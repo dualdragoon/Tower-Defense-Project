@@ -66,7 +66,7 @@ namespace Tower_Defense_Project
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            level.Update(gameTime);
+            //level.Update(gameTime);
 
             base.Update(gameTime);
         }
