@@ -9,27 +9,41 @@ namespace Tower_Defense_Project
 {
     class Path
     {
-        List<FloatingRectangle> pathSet = new List<FloatingRectangle>();
+        public List<FloatingRectangle> pathSet = new List<FloatingRectangle>();
 
         public Path(Vector2[] locations, Vector2[] w_h)
         {
-            if (locations.Length != w_h.Length)
-                throw new PathException("A array is an incorrect size.");
-
-            for (int i = 0; i < locations.Length; i++)
+            try
             {
-                pathSet.Add(new FloatingRectangle(locations[i].X, locations[i].Y, w_h[i].X, w_h[i].Y));
-            }
+                if (locations.Length != w_h.Length)
+                    throw new PathException("A array is an incorrect size.");
 
-            SinglePath();
+                for (int i = 0; i < locations.Length; i++)
+                {
+                    pathSet.Add(new FloatingRectangle(locations[i].X, locations[i].Y, w_h[i].X, w_h[i].Y));
+                }
+
+                SinglePath();
+            }
+            catch (PathException ex)
+            {
+                //Todo: add exception record.
+            }
         }
 
         private void SinglePath()
         {
             for (int i = 0; i < pathSet.Count - 2; i++)
             {
-                if (!pathSet[i].Intersects(pathSet[i + 1]))
-                    throw new PathException("Path is not connected.");
+                try
+                {
+                    if (!pathSet[i].Intersects(pathSet[i + 1]))
+                        throw new PathException("Path is not connected.");
+                }
+                catch (PathException ex)
+                {
+                    
+                }
             }
         }
 
