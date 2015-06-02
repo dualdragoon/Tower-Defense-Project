@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Duality;
 
 namespace Tower_Defense_Project
 {
@@ -18,6 +19,8 @@ namespace Tower_Defense_Project
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Level level;
 
         public Main()
         {
@@ -34,6 +37,7 @@ namespace Tower_Defense_Project
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            ErrorHandler.Initialize();
 
             base.Initialize();
         }
@@ -47,6 +51,7 @@ namespace Tower_Defense_Project
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            level = new Level(Services);
             // TODO: use this.Content to load your game content here
         }
 
@@ -66,6 +71,7 @@ namespace Tower_Defense_Project
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            
             //level.Update(gameTime);
 
             base.Update(gameTime);
@@ -79,7 +85,13 @@ namespace Tower_Defense_Project
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
+
             // TODO: Add your drawing code here
+
+            level.Draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
