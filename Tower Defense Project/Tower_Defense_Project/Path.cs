@@ -43,7 +43,7 @@ namespace Tower_Defense_Project
                 catch (PathException ex)
                 {
                     Console.WriteLine(ex.Message);
-                    ErrorHandler.RecordError(2, 103, "This is my fault.", ex.Message);
+                    ErrorHandler.RecordError(3, 103, "This is my fault.", ex.Message);
                 }
             }
         }
