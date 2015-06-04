@@ -16,7 +16,7 @@ namespace Tower_Defense_Project
             try
             {
                 if (locations.Length != w_h.Length)
-                    throw new PathException("A array is an incorrect size.");
+                    throw new PathException("A path array is longer than the other.");
 
                 for (int i = 0; i < locations.Length; i++)
                 {
