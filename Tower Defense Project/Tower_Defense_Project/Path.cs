@@ -16,7 +16,7 @@ namespace Tower_Defense_Project
             try
             {
                 if (locations.Length != w_h.Length)
-                    throw new PathException("A path array is longer than the other.");
+                    throw new PathException("PathException: One path array is longer than the other.");
 
                 for (int i = 0; i < locations.Length; i++)
                 {
@@ -38,12 +38,12 @@ namespace Tower_Defense_Project
                 try
                 {
                     if (!pathSet[i].Intersects(pathSet[i + 1]))
-                        throw new PathException("Path is not connected.");
+                        throw new PathException("PathException: Path is not connected.");
                 }
                 catch (PathException ex)
                 {
                     Console.WriteLine(ex.Message);
-                    ErrorHandler.RecordError(3, 103, "This is my fault.", ex.Message);
+                    ErrorHandler.RecordError(3, 103, "Solution: replace levels file with newest version.", ex.Message);
                 }
             }
         }
