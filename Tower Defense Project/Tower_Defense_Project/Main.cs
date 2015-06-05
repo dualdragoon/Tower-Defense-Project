@@ -52,6 +52,7 @@ namespace Tower_Defense_Project
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             level = new Level(Services);
+            level.LoadLevel(1);
             // TODO: use this.Content to load your game content here
         }
 
@@ -71,8 +72,7 @@ namespace Tower_Defense_Project
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
-            //level.Update(gameTime);
+            level.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -89,7 +89,7 @@ namespace Tower_Defense_Project
 
             // TODO: Add your drawing code here
 
-            level.Draw(spriteBatch);
+            level.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
 

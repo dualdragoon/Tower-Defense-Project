@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -8,12 +9,17 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Duality;
+using Duality.Records;
 
 namespace Tower_Defense_Project
 {
     class Level
     {
+        private float timer = 0, minTimer = 1f;
         private Texture2D tex;
+        private StreamReader reader;
+
+        private List<Enemy> enemies = new List<Enemy>();
 
         public Path Path
         {
@@ -32,12 +38,11 @@ namespace Tower_Defense_Project
             tex = Content.Load<Texture2D>(@"Textures/SQUARE");
         }
 
-        private void LoadLevel()
+        public void LoadLevel(int levelIndex)
         {
-            Vector2[] locations = new Vector2[] { Vector2.Zero, new Vector2(100, 0), new Vector2(100, 100) };
-            Vector2[] w_h = new Vector2[] { new Vector2(100, 10), new Vector2(10, 110), new Vector2(100, 10) };
-
-            path = new Path(locations, w_h);
+            reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
+            path = Serialization.DeserializeFromString<Path>(reader.ReadLine());
+            path.Build();
         }
 
         public Level(IServiceProvider serviceProvider)
@@ -45,16 +50,47 @@ namespace Tower_Defense_Project
             content = new ContentManager(serviceProvider, "Content");
 
             LoadContent();
-
-            LoadLevel();
         }
 
-        public void Draw(SpriteBatch spritebatch)
+        public void Update(GameTime gameTime)
         {
-            for (int i = 0; i < path.pathSet.Count; i++)
-			{
-                spritebatch.Draw(tex, new Rectangle((int)path.pathSet[i].X, (int)path.pathSet[i].Y, (int)path.pathSet[i].Width, (int)path.pathSet[i].Height), Color.White); 
-			}
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (timer > minTimer)
+            {
+                enemies.Add(new Enemy(this, EnemyType.peon));
+                timer = 0;
+            }
+
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Update(gameTime);
+
+                if (enemies[i].position.X == 200)
+                {
+                    enemies.Remove(enemies[i]);
+                }
+            }
+
+            try
+            {
+                Console.WriteLine(enemies[0].stagePos);
+            }
+            catch
+            { }
+        }
+
+        public void Draw(GameTime gameTime, SpriteBatch spritebatch)
+        {
+            for (int i = 0; i < Path.pathSet.Count(); i++)
+            {
+                spritebatch.Draw(tex, Path.pathSet[i].Draw, Color.White);
+            }
+
+            foreach (Enemy enemy in enemies)
+            {
+                enemy.Draw(gameTime, spritebatch);
+            }
         }
     }
 }

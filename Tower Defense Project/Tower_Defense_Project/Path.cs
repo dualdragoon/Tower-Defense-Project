@@ -7,28 +7,18 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
+    [Serializable]
     class Path
     {
+        public List<Vector2> points = new List<Vector2>();
+        public float[] lengths;
+        public Vector2[] directions;
+
         public List<FloatingRectangle> pathSet = new List<FloatingRectangle>();
 
-        public Path(Vector2[] locations, Vector2[] w_h)
+        public Path()
         {
-            try
-            {
-                if (locations.Length != w_h.Length)
-                    throw new PathException("PathException: One path array is longer than the other.");
-
-                for (int i = 0; i < locations.Length; i++)
-                {
-                    pathSet.Add(new FloatingRectangle(locations[i].X, locations[i].Y, w_h[i].X, w_h[i].Y));
-                }
-
-                SinglePath();
-            }
-            catch (PathException ex)
-            {
-                //Todo: add exception record.
-            }
+            
         }
 
         private void SinglePath()
@@ -48,8 +38,21 @@ namespace Tower_Defense_Project
             }
         }
 
+        public void Build()
+        {
+            lengths = new float[points.Count - 1];
+            directions = new Vector2[points.Count - 1];
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                directions[i] = points[i + 1] - points[i];
+                lengths[i] = directions[i].Length();
+                directions[i].Normalize();
+            }
+        }
+
         public void Clear()
         {
+            points.Clear();
             pathSet.Clear();
         }
     }
