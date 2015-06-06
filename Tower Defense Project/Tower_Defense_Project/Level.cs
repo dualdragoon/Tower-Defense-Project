@@ -15,17 +15,26 @@ namespace Tower_Defense_Project
 {
     class Level
     {
+        private bool keyPressed, keyDidSomething;
         private float timer = 0, minTimer = 1f;
+        private MouseState mouse;
         private Texture2D tex;
         private StreamReader reader;
 
         private List<Enemy> enemies = new List<Enemy>();
+        private List<Tower> towers = new List<Tower>();
 
         public Path Path
         {
             get { return path; }
         }
         Path path;
+
+        public SpriteFont Font
+        {
+            get { return font; }
+        }
+        SpriteFont font;
 
         public ContentManager Content
         {
@@ -36,6 +45,7 @@ namespace Tower_Defense_Project
         private void LoadContent()
         {
             tex = Content.Load<Texture2D>(@"Textures/SQUARE");
+            font = Content.Load<SpriteFont>(@"Fonts/Font");
         }
 
         public void LoadLevel(int levelIndex)
@@ -54,11 +64,13 @@ namespace Tower_Defense_Project
 
         public void Update(GameTime gameTime)
         {
+            mouse = Mouse.GetState();
+
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (timer > minTimer)
             {
-                enemies.Add(new Enemy(this, EnemyType.peon));
+                enemies.Add(new Enemy(this, EnemyType.Scout));
                 timer = 0;
             }
 
@@ -69,6 +81,37 @@ namespace Tower_Defense_Project
                 if (enemies[i].position.X == 200)
                 {
                     enemies.Remove(enemies[i]);
+                }
+            }
+
+            foreach (Tower tower in towers)
+            {
+                tower.Update(gameTime, mouse);
+            }
+
+            if (towers.Count > 0 && towers[towers.Count-1].isPlaced)
+            {
+                keyPressed = false;
+            }
+
+            keyDidSomething = keyPressed && keyDidSomething;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                keyPressed = true;
+                if (!keyDidSomething)
+                {
+                    towers.Add(new Tower(this, TowerType.Small, mouse));
+                    keyDidSomething = true;
+                }
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                keyPressed = true;
+                if (!keyDidSomething)
+                {
+                    towers.Add(new Tower(this, TowerType.Medium, mouse));
+                    keyDidSomething = true;
                 }
             }
 
@@ -91,6 +134,14 @@ namespace Tower_Defense_Project
             {
                 enemy.Draw(gameTime, spritebatch);
             }
+
+            foreach (Tower tower in towers)
+            {
+                tower.Draw(spritebatch);
+            }
+
+            spritebatch.DrawString(Font, keyDidSomething.ToString(), new Vector2(200, 5), Color.White);
+            spritebatch.DrawString(Font, keyPressed.ToString(), new Vector2(200, 200), Color.White);
         }
     }
 }

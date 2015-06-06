@@ -8,12 +8,7 @@ using Duality.Graphics;
 
 namespace Tower_Defense_Project
 {
-    enum EnemyType
-    {
-        peon,
-        scout,
-        brute,
-    }
+    enum EnemyType { Peon, Scout, Brute, }
 
     class Enemy
     {
@@ -36,36 +31,34 @@ namespace Tower_Defense_Project
         /// </summary>
         public void LoadContent(EnemyType type)
         {
-            string spriteSet = "";
-
             // Load animations.
             switch (type)
             {
-                case EnemyType.peon:
+                case EnemyType.Peon:
                     frameWidth = 10;
-                    spriteSet = "Peon";
+                    moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Peon"), 0.1f, true, frameWidth);
                     speed = .5f;
+                    seconds = 1f;
                     break;
 
-                case EnemyType.scout:
+                case EnemyType.Scout:
                     frameWidth = 20;
-                    spriteSet = "Scout";
+                    moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Scout"), 0.1f, true, frameWidth);
                     speed = .9f;
+                    seconds = 2f;
                     break;
 
-                case EnemyType.brute:
+                case EnemyType.Brute:
                     frameWidth = 30;
-                    spriteSet = "Brute";
+                    moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Brute"), 0.1f, true, frameWidth);
                     speed = .2f;
+                    seconds = 1f;
                     break;
 
                 default:
                     break;
             }
 
-            spriteSet = "Sprites/" + spriteSet;
-
-            moveAnimation = new Animation(Level.Content.Load<Texture2D>(spriteSet), 0.1f, true, frameWidth);
             sprite.PlayAnimation(moveAnimation);
 
         }
@@ -82,8 +75,6 @@ namespace Tower_Defense_Project
 
         public void Update(GameTime gameTime)
         {
-            seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             if (stageIndex != Level.Path.points.Count - 1)
             {
                 stagePos += speed * seconds;

@@ -55,6 +55,19 @@ namespace Tower_Defense_Project
             points.Clear();
             pathSet.Clear();
         }
+
+        public bool Intersects(FloatingRectangle rect)
+        {
+            bool intersects = false;
+            foreach (FloatingRectangle pathRectangle in pathSet)
+            {
+                if (!intersects)
+                {
+                    intersects = rect.Left < pathRectangle.Right && pathRectangle.Left < rect.Right && rect.Top < pathRectangle.Bottom && pathRectangle.Top < rect.Bottom; 
+                }
+            }
+            return intersects;
+        }
     }
 
     class PathException : Exception
