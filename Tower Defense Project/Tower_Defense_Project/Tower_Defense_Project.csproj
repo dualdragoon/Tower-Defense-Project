@@ -82,6 +82,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Path.cs" />
+    <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Main.cs" />

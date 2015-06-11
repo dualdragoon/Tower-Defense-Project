@@ -21,8 +21,9 @@ namespace Tower_Defense_Project
         private Texture2D tex;
         private StreamReader reader;
 
-        private List<Enemy> enemies = new List<Enemy>();
-        private List<Tower> towers = new List<Tower>();
+        public List<Enemy> enemies = new List<Enemy>();
+        public List<Tower> towers = new List<Tower>();
+        public List<Projectile> projectiles = new List<Projectile>();
 
         public Path Path
         {
@@ -78,7 +79,7 @@ namespace Tower_Defense_Project
             {
                 enemies[i].Update(gameTime);
 
-                if (enemies[i].position.X == 200)
+                if (enemies[i].position == path.points[path.points.Count - 1])
                 {
                     enemies.Remove(enemies[i]);
                 }
@@ -87,6 +88,16 @@ namespace Tower_Defense_Project
             foreach (Tower tower in towers)
             {
                 tower.Update(gameTime, mouse);
+            }
+
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                projectiles[i].Update(gameTime);
+
+                if (projectiles[i].StageIndex == 1)
+                {
+                    projectiles.Remove(projectiles[i]);
+                }
             }
 
             if (towers.Count > 0 && towers[towers.Count-1].isPlaced)
@@ -138,6 +149,11 @@ namespace Tower_Defense_Project
             foreach (Tower tower in towers)
             {
                 tower.Draw(spritebatch);
+            }
+
+            foreach (Projectile projectile in projectiles)
+            {
+                projectile.Draw(spritebatch);
             }
 
             spritebatch.DrawString(Font, keyDidSomething.ToString(), new Vector2(200, 5), Color.White);

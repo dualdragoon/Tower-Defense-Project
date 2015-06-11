@@ -21,9 +21,11 @@ namespace Tower_Defense_Project
 
         public bool isPlaced = false;
         private bool canPlace;
+        float attackTimer = 0, minAttackTimer;
+        public Circle range;
         private Color rangeColor = Color.Gray;
         public FloatingRectangle collision;
-        private Texture2D tex;
+        private Texture2D tex, rangeTex;
         public TowerType type;
 
         private void LoadContent()
@@ -32,14 +34,17 @@ namespace Tower_Defense_Project
             {
                 case TowerType.Small:
                     tex = Level.Content.Load<Texture2D>(@"Towers/Small");
+                    rangeTex = Level.Content.Load<Texture2D>(@"Towers/Small Range");
                     break;
 
                 case TowerType.Medium:
                     tex = Level.Content.Load<Texture2D>(@"Towers/Medium");
+                    rangeTex = Level.Content.Load<Texture2D>(@"Towers/Test");
                     break;
 
                 case TowerType.Large:
                     tex = Level.Content.Load<Texture2D>(@"Towers/Large");
+                    rangeTex = Level.Content.Load<Texture2D>(@"Towers/Large Range");
                     break;
 
                 default:
@@ -56,14 +61,18 @@ namespace Tower_Defense_Project
             {
                 case TowerType.Small:
                     collision = new FloatingRectangle(mouse.X, mouse.Y, 10, 10);
+                    range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 40);
+                    minAttackTimer = 1f;
                     break;
 
                 case TowerType.Medium:
                     collision = new FloatingRectangle(mouse.X, mouse.Y, 20, 20);
+                    range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 120);
                     break;
 
                 case TowerType.Large:
                     collision = new FloatingRectangle(mouse.X, mouse.Y, 30, 30);
+                    range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 60);
                     break;
 
                 default:
@@ -79,13 +88,35 @@ namespace Tower_Defense_Project
             {
                 isPlaced = Placed(mouse);
             }
+            else
+            {
+                attackTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Fire();
+            }
         }
 
-        private bool Placed (MouseState mouse)
+        private void Fire()
+        {
+            if (attackTimer > minAttackTimer)
+            {
+                attackTimer = 0;
+                for (int i = 0; i < Level.enemies.Count; i++)
+                {
+                    if (range.Contains(Level.enemies[i].position))
+                    {
+                        Level.projectiles.Add(new Projectile(collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], ProjectileType.Small, Level));
+                        return;
+                    }
+                }
+            }
+        }
+
+        private bool Placed(MouseState mouse)
         {
             bool placed = false;
             collision.X = mouse.X;
             collision.Y = mouse.Y;
+            range.Center = new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2));
             if (CanPlace())
             {
                 rangeColor = Color.Gray;
@@ -104,19 +135,28 @@ namespace Tower_Defense_Project
 
         private bool CanPlace()
         {
-            if (Level.Path.Intersects(collision))
+            return !Level.Path.Intersects(collision) && TowerCheck();
+        }
+
+        private bool TowerCheck()
+        {
+            bool check = true;
+            for (int i = 0; i < Level.towers.Count - 1; i++)
             {
-                canPlace = false;
+                if (collision.Intersects(Level.towers[i].collision))
+                {
+                    check = false;
+                }
             }
-            else
-            {
-                canPlace = true;
-            }
-            return canPlace;
+            return check;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (!isPlaced)
+            {
+                spriteBatch.Draw(rangeTex, range.Location, rangeColor);
+            }
             spriteBatch.Draw(tex, collision.Draw, Color.White);
         }
     }
