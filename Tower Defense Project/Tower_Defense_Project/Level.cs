@@ -72,7 +72,7 @@ namespace Tower_Defense_Project
 
             if (timer > minTimer)
             {
-                enemies.Add(new Enemy(this, EnemyType.Scout));
+                enemies.Add(new Enemy(this, (EnemyType)102));
                 timer = 0;
             }
 
