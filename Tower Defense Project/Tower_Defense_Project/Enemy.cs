@@ -8,13 +8,18 @@ using Duality.Graphics;
 
 namespace Tower_Defense_Project
 {
-    enum EnemyType { Peon, Scout, Brute, }
+    enum EnemyType
+    { 
+        Peon = 101,
+        Scout = 102,
+        Brute = 103,
+    }
 
     class Enemy
     {
         public Vector2 position;
         public float stagePos;
-        int stageIndex, frameWidth;
+        int stageIndex, frameWidth, health;
         float speed = 0, seconds = 0;
 
         private Animation moveAnimation;
@@ -25,6 +30,12 @@ namespace Tower_Defense_Project
             get { return level; }
         }
         Level level;
+
+        public int Health
+        {
+            get { return health; }
+            set { health = value; }
+        }
 
         /// <summary>
         /// Loads a particular enemy sprite sheet and sounds.
@@ -39,13 +50,15 @@ namespace Tower_Defense_Project
                     moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Peon"), 0.1f, true, frameWidth);
                     speed = .5f;
                     seconds = 1f;
+                    Health = 5;
                     break;
 
                 case EnemyType.Scout:
                     frameWidth = 20;
                     moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Scout"), 0.1f, true, frameWidth);
-                    speed = .9f;
+                    speed = .5f;
                     seconds = 2f;
+                    Health = 6;
                     break;
 
                 case EnemyType.Brute:
@@ -53,6 +66,7 @@ namespace Tower_Defense_Project
                     moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Brute"), 0.1f, true, frameWidth);
                     speed = .2f;
                     seconds = 1f;
+                    Health = 10;
                     break;
 
                 default:

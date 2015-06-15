@@ -42,6 +42,10 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <None Include="Levels\Level1.enemies">
+      <Name>Level1</Name>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Levels\Level1.path">
       <Name>Level1</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

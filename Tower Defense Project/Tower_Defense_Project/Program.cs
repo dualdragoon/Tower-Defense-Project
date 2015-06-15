@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Duality;
 using Duality.Records;
+using Duality.Encrypting;
 
 namespace Tower_Defense_Project
 {
@@ -15,7 +16,7 @@ namespace Tower_Defense_Project
         static void Main(string[] args)
         {
             //Uncomment for making new level serializations.
-            /*Path path = new Path();
+            Path path = new Path();
 
             path.points.Add(new Vector2(0, 5));
             path.points.Add(new Vector2(100, 5));
@@ -31,7 +32,11 @@ namespace Tower_Defense_Project
             path.pathSet.Add(new FloatingRectangle(100, 100, 100, 10));
 
             StreamWriter write = new StreamWriter("Level1.path");
-            write.Write(Serialization.SerializeToString<Path>(path));
+            write.Write(StringCipher.Encrypt(Serialization.SerializeToString<Path>(path), "temp2"));
+            write.Close();
+
+            /*StreamWriter write = new StreamWriter("Level1.enemies");
+            write.Write(StringCipher.Encrypt(Serialization.SerializeToString<EnemyType>(EnemyType.Scout), "temp"));
             write.Close();*/
 
             using (Main game = new Main())

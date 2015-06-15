@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Duality;
 using Duality.Records;
+using Duality.Encrypting;
 
 namespace Tower_Defense_Project
 {
@@ -52,7 +53,7 @@ namespace Tower_Defense_Project
         public void LoadLevel(int levelIndex)
         {
             reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
-            path = Serialization.DeserializeFromString<Path>(reader.ReadLine());
+            path = Serialization.DeserializeFromString<Path>(StringCipher.Decrypt(reader.ReadLine(), "temp2"));
             path.Build();
         }
 
@@ -79,7 +80,7 @@ namespace Tower_Defense_Project
             {
                 enemies[i].Update(gameTime);
 
-                if (enemies[i].position == path.points[path.points.Count - 1])
+                if (enemies[i].position == path.points[path.points.Count - 1] || enemies[i].Health == 0)
                 {
                     enemies.Remove(enemies[i]);
                 }
@@ -96,6 +97,7 @@ namespace Tower_Defense_Project
 
                 if (projectiles[i].StageIndex == 1)
                 {
+                    projectiles[i].target.Health -= projectiles[i].damage;
                     projectiles.Remove(projectiles[i]);
                 }
             }
