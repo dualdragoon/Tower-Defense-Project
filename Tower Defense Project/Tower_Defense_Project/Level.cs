@@ -140,7 +140,7 @@ namespace Tower_Defense_Project
 
             keyDidSomething = keyPressed && keyDidSomething;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            if (Keyboard.GetState().IsKeyDown(Keys.D1))
             {
                 keyPressed = true;
                 if (!keyDidSomething)
@@ -149,7 +149,7 @@ namespace Tower_Defense_Project
                     keyDidSomething = true;
                 }
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.W))
+            else if (Keyboard.GetState().IsKeyDown(Keys.D2))
             {
                 keyPressed = true;
                 if (!keyDidSomething)
