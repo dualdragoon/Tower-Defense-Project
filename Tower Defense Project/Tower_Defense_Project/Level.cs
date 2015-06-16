@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -16,8 +15,8 @@ namespace Tower_Defense_Project
 {
     class Level
     {
-        private bool keyPressed, keyDidSomething;
-        private float timer = 0, minTimer = 1f;
+        private bool keyPressed, keyDidSomething, pause = false;
+        private float timer = 0, minTimer = 1f, escapeTimer = 0, minEscapeTimer = .05f;
         private MouseState mouse;
         private Texture2D tex;
         private StreamReader reader;
@@ -68,41 +67,73 @@ namespace Tower_Defense_Project
         {
             mouse = Mouse.GetState();
 
-            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            escapeTimer = Keyboard.GetState().IsKeyDown(Keys.Escape) ? escapeTimer + (float)gameTime.ElapsedGameTime.TotalSeconds : escapeTimer;
 
-            if (timer > minTimer)
+            if (Keyboard.GetState().IsKeyUp(Keys.Escape) && escapeTimer > minEscapeTimer)
             {
-                enemies.Add(new Enemy(this, (EnemyType)102));
-                timer = 0;
+                escapeTimer = 0;
+                pause = !pause;
             }
 
-            for (int i = 0; i < enemies.Count; i++)
+            if (!pause)
             {
-                enemies[i].Update(gameTime);
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (enemies[i].position == path.points[path.points.Count - 1] || enemies[i].Health == 0)
+                if (timer > minTimer)
                 {
-                    enemies.Remove(enemies[i]);
+                    enemies.Add(new Enemy(this, (EnemyType)101));
+                    timer = 0;
                 }
-            }
 
-            foreach (Tower tower in towers)
-            {
-                tower.Update(gameTime, mouse);
-            }
-
-            for (int i = 0; i < projectiles.Count; i++)
-            {
-                projectiles[i].Update(gameTime);
-
-                if (projectiles[i].StageIndex == 1)
+                try
                 {
-                    projectiles[i].target.Health -= projectiles[i].damage;
-                    projectiles.Remove(projectiles[i]);
-                }
-            }
+                    foreach (Enemy enemy in enemies)
+                    {
+                        enemy.Update(gameTime);
 
-            if (towers.Count > 0 && towers[towers.Count-1].isPlaced)
+                        if (enemy.position == path.points[path.points.Count - 1] || enemy.Health <= 0)
+                        {
+                            enemies.Remove(enemy);
+                        }
+                    }
+
+                    foreach (Tower tower in towers)
+                    {
+                        tower.Update(gameTime, mouse);
+                    }
+
+                    foreach (Projectile projectile in projectiles)
+                    {
+                        projectile.Update(gameTime);
+
+                        if (projectile.StageIndex == 1)
+                        {
+                            projectile.target.Health -= projectile.damage;
+                            projectiles.Remove(projectile);
+                        }
+                        else if (!projectile.Origin.range.Contains(projectile.Position))
+                        {
+                            projectiles.Remove(projectile);
+                        }
+                    }
+                }
+                catch
+                { }
+
+                Input();
+
+                try
+                {
+                    Console.WriteLine(enemies[0].stagePos);
+                }
+                catch
+                { }
+            }
+        }
+
+        private void Input()
+        {
+            if (towers.Count > 0 && towers[towers.Count - 1].isPlaced)
             {
                 keyPressed = false;
             }
@@ -127,13 +158,6 @@ namespace Tower_Defense_Project
                     keyDidSomething = true;
                 }
             }
-
-            try
-            {
-                Console.WriteLine(enemies[0].stagePos);
-            }
-            catch
-            { }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spritebatch)
@@ -158,8 +182,8 @@ namespace Tower_Defense_Project
                 projectile.Draw(spritebatch);
             }
 
-            spritebatch.DrawString(Font, keyDidSomething.ToString(), new Vector2(200, 5), Color.White);
-            spritebatch.DrawString(Font, keyPressed.ToString(), new Vector2(200, 200), Color.White);
+            spritebatch.DrawString(Font, keyDidSomething.ToString(), new Vector2(300, 5), Color.White);
+            spritebatch.DrawString(Font, keyPressed.ToString(), new Vector2(300, 200), Color.White);
         }
     }
 }

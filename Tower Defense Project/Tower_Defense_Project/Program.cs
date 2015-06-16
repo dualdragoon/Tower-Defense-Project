@@ -16,24 +16,28 @@ namespace Tower_Defense_Project
         static void Main(string[] args)
         {
             //Uncomment for making new level serializations.
-            Path path = new Path();
+            /*Path path = new Path();
 
-            path.points.Add(new Vector2(0, 5));
-            path.points.Add(new Vector2(100, 5));
-            path.points.Add(new Vector2(103.5f, 6.5f));
-            path.points.Add(new Vector2(105, 10));
-            path.points.Add(new Vector2(105, 100));
-            path.points.Add(new Vector2(106.5f, 103.5f));
-            path.points.Add(new Vector2(110, 105));
-            path.points.Add(new Vector2(200, 105));
+            path.points.Add(new Vector2(0, 105));
+            path.points.Add(new Vector2(100, 105));
+            path.points.Add(new Vector2(103.5f, 106.5f));
+            path.points.Add(new Vector2(105, 110));
+            path.points.Add(new Vector2(105, 200));
+            path.points.Add(new Vector2(106.5f, 203.5f));
+            path.points.Add(new Vector2(110, 205));
+            path.points.Add(new Vector2(200, 205));
+            path.points.Add(new Vector2(203.5f, 206.5f));
+            path.points.Add(new Vector2(205, 210));
+            path.points.Add(new Vector2(205, 400));
 
-            path.pathSet.Add(new FloatingRectangle(0, 0, 110, 10));
-            path.pathSet.Add(new FloatingRectangle(100, 0, 10, 110));
-            path.pathSet.Add(new FloatingRectangle(100, 100, 100, 10));
+            path.pathSet.Add(new FloatingRectangle(0, 100, 110, 10));
+            path.pathSet.Add(new FloatingRectangle(100, 100, 10, 110));
+            path.pathSet.Add(new FloatingRectangle(100, 200, 110, 10));
+            path.pathSet.Add(new FloatingRectangle(200, 200, 10, 210));
 
             StreamWriter write = new StreamWriter("Level1.path");
             write.Write(StringCipher.Encrypt(Serialization.SerializeToString<Path>(path), "temp2"));
-            write.Close();
+            write.Close();*/
 
             /*StreamWriter write = new StreamWriter("Level1.enemies");
             write.Write(StringCipher.Encrypt(Serialization.SerializeToString<EnemyType>(EnemyType.Scout), "temp"));

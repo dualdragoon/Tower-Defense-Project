@@ -50,7 +50,7 @@ namespace Tower_Defense_Project
                     moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Peon"), 0.1f, true, frameWidth);
                     speed = .5f;
                     seconds = 1f;
-                    Health = 5;
+                    Health = 1;
                     break;
 
                 case EnemyType.Scout:

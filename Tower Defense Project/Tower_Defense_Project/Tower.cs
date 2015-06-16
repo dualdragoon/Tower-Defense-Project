@@ -26,6 +26,7 @@ namespace Tower_Defense_Project
         public Circle range;
         private Color rangeColor = Color.Gray;
         public FloatingRectangle collision;
+        private ProjectileType projectileType;
         private Texture2D tex, rangeTex;
         public TowerType type;
 
@@ -62,14 +63,16 @@ namespace Tower_Defense_Project
             {
                 case TowerType.Small:
                     collision = new FloatingRectangle(mouse.X, mouse.Y, 10, 10);
-                    range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 40);
+                    range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 100);
                     minAttackTimer = 1f;
+                    projectileType = ProjectileType.Small;
                     break;
 
                 case TowerType.Medium:
                     collision = new FloatingRectangle(mouse.X, mouse.Y, 20, 20);
                     range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 120);
                     minAttackTimer = .3f;
+                    projectileType = ProjectileType.Medium;
                     break;
 
                 case TowerType.Large:
@@ -109,7 +112,7 @@ namespace Tower_Defense_Project
                 {
                     if (range.Contains(Level.enemies[i].position))
                     {
-                        Level.projectiles.Add(new Projectile(collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], ProjectileType.Small, Level));
+                        Level.projectiles.Add(new Projectile(this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], projectileType, Level));
                         break;
                     } 
                 }

@@ -22,6 +22,16 @@ namespace Tower_Defense_Project
             get { return stageIndex; }
         }
 
+        public Tower Origin
+        {
+            get { return origin; }
+        }
+
+        public Vector2 Position
+        {
+            get { return position; }
+        }
+
         public int damage;
         int stageIndex;
         float stagePos, speed = 0, seconds = 0;
@@ -29,6 +39,7 @@ namespace Tower_Defense_Project
         Path path;
         ProjectileType type;
         Texture2D tex;
+        Tower origin;
         Vector2 position;
 
         private void LoadContent()
@@ -52,12 +63,13 @@ namespace Tower_Defense_Project
             }
         }
 
-        public Projectile(Vector2 position, Enemy target, ProjectileType type, Level level)
+        public Projectile(Tower origin, Vector2 position, Enemy target, ProjectileType type, Level level)
         {
             this.level = level;
             this.position = position;
             this.target = target;
             this.type = type;
+            this.origin = origin;
 
             path = new Path();
             path.points.Add(position);
@@ -73,8 +85,8 @@ namespace Tower_Defense_Project
                     break;
 
                 case ProjectileType.Medium:
-                    speed = .3f;
-                    seconds = 1.3f;
+                    speed = .1f;
+                    seconds = .6f;
                     damage = 2;
                     break;
 
