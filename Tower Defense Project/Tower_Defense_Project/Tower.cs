@@ -20,9 +20,7 @@ namespace Tower_Defense_Project
         private Level level;
 
         public bool isPlaced = false;
-        private bool canPlace;
         float attackTimer = 0, minAttackTimer;
-        int dummy;
         public Circle range;
         private Color rangeColor = Color.Gray;
         public FloatingRectangle collision;
@@ -98,23 +96,20 @@ namespace Tower_Defense_Project
                 attackTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (attackTimer > minAttackTimer)
                 {
-                    Fire(); 
+                    Fire();
                 }
             }
         }
 
         private void Fire()
         {
-            //if (attackTimer > minAttackTimer)
+            attackTimer = 0f;
+            for (int i = 0; i < Level.enemies.Count; i++)
             {
-                attackTimer = 0f;
-                for (int i = 0; i < Level.enemies.Count; i++)
+                if (range.Contains(Level.enemies[i].position))
                 {
-                    if (range.Contains(Level.enemies[i].position))
-                    {
-                        Level.projectiles.Add(new Projectile(this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], projectileType, Level));
-                        break;
-                    } 
+                    Level.projectiles.Add(new Projectile(this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], projectileType, Level));
+                    break;
                 }
             }
         }

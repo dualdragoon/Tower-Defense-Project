@@ -162,9 +162,9 @@ namespace Tower_Defense_Project
 
         public void Draw(GameTime gameTime, SpriteBatch spritebatch)
         {
-            for (int i = 0; i < Path.pathSet.Count(); i++)
+            foreach (FloatingRectangle i in Path.pathSet)
             {
-                spritebatch.Draw(tex, Path.pathSet[i].Draw, Color.White);
+                spritebatch.Draw(tex, i.Draw, Color.White);
             }
 
             foreach (Enemy enemy in enemies)
