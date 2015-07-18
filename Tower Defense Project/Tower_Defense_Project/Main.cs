@@ -26,6 +26,10 @@ namespace Tower_Defense_Project
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferHeight = 900;
+            graphics.PreferredBackBufferWidth = 1440;
+            graphics.IsFullScreen = true;
+            IsMouseVisible = true;
         }
 
         /// <summary>
@@ -51,7 +55,7 @@ namespace Tower_Defense_Project
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            level = new Level(Services);
+            level = new Level(Services, graphics);
             level.LoadLevel(1);
             // TODO: use this.Content to load your game content here
         }

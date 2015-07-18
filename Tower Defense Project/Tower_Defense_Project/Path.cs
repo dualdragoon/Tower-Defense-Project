@@ -40,6 +40,12 @@ namespace Tower_Defense_Project
 
         public void Build()
         {
+            for (int i = 0; i < points.Count; i++)
+            {
+                Vector2 temp = new Vector2(points[i].X / 800, points[i].Y / 480);
+                points[i] = new Vector2(Level.Graphics.PreferredBackBufferWidth, Level.Graphics.PreferredBackBufferHeight) * temp;
+            }
+
             lengths = new float[points.Count - 1];
             directions = new Vector2[points.Count - 1];
             for (int i = 0; i < points.Count - 1; i++)

@@ -18,7 +18,7 @@ namespace Tower_Defense_Project
         private bool keyPressed, keyDidSomething, pause = false;
         private float timer = 0, minTimer = 1f, escapeTimer = 0, minEscapeTimer = .05f;
         private MouseState mouse;
-        private Texture2D tex;
+        private Texture2D tex, background;
         private StreamReader reader;
 
         public List<Enemy> enemies = new List<Enemy>();
@@ -49,25 +49,33 @@ namespace Tower_Defense_Project
         }
         ContentManager content;
 
-        private void LoadContent()
+        public static GraphicsDeviceManager Graphics
         {
+            get { return graphics; }
+        }
+        private static GraphicsDeviceManager graphics;
+
+        private void LoadContent(int levelIndex)
+        {
+            background = Content.Load<Texture2D>(@"Levels/Level" + levelIndex);
             tex = Content.Load<Texture2D>(@"Textures/SQUARE");
             font = Content.Load<SpriteFont>(@"Fonts/Font");
         }
-
+        
         public void LoadLevel(int levelIndex)
         {
             reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
             path = Serialization.DeserializeFromString<Path>(StringCipher.Decrypt(reader.ReadLine(), "temp2"));
             path.Build();
             currency = 1000;
+
+            LoadContent(levelIndex);
         }
 
-        public Level(IServiceProvider serviceProvider)
+        public Level(IServiceProvider serviceProvider, GraphicsDeviceManager graphics)
         {
             content = new ContentManager(serviceProvider, "Content");
-
-            LoadContent();
+            Level.graphics = graphics;
         }
 
         public void Update(GameTime gameTime)
@@ -175,10 +183,12 @@ namespace Tower_Defense_Project
 
         public void Draw(GameTime gameTime, SpriteBatch spritebatch)
         {
-            foreach (FloatingRectangle i in Path.pathSet)
+            /*foreach (FloatingRectangle i in Path.pathSet)
             {
                 spritebatch.Draw(tex, i.Draw, Color.White);
-            }
+            }*/
+
+            spritebatch.Draw(background, new Rectangle(0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight), Color.White);
 
             foreach (Enemy enemy in enemies)
             {
@@ -194,7 +204,7 @@ namespace Tower_Defense_Project
             {
                 projectile.Draw(spritebatch);
             }
-
+            
             spritebatch.DrawString(Font, Currency.ToString(), Vector2.Zero, Color.White);
         }
     }

@@ -52,7 +52,7 @@ namespace Tower_Defense_Project
             switch (type)
             {
                 case EnemyType.Peon:
-                    frameWidth = 10;
+                    frameWidth = 128;
                     moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Peon"), 0.1f, true, frameWidth);
                     speed = .5f;
                     seconds = 1f;
