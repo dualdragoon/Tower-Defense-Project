@@ -25,6 +25,12 @@ namespace Tower_Defense_Project
         public List<Tower> towers = new List<Tower>();
         public List<Projectile> projectiles = new List<Projectile>();
 
+        public uint Currency
+        {
+            get { return currency; }
+        }
+        uint currency;
+
         public Path Path
         {
             get { return path; }
@@ -54,6 +60,7 @@ namespace Tower_Defense_Project
             reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
             path = Serialization.DeserializeFromString<Path>(StringCipher.Decrypt(reader.ReadLine(), "temp2"));
             path.Build();
+            currency = 1000;
         }
 
         public Level(IServiceProvider serviceProvider)
@@ -91,8 +98,13 @@ namespace Tower_Defense_Project
                     {
                         enemy.Update(gameTime);
 
-                        if (enemy.position == path.points[path.points.Count - 1] || enemy.Health <= 0)
+                        if (enemy.position == path.points[path.points.Count - 1])
                         {
+                            enemies.Remove(enemy);
+                        }
+                        else if (enemy.Health <= 0)
+                        {
+                            currency += enemy.Worth;
                             enemies.Remove(enemy);
                         }
                     }
@@ -122,12 +134,12 @@ namespace Tower_Defense_Project
 
                 Input();
 
-                try
+                /*try
                 {
                     Console.WriteLine(enemies[0].stagePos);
                 }
                 catch
-                { }
+                { }*/
             }
         }
 
@@ -140,12 +152,13 @@ namespace Tower_Defense_Project
 
             keyDidSomething = keyPressed && keyDidSomething;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D1))
+            if (Keyboard.GetState().IsKeyDown(Keys.D1) && Currency >= 500)
             {
                 keyPressed = true;
                 if (!keyDidSomething)
                 {
                     towers.Add(new Tower(this, TowerType.Small, mouse));
+                    currency -= towers[towers.Count - 1].Cost;
                     keyDidSomething = true;
                 }
             }
@@ -182,8 +195,7 @@ namespace Tower_Defense_Project
                 projectile.Draw(spritebatch);
             }
 
-            spritebatch.DrawString(Font, keyDidSomething.ToString(), new Vector2(300, 5), Color.White);
-            spritebatch.DrawString(Font, keyPressed.ToString(), new Vector2(300, 200), Color.White);
+            spritebatch.DrawString(Font, Currency.ToString(), Vector2.Zero, Color.White);
         }
     }
 }

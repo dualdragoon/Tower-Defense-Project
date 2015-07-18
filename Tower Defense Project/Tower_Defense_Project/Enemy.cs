@@ -21,6 +21,7 @@ namespace Tower_Defense_Project
         public float stagePos;
         int stageIndex, frameWidth, health;
         float speed = 0, seconds = 0;
+        uint worth;
 
         private Animation moveAnimation;
         private AnimationPlayer sprite;
@@ -37,6 +38,11 @@ namespace Tower_Defense_Project
             set { health = value; }
         }
 
+        public uint Worth
+        {
+            get { return worth; }
+        }
+
         /// <summary>
         /// Loads a particular enemy sprite sheet and sounds.
         /// </summary>
@@ -51,6 +57,7 @@ namespace Tower_Defense_Project
                     speed = .5f;
                     seconds = 1f;
                     Health = 1;
+                    worth = 1;
                     break;
 
                 case EnemyType.Scout:
@@ -59,6 +66,7 @@ namespace Tower_Defense_Project
                     speed = .5f;
                     seconds = 2f;
                     Health = 6;
+                    worth = 5;
                     break;
 
                 case EnemyType.Brute:
@@ -67,6 +75,7 @@ namespace Tower_Defense_Project
                     speed = .2f;
                     seconds = 1f;
                     Health = 10;
+                    worth = 10;
                     break;
 
                 default:

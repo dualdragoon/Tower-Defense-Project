@@ -1,0 +1,8 @@
+﻿Theme:
+Lantern Corps
+
+Possible Inclusions:
+Story Mode,
+Survival,
+Hero Summons(ish),
+...

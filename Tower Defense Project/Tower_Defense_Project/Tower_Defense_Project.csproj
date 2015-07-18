@@ -89,6 +89,7 @@
     <Compile Include="Tower.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Decided Theme.txt" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>

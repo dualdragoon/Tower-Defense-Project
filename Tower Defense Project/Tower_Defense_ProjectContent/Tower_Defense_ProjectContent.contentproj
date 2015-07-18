@@ -94,13 +94,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Towers\Medium Range.png">
-      <Name>Medium Range</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Towers\Large Range.png">
       <Name>Large Range</Name>
       <Importer>TextureImporter</Importer>
@@ -127,8 +120,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Towers\Test.png">
-      <Name>Test</Name>
+    <Compile Include="Towers\Medium Range.png">
+      <Name>Medium Range</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

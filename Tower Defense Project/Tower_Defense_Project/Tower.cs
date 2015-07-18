@@ -19,37 +19,26 @@ namespace Tower_Defense_Project
         }
         private Level level;
 
+        public uint Cost
+        {
+            get { return cost; }
+        }
+        private uint cost;
+
         public bool isPlaced = false;
         float attackTimer = 0, minAttackTimer;
         public Circle range;
         private Color rangeColor = Color.Gray;
         public FloatingRectangle collision;
         private ProjectileType projectileType;
+        private string spriteSet;
         private Texture2D tex, rangeTex;
         public TowerType type;
 
         private void LoadContent()
         {
-            switch (type)
-            {
-                case TowerType.Small:
-                    tex = Level.Content.Load<Texture2D>(@"Towers/Small");
-                    rangeTex = Level.Content.Load<Texture2D>(@"Towers/Small Range");
-                    break;
-
-                case TowerType.Medium:
-                    tex = Level.Content.Load<Texture2D>(@"Towers/Medium");
-                    rangeTex = Level.Content.Load<Texture2D>(@"Towers/Test");
-                    break;
-
-                case TowerType.Large:
-                    tex = Level.Content.Load<Texture2D>(@"Towers/Large");
-                    rangeTex = Level.Content.Load<Texture2D>(@"Towers/Large Range");
-                    break;
-
-                default:
-                    break;
-            }
+            tex = Level.Content.Load<Texture2D>(@"Towers/" + spriteSet);
+            rangeTex = Level.Content.Load<Texture2D>(@"Towers/" + spriteSet + " Range");
         }
 
         public Tower(Level level, TowerType type, MouseState mouse)
@@ -64,6 +53,8 @@ namespace Tower_Defense_Project
                     range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 100);
                     minAttackTimer = 1f;
                     projectileType = ProjectileType.Small;
+                    spriteSet = "Small";
+                    cost = 500;
                     break;
 
                 case TowerType.Medium:
@@ -71,11 +62,14 @@ namespace Tower_Defense_Project
                     range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 120);
                     minAttackTimer = .3f;
                     projectileType = ProjectileType.Medium;
+                    spriteSet = "Medium";
                     break;
 
                 case TowerType.Large:
                     collision = new FloatingRectangle(mouse.X, mouse.Y, 30, 30);
                     range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 60);
+                    projectileType = ProjectileType.Large;
+                    spriteSet = "Large";
                     break;
 
                 default:
