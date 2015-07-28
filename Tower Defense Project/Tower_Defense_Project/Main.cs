@@ -26,10 +26,10 @@ namespace Tower_Defense_Project
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferHeight = 900;
+            /*graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1440;
             graphics.IsFullScreen = true;
-            IsMouseVisible = true;
+            IsMouseVisible = true;*/
         }
 
         /// <summary>

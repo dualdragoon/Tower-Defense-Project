@@ -30,10 +30,20 @@ namespace Tower_Defense_Project
             path.points.Add(new Vector2(205, 210));
             path.points.Add(new Vector2(205, 400));
 
+            for (int i = 0; i < path.points.Count; i++)
+            {
+                path.points[i] = new Vector2(path.points[i].X / 800, path.points[i].Y / 480);
+            }
+
             path.pathSet.Add(new FloatingRectangle(0, 100, 110, 10));
             path.pathSet.Add(new FloatingRectangle(100, 100, 10, 110));
             path.pathSet.Add(new FloatingRectangle(100, 200, 110, 10));
             path.pathSet.Add(new FloatingRectangle(200, 200, 10, 210));
+
+            for (int i = 0; i < path.pathSet.Count; i++)
+            {
+                path.pathSet[i] = new FloatingRectangle(path.pathSet[i].X/800f, path.pathSet[i].Y/480f, path.pathSet[i].Width/800f, path.pathSet[i].Height/480f);
+            }
 
             StreamWriter write = new StreamWriter("Level1.path");
             write.Write(StringCipher.Encrypt(Serialization.SerializeToString<Path>(path), "temp2"));

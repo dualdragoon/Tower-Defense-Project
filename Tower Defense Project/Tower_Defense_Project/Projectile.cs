@@ -74,7 +74,7 @@ namespace Tower_Defense_Project
             path = new Path();
             path.points.Add(position);
             path.points.Add(target.position);
-            path.Build();
+            path.Build(false);
 
             switch (type)
             {
@@ -108,7 +108,7 @@ namespace Tower_Defense_Project
             path.Clear();
             path.points.Add(position);
             path.points.Add(target.position);
-            path.Build();
+            path.Build(false);
 
             if (stageIndex != path.points.Count - 1)
             {

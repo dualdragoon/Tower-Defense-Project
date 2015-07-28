@@ -38,12 +38,19 @@ namespace Tower_Defense_Project
             }
         }
 
-        public void Build()
+        public void Build(bool fromFile)
         {
-            for (int i = 0; i < points.Count; i++)
+            if (fromFile)
             {
-                Vector2 temp = new Vector2(points[i].X / 800, points[i].Y / 480);
-                points[i] = new Vector2(Level.Graphics.PreferredBackBufferWidth, Level.Graphics.PreferredBackBufferHeight) * temp;
+                for (int i = 0; i < points.Count; i++)
+                {
+                    points[i] = new Vector2(Level.Graphics.PreferredBackBufferWidth, Level.Graphics.PreferredBackBufferHeight) * points[i];
+                }
+
+                for (int i = 0; i < pathSet.Count; i++)
+                {
+                    pathSet[i] = new FloatingRectangle((float)Level.Graphics.PreferredBackBufferWidth * pathSet[i].X, (float)Level.Graphics.PreferredBackBufferHeight * pathSet[i].Y, (float)Level.Graphics.PreferredBackBufferWidth * pathSet[i].Width, (float)Level.Graphics.PreferredBackBufferHeight * pathSet[i].Height);
+                } 
             }
 
             lengths = new float[points.Count - 1];

@@ -8,17 +8,20 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Duality;
-using Duality.Records;
 using Duality.Encrypting;
+using Duality.Interaction;
+using Duality.Records;
 
 namespace Tower_Defense_Project
 {
     class Level
     {
+        public Button temp1;
         private bool keyPressed, keyDidSomething, pause = false;
         private float timer = 0, minTimer = 1f, escapeTimer = 0, minEscapeTimer = .05f;
+        public FloatingRectangle storeSection;
         private MouseState mouse;
-        private Texture2D tex, background;
+        private Texture2D tex, background, tempButton1, tempButton2;
         private StreamReader reader;
 
         public List<Enemy> enemies = new List<Enemy>();
@@ -58,15 +61,17 @@ namespace Tower_Defense_Project
         private void LoadContent(int levelIndex)
         {
             background = Content.Load<Texture2D>(@"Levels/Level" + levelIndex);
+            tempButton1 = Content.Load<Texture2D>(@"Buttons/Temp Button 1");
+            tempButton2 = Content.Load<Texture2D>(@"Buttons/Temp Button 2");
             tex = Content.Load<Texture2D>(@"Textures/SQUARE");
             font = Content.Load<SpriteFont>(@"Fonts/Font");
         }
-        
+
         public void LoadLevel(int levelIndex)
         {
             reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
             path = Serialization.DeserializeFromString<Path>(StringCipher.Decrypt(reader.ReadLine(), "temp2"));
-            path.Build();
+            path.Build(true);
             currency = 1000;
 
             LoadContent(levelIndex);
@@ -76,6 +81,7 @@ namespace Tower_Defense_Project
         {
             content = new ContentManager(serviceProvider, "Content");
             Level.graphics = graphics;
+            storeSection = new FloatingRectangle(.75f * Graphics.PreferredBackBufferWidth, 0f * Graphics.PreferredBackBufferHeight, (.25f * Graphics.PreferredBackBufferWidth) + 1, (Graphics.PreferredBackBufferHeight) + 1);
         }
 
         public void Update(GameTime gameTime)
@@ -94,10 +100,23 @@ namespace Tower_Defense_Project
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                temp1 = new Button(new Vector2(610, 10), 180, 80, 1, mouse, tempButton1, tempButton2);
+
                 if (timer > minTimer)
                 {
                     enemies.Add(new Enemy(this, (EnemyType)101));
                     timer = 0;
+                }
+
+                if (temp1.getButtonState() && Currency >= 500)
+                {
+                    keyPressed = true;
+                    if (!keyDidSomething)
+                    {
+                        towers.Add(new Tower(this, TowerType.Small, mouse));
+                        currency -= towers[towers.Count - 1].Cost;
+                        keyDidSomething = true;
+                    }
                 }
 
                 try
@@ -122,23 +141,26 @@ namespace Tower_Defense_Project
                         tower.Update(gameTime, mouse);
                     }
 
-                    foreach (Projectile projectile in projectiles)
+                    for (int i = 0; i < projectiles.Count; i++)
                     {
-                        projectile.Update(gameTime);
+                        projectiles[i].Update(gameTime);
 
-                        if (projectile.StageIndex == 1)
+                        if (projectiles[i].StageIndex == 1)
                         {
-                            projectile.target.Health -= projectile.damage;
-                            projectiles.Remove(projectile);
+                            projectiles[i].target.Health -= projectiles[i].damage;
+                            projectiles.Remove(projectiles[i]);
                         }
-                        else if (!projectile.Origin.range.Contains(projectile.Position))
+                        else if (!projectiles[i].Origin.range.Contains(projectiles[i].Position))
                         {
-                            projectiles.Remove(projectile);
+                            projectiles.Remove(projectiles[i]);
                         }
                     }
+
                 }
                 catch
-                { }
+                {
+                    //ErrorHandler.RecordError(3, 100, "*shrugs*", ex.Message);
+                }
 
                 Input();
 
@@ -183,12 +205,23 @@ namespace Tower_Defense_Project
 
         public void Draw(GameTime gameTime, SpriteBatch spritebatch)
         {
-            /*foreach (FloatingRectangle i in Path.pathSet)
-            {
-                spritebatch.Draw(tex, i.Draw, Color.White);
-            }*/
-
             spritebatch.Draw(background, new Rectangle(0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight), Color.White);
+
+            spritebatch.Draw(tex, storeSection.Draw, Color.Black);
+
+            #region ButtonDrawing
+            try
+            {
+                spritebatch.Draw(temp1.getTexture(), temp1.Collision, Color.White);
+            }
+            catch
+            { } 
+            #endregion
+
+            foreach (FloatingRectangle i in Path.pathSet)
+            {
+                spritebatch.Draw(tex, i.Draw, Color.Green);
+            }
 
             foreach (Enemy enemy in enemies)
             {
@@ -204,8 +237,8 @@ namespace Tower_Defense_Project
             {
                 projectile.Draw(spritebatch);
             }
-            
-            spritebatch.DrawString(Font, Currency.ToString(), Vector2.Zero, Color.White);
+
+            spritebatch.DrawString(Font, Currency.ToString(), Vector2.Zero, Color.Black);
         }
     }
 }
