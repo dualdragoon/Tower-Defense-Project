@@ -22,6 +22,29 @@ namespace Tower_Defense_Project
 
         Level level;
 
+        static Texture2D currentCursor, emptyCursor, selectedCursor;
+        int offset;
+
+        public static bool IsCustomMouseVisible
+        {
+            get { return isCustomMouseVisible; }
+            set { isCustomMouseVisible = value; }
+        }
+        private static bool isCustomMouseVisible = true;
+
+        public static MouseState CurrentMouse
+        {
+            get { return mouse; }
+            set { mouse = value; }
+        }
+        private static MouseState mouse;
+
+        public static Texture2D SelectedCursor
+        {
+            get { return selectedCursor; }
+            set { selectedCursor = value; }
+        }
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -55,6 +78,9 @@ namespace Tower_Defense_Project
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            emptyCursor = Content.Load<Texture2D>(@"Textures/Null");
+            SelectedCursor = Content.Load<Texture2D>(@"Textures/Cursors/GL Cursor");
+
             level = new Level(Services, graphics);
             level.LoadLevel(1);
             // TODO: use this.Content to load your game content here
@@ -76,6 +102,23 @@ namespace Tower_Defense_Project
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (IsCustomMouseVisible)
+            {
+                currentCursor = SelectedCursor;
+                if (SelectedCursor == Content.Load<Texture2D>(@"Textures/Cursors/BL Cursor"))
+                {
+                    offset = 2;
+                }
+                else
+                {
+                    offset = 1;
+                }
+            }
+            else
+            {
+                currentCursor = emptyCursor;
+            }
+
             level.Update(gameTime);
 
             base.Update(gameTime);
@@ -94,6 +137,8 @@ namespace Tower_Defense_Project
             // TODO: Add your drawing code here
 
             level.Draw(gameTime, spriteBatch);
+
+            spriteBatch.Draw(currentCursor, new Vector2(CurrentMouse.X - offset, CurrentMouse.Y - offset), Color.White);
 
             spriteBatch.End();
 

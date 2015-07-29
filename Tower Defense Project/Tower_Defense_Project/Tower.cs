@@ -110,6 +110,7 @@ namespace Tower_Defense_Project
 
         private bool Placed(MouseState mouse)
         {
+            Main.IsCustomMouseVisible = false;
             bool placed = false;
             if (mouse.X >= 0 && mouse.X <= Level.Graphics.PreferredBackBufferWidth && mouse.Y >= 0 && mouse.Y <= Level.Graphics.PreferredBackBufferHeight)
             {
@@ -122,6 +123,7 @@ namespace Tower_Defense_Project
                     if (mouse.LeftButton == ButtonState.Pressed)
                     {
                         placed = true;
+                        Main.IsCustomMouseVisible = true;
                     }
                 }
                 else

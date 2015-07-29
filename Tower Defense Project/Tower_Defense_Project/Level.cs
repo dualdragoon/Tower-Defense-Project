@@ -20,7 +20,6 @@ namespace Tower_Defense_Project
         private bool keyPressed, keyDidSomething, pause = false;
         private float timer = 0, minTimer = 1f, escapeTimer = 0, minEscapeTimer = .05f;
         public FloatingRectangle storeSection;
-        private MouseState mouse;
         private Texture2D tex, background, tempButton1, tempButton2;
         private StreamReader reader;
 
@@ -86,7 +85,7 @@ namespace Tower_Defense_Project
 
         public void Update(GameTime gameTime)
         {
-            mouse = Mouse.GetState();
+            Main.CurrentMouse = Mouse.GetState();
 
             escapeTimer = Keyboard.GetState().IsKeyDown(Keys.Escape) ? escapeTimer + (float)gameTime.ElapsedGameTime.TotalSeconds : escapeTimer;
 
@@ -100,7 +99,7 @@ namespace Tower_Defense_Project
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                temp1 = new Button(new Vector2(610, 10), 180, 80, 1, mouse, tempButton1, tempButton2);
+                temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2);
 
                 if (timer > minTimer)
                 {
@@ -113,7 +112,7 @@ namespace Tower_Defense_Project
                     keyPressed = true;
                     if (!keyDidSomething)
                     {
-                        towers.Add(new Tower(this, TowerType.Small, mouse));
+                        towers.Add(new Tower(this, TowerType.Small, Main.CurrentMouse));
                         currency -= towers[towers.Count - 1].Cost;
                         keyDidSomething = true;
                     }
@@ -138,7 +137,7 @@ namespace Tower_Defense_Project
 
                     foreach (Tower tower in towers)
                     {
-                        tower.Update(gameTime, mouse);
+                        tower.Update(gameTime, Main.CurrentMouse);
                     }
 
                     for (int i = 0; i < projectiles.Count; i++)
@@ -187,7 +186,7 @@ namespace Tower_Defense_Project
                 keyPressed = true;
                 if (!keyDidSomething)
                 {
-                    towers.Add(new Tower(this, TowerType.Small, mouse));
+                    towers.Add(new Tower(this, TowerType.Small, Main.CurrentMouse));
                     currency -= towers[towers.Count - 1].Cost;
                     keyDidSomething = true;
                 }
@@ -197,7 +196,7 @@ namespace Tower_Defense_Project
                 keyPressed = true;
                 if (!keyDidSomething)
                 {
-                    towers.Add(new Tower(this, TowerType.Medium, mouse));
+                    towers.Add(new Tower(this, TowerType.Medium, Main.CurrentMouse));
                     keyDidSomething = true;
                 }
             }
