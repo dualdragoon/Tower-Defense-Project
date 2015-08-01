@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using SharpDX;
+using SharpDX.Toolkit;
+using SharpDX.Toolkit.Graphics;
+using SharpDX.Toolkit.Input;
+
 using Duality;
 
 namespace Tower_Defense_Project
@@ -49,8 +51,8 @@ namespace Tower_Defense_Project
             switch (type)
             {
                 case TowerType.Small:
-                    collision = new FloatingRectangle(mouse.X, mouse.Y, 10, 10);
-                    range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 100);
+                    collision = new FloatingRectangle(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight, 10, 10);
+                    range = new Circle(new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 100);
                     minAttackTimer = 1f;
                     projectileType = ProjectileType.Small;
                     spriteSet = "Small";
@@ -58,16 +60,16 @@ namespace Tower_Defense_Project
                     break;
 
                 case TowerType.Medium:
-                    collision = new FloatingRectangle(mouse.X, mouse.Y, 20, 20);
-                    range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 120);
+                    collision = new FloatingRectangle(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight, 20, 20);
+                    range = new Circle(new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 120);
                     minAttackTimer = .3f;
                     projectileType = ProjectileType.Medium;
                     spriteSet = "Medium";
                     break;
 
                 case TowerType.Large:
-                    collision = new FloatingRectangle(mouse.X, mouse.Y, 30, 30);
-                    range = new Circle(new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2)), 60);
+                    collision = new FloatingRectangle(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight, 30, 30);
+                    range = new Circle(new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 60);
                     projectileType = ProjectileType.Large;
                     spriteSet = "Large";
                     break;
@@ -112,15 +114,15 @@ namespace Tower_Defense_Project
         {
             Main.IsCustomMouseVisible = false;
             bool placed = false;
-            if (mouse.X >= 0 && mouse.X <= Level.Graphics.PreferredBackBufferWidth && mouse.Y >= 0 && mouse.Y <= Level.Graphics.PreferredBackBufferHeight)
+            if (mouse.X * Level.Graphics.PreferredBackBufferWidth >= 0 && mouse.X * Level.Graphics.PreferredBackBufferWidth <= Level.Graphics.PreferredBackBufferWidth && mouse.Y * Level.Graphics.PreferredBackBufferHeight >= 0 && mouse.Y * Level.Graphics.PreferredBackBufferHeight <= Level.Graphics.PreferredBackBufferHeight)
             {
-                collision.X = mouse.X;
-                collision.Y = mouse.Y;
-                range.Center = new Vector2(mouse.X + (collision.Width / 2), mouse.Y + (collision.Height / 2));
+                collision.X = mouse.X * Level.Graphics.PreferredBackBufferWidth;
+                collision.Y = mouse.Y * Level.Graphics.PreferredBackBufferHeight;
+                range.Center = new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
                 if (CanPlace())
                 {
                     rangeColor = Color.Gray;
-                    if (mouse.LeftButton == ButtonState.Pressed)
+                    if (mouse.LeftButton.Pressed)
                     {
                         placed = true;
                         Main.IsCustomMouseVisible = true;
@@ -134,56 +136,56 @@ namespace Tower_Defense_Project
                 return placed; 
             }
             #region OutOfBoundsHandling
-            else if (mouse.X <= 0 && mouse.Y >= 0 && mouse.Y <= Level.Graphics.PreferredBackBufferHeight)
+            else if (mouse.X * Level.Graphics.PreferredBackBufferWidth <= 0 && mouse.Y * Level.Graphics.PreferredBackBufferHeight >= 0 && mouse.Y * Level.Graphics.PreferredBackBufferHeight <= Level.Graphics.PreferredBackBufferHeight)
             {
                 collision.X = 0;
-                collision.Y = mouse.Y;
-                range.Center = new Vector2(0 + (collision.Width / 2), mouse.Y + (collision.Height / 2));
+                collision.Y = mouse.Y * Level.Graphics.PreferredBackBufferHeight;
+                range.Center = new Vector2(0 + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
                 return placed;
             }
-            else if (mouse.X >= Level.Graphics.PreferredBackBufferWidth && mouse.Y >= 0 && mouse.Y <= Level.Graphics.PreferredBackBufferHeight)
+            else if (mouse.X * Level.Graphics.PreferredBackBufferWidth >= Level.Graphics.PreferredBackBufferWidth && mouse.Y * Level.Graphics.PreferredBackBufferHeight >= 0 && mouse.Y * Level.Graphics.PreferredBackBufferHeight <= Level.Graphics.PreferredBackBufferHeight)
             {
                 collision.X = Level.Graphics.PreferredBackBufferWidth;
-                collision.Y = mouse.Y;
-                range.Center = new Vector2(Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y + (collision.Height / 2));
+                collision.Y = mouse.Y * Level.Graphics.PreferredBackBufferHeight;
+                range.Center = new Vector2(Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
                 return placed;
             }
-            else if (mouse.Y <= 0 && mouse.X >= 0 && mouse.X <= Level.Graphics.PreferredBackBufferWidth)
+            else if (mouse.Y * Level.Graphics.PreferredBackBufferHeight <= 0 && mouse.X * Level.Graphics.PreferredBackBufferWidth >= 0 && mouse.X * Level.Graphics.PreferredBackBufferWidth <= Level.Graphics.PreferredBackBufferWidth)
             {
-                collision.X = mouse.X;
+                collision.X = mouse.X * Level.Graphics.PreferredBackBufferWidth;
                 collision.Y = 0;
-                range.Center = new Vector2(mouse.X + (collision.Width / 2), 0 + (collision.Height / 2));
+                range.Center = new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), 0 + (collision.Height / 2));
                 return placed;
             }
-            else if (mouse.Y >= Level.Graphics.PreferredBackBufferHeight && mouse.X >= 0 && mouse.X <= Level.Graphics.PreferredBackBufferWidth)
+            else if (mouse.Y * Level.Graphics.PreferredBackBufferHeight >= Level.Graphics.PreferredBackBufferHeight && mouse.X * Level.Graphics.PreferredBackBufferWidth >= 0 && mouse.X * Level.Graphics.PreferredBackBufferWidth <= Level.Graphics.PreferredBackBufferWidth)
             {
-                collision.X = mouse.X;
+                collision.X = mouse.X * Level.Graphics.PreferredBackBufferWidth;
                 collision.Y = Level.Graphics.PreferredBackBufferHeight;
-                range.Center = new Vector2(mouse.X + (collision.Width / 2), Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
+                range.Center = new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
                 return placed;
             }
-            else if (mouse.X <= 0 && mouse.Y <= 0)
+            else if (mouse.X * Level.Graphics.PreferredBackBufferWidth <= 0 && mouse.Y * Level.Graphics.PreferredBackBufferHeight <= 0)
             {
                 collision.X = 0;
                 collision.Y = 0;
                 range.Center = new Vector2(0 + (collision.Width / 2), 0 + (collision.Height / 2));
                 return placed;
             }
-            else if (mouse.X <= 0 && mouse.Y >= Level.Graphics.PreferredBackBufferHeight)
+            else if (mouse.X * Level.Graphics.PreferredBackBufferWidth <= 0 && mouse.Y * Level.Graphics.PreferredBackBufferHeight >= Level.Graphics.PreferredBackBufferHeight)
             {
                 collision.X = 0;
                 collision.Y = Level.Graphics.PreferredBackBufferHeight;
                 range.Center = new Vector2(0 + (collision.Width / 2), Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
                 return placed;
             }
-            else if (mouse.X >= Level.Graphics.PreferredBackBufferWidth && mouse.Y <= 0)
+            else if (mouse.X * Level.Graphics.PreferredBackBufferWidth >= Level.Graphics.PreferredBackBufferWidth && mouse.Y * Level.Graphics.PreferredBackBufferHeight <= 0)
             {
                 collision.X = Level.Graphics.PreferredBackBufferWidth;
                 collision.Y = 0;
                 range.Center = new Vector2(Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), 0 + (collision.Height / 2));
                 return placed;
             }
-            else if (mouse.X >= Level.Graphics.PreferredBackBufferWidth && mouse.Y >= Level.Graphics.PreferredBackBufferHeight)
+            else if (mouse.X * Level.Graphics.PreferredBackBufferWidth >= Level.Graphics.PreferredBackBufferWidth && mouse.Y * Level.Graphics.PreferredBackBufferHeight >= Level.Graphics.PreferredBackBufferHeight)
             {
                 collision.X = Level.Graphics.PreferredBackBufferWidth;
                 collision.Y = Level.Graphics.PreferredBackBufferHeight;

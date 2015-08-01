@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using Microsoft.Xna.Framework;
+using SharpDX;
+using SharpDX.Serialization;
 using Duality;
 
 namespace Tower_Defense_Project
 {
     [Serializable]
-    class Path
+    class Path : IDataSerializable
     {
         public List<Vector2> points = new List<Vector2>();
         public float[] lengths;
@@ -80,6 +83,11 @@ namespace Tower_Defense_Project
                 }
             }
             return intersects;
+        }
+
+        public void Serialize(BinarySerializer serializer)
+        {
+            //throw new NotImplementedException();
         }
     }
 

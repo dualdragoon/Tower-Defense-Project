@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using SharpDX;
+using SharpDX.Toolkit;
+using SharpDX.Toolkit.Content;
+using SharpDX.Toolkit.Graphics;
+using SharpDX.Toolkit.Input;
 using Duality;
 using Duality.Encrypting;
 using Duality.Interaction;
@@ -78,18 +78,19 @@ namespace Tower_Defense_Project
 
         public Level(IServiceProvider serviceProvider, GraphicsDeviceManager graphics)
         {
-            content = new ContentManager(serviceProvider, "Content");
+            content = new ContentManager(serviceProvider);
+            content.RootDirectory = "Content";
             Level.graphics = graphics;
             storeSection = new FloatingRectangle(.75f * Graphics.PreferredBackBufferWidth, 0f * Graphics.PreferredBackBufferHeight, (.25f * Graphics.PreferredBackBufferWidth) + 1, (Graphics.PreferredBackBufferHeight) + 1);
         }
 
         public void Update(GameTime gameTime)
         {
-            Main.CurrentMouse = Mouse.GetState();
+            Main.CurrentMouse = Main.Mouse.GetState();
 
-            escapeTimer = Keyboard.GetState().IsKeyDown(Keys.Escape) ? escapeTimer + (float)gameTime.ElapsedGameTime.TotalSeconds : escapeTimer;
+            escapeTimer = Main.CurrentKeyboard.IsKeyPressed(Keys.Escape) ? escapeTimer + (float)gameTime.ElapsedGameTime.TotalSeconds : escapeTimer;
 
-            if (Keyboard.GetState().IsKeyUp(Keys.Escape) && escapeTimer > minEscapeTimer)
+            if (Main.CurrentKeyboard.IsKeyReleased(Keys.Escape) && escapeTimer > minEscapeTimer)
             {
                 escapeTimer = 0;
                 pause = !pause;
@@ -99,7 +100,7 @@ namespace Tower_Defense_Project
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2);
+                temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight);
 
                 if (timer > minTimer)
                 {
@@ -181,7 +182,7 @@ namespace Tower_Defense_Project
 
             keyDidSomething = keyPressed && keyDidSomething;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D1) && Currency >= 500)
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500)
             {
                 keyPressed = true;
                 if (!keyDidSomething)
@@ -191,7 +192,7 @@ namespace Tower_Defense_Project
                     keyDidSomething = true;
                 }
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.D2))
+            else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2))
             {
                 keyPressed = true;
                 if (!keyDidSomething)

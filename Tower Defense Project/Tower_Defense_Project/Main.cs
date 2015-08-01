@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
+using SharpDX;
+using SharpDX.Toolkit;
+using SharpDX.Toolkit.Graphics;
+using SharpDX.Toolkit.Input;
 using Duality;
 
 namespace Tower_Defense_Project
@@ -50,16 +47,36 @@ namespace Tower_Defense_Project
         }
         private static MouseState mouse;
 
+        public static KeyboardState CurrentKeyboard
+        {
+            get { return keyboard; }
+        }
+        private static KeyboardState keyboard;
+
         private static Texture2D SelectedCursor
         {
             get { return selectedCursor; }
             set { selectedCursor = value; }
         }
 
+        public static MouseManager Mouse
+        {
+            get { return mouseManager; }
+        }
+        private static MouseManager mouseManager;
+
+        public static KeyboardManager Keyboard
+        {
+            get { return keyboardManager; }
+        }
+        private static KeyboardManager keyboardManager;
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            mouseManager = new MouseManager(this);
+            keyboardManager = new KeyboardManager(this);
             /*graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1440;
             graphics.IsFullScreen = true;
@@ -121,6 +138,8 @@ namespace Tower_Defense_Project
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            mouse = Mouse.GetState();
+            keyboard = Keyboard.GetState();
             if (IsCustomMouseVisible)
             {
                 currentCursor = cursors[(int)CursorType];
@@ -149,23 +168,31 @@ namespace Tower_Defense_Project
         {
             keyDidSomething = keyPressed && keyDidSomething;
 
-            if(Keyboard.GetState().IsKeyDown(Keys.E))
+            if(keyboard.IsKeyPressed(Keys.E))
             {
-                keyPressed = true;
-                if(!keyDidSomething)
+                //keyPressed = true;
+                //if(!keyDidSomething)
+                //{
+                if((int)CursorType + 1 > 7)
                 {
+                    CursorType = (CustomCursor)0;
+                }
                     CursorType = (CustomCursor)((int)CursorType + 1);
                     keyDidSomething = true;
-                }
+                //}
             }
-            else if(Keyboard.GetState().IsKeyDown(Keys.Q))
+            else if(keyboard.IsKeyPressed(Keys.Q))
             {
-                keyPressed = true;
-                if (!keyDidSomething)
+                //keyPressed = true;
+                //if (!keyDidSomething)
+                //{
+                if ((int)CursorType + 1 < 0)
                 {
-                    CursorType = (CustomCursor)((int)CursorType - 1);
-                    keyDidSomething = true;
+                    CursorType = (CustomCursor)7;
                 }
+                CursorType = (CustomCursor)((int)CursorType - 1);
+                    keyDidSomething = true;
+                //}
             }
         }
 

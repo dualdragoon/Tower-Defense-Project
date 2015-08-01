@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using Microsoft.Xna.Framework;
+using SharpDX;
+using SharpDX.Serialization;
 using Duality;
 using Duality.Records;
 using Duality.Encrypting;
@@ -16,7 +18,8 @@ namespace Tower_Defense_Project
         static void Main(string[] args)
         {
             //Uncomment for making new level serializations.
-            /*Path path = new Path();
+            Path path = new Path();
+            BinarySerializer bs = new BinarySerializer(new FileStream(Environment.CurrentDirectory + "/test.txt", FileMode.Create), SerializerMode.Write);
 
             path.points.Add(new Vector2(0, 105));
             path.points.Add(new Vector2(100, 105));
@@ -47,7 +50,7 @@ namespace Tower_Defense_Project
 
             StreamWriter write = new StreamWriter("Level1.path");
             write.Write(StringCipher.Encrypt(Serialization.SerializeToString<Path>(path), "temp2"));
-            write.Close();*/
+            write.Close();
 
             /*StreamWriter write = new StreamWriter("Level1.enemies");
             write.Write(StringCipher.Encrypt(Serialization.SerializeToString<EnemyType>(EnemyType.Scout), "temp"));
