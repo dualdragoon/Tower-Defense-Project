@@ -12,6 +12,8 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
+    public enum CustomCursor { BL_Cursor, BLL_Cursor, GL_Cursor, IT_Cursor, OL_Cursor, RL_Cursor, SS_Cursor, YL_Cursor, }
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -22,7 +24,10 @@ namespace Tower_Defense_Project
 
         Level level;
 
+        bool keyPressed, keyDidSomething;
+        static CustomCursor cursorType = CustomCursor.GL_Cursor;
         static Texture2D currentCursor, emptyCursor, selectedCursor;
+        Texture2D[] cursors = new Texture2D[8];
         int offset;
 
         public static bool IsCustomMouseVisible
@@ -32,6 +37,12 @@ namespace Tower_Defense_Project
         }
         private static bool isCustomMouseVisible = true;
 
+        public static CustomCursor CursorType
+        {
+            get { return cursorType; }
+            set { cursorType = value; }
+        }
+
         public static MouseState CurrentMouse
         {
             get { return mouse; }
@@ -39,7 +50,7 @@ namespace Tower_Defense_Project
         }
         private static MouseState mouse;
 
-        public static Texture2D SelectedCursor
+        private static Texture2D SelectedCursor
         {
             get { return selectedCursor; }
             set { selectedCursor = value; }
@@ -79,7 +90,15 @@ namespace Tower_Defense_Project
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             emptyCursor = Content.Load<Texture2D>(@"Textures/Null");
-            SelectedCursor = Content.Load<Texture2D>(@"Textures/Cursors/GL Cursor");
+
+            cursors[0] = Content.Load<Texture2D>(@"Textures/Cursors/BLL Cursor");
+            cursors[1] = Content.Load<Texture2D>(@"Textures/Cursors/BL Cursor");
+            cursors[2] = Content.Load<Texture2D>(@"Textures/Cursors/GL Cursor");
+            cursors[3] = Content.Load<Texture2D>(@"Textures/Cursors/IT Cursor");
+            cursors[4] = Content.Load<Texture2D>(@"Textures/Cursors/OL Cursor");
+            cursors[5] = Content.Load<Texture2D>(@"Textures/Cursors/RL Cursor");
+            cursors[6] = Content.Load<Texture2D>(@"Textures/Cursors/SS Cursor");
+            cursors[7] = Content.Load<Texture2D>(@"Textures/Cursors/YL Cursor");
 
             level = new Level(Services, graphics);
             level.LoadLevel(1);
@@ -104,8 +123,8 @@ namespace Tower_Defense_Project
         {
             if (IsCustomMouseVisible)
             {
-                currentCursor = SelectedCursor;
-                if (SelectedCursor == Content.Load<Texture2D>(@"Textures/Cursors/BL Cursor"))
+                currentCursor = cursors[(int)CursorType];
+                if (currentCursor == Content.Load<Texture2D>(@"Textures/Cursors/BL Cursor"))
                 {
                     offset = 2;
                 }
@@ -119,9 +138,35 @@ namespace Tower_Defense_Project
                 currentCursor = emptyCursor;
             }
 
+            Input();
+
             level.Update(gameTime);
 
             base.Update(gameTime);
+        }
+
+        private void Input()
+        {
+            keyDidSomething = keyPressed && keyDidSomething;
+
+            if(Keyboard.GetState().IsKeyDown(Keys.E))
+            {
+                keyPressed = true;
+                if(!keyDidSomething)
+                {
+                    CursorType = (CustomCursor)((int)CursorType + 1);
+                    keyDidSomething = true;
+                }
+            }
+            else if(Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                keyPressed = true;
+                if (!keyDidSomething)
+                {
+                    CursorType = (CustomCursor)((int)CursorType - 1);
+                    keyDidSomething = true;
+                }
+            }
         }
 
         /// <summary>
