@@ -18,8 +18,7 @@ namespace Tower_Defense_Project
         static void Main(string[] args)
         {
             //Uncomment for making new level serializations.
-            Path path = new Path();
-            BinarySerializer bs = new BinarySerializer(new FileStream(Environment.CurrentDirectory + "/test.txt", FileMode.Create), SerializerMode.Write);
+            /*Path path = new Path();
 
             path.points.Add(new Vector2(0, 105));
             path.points.Add(new Vector2(100, 105));
@@ -48,9 +47,34 @@ namespace Tower_Defense_Project
                 path.pathSet[i] = new FloatingRectangle(path.pathSet[i].X/800f, path.pathSet[i].Y/480f, path.pathSet[i].Width/800f, path.pathSet[i].Height/480f);
             }
 
+            StreamWriter temp = new StreamWriter("temp1.temp");
             StreamWriter write = new StreamWriter("Level1.path");
-            write.Write(StringCipher.Encrypt(Serialization.SerializeToString<Path>(path), "temp2"));
+
+            temp.WriteLine(path.points.Count);
+            temp.WriteLine(path.pathSet.Count);
+
+            for (int i = 0; i < path.points.Count; i++)
+            {
+                temp.WriteLine(path.points[i].X);
+                temp.WriteLine(path.points[i].Y);
+            }
+
+            for (int i = 0; i < path.pathSet.Count; i++)
+            {
+                temp.WriteLine(path.pathSet[i].X);
+                temp.WriteLine(path.pathSet[i].Y);
+                temp.WriteLine(path.pathSet[i].Width);
+                temp.WriteLine(path.pathSet[i].Height);
+            }
+
+            temp.Close();
+
+            StreamReader read = new StreamReader("temp1.temp");
+
+            write.Write(StringCipher.Encrypt(read.ReadToEnd(), "temp2"));
             write.Close();
+            read.Close();
+            File.Delete("temp1.temp");*/
 
             /*StreamWriter write = new StreamWriter("Level1.enemies");
             write.Write(StringCipher.Encrypt(Serialization.SerializeToString<EnemyType>(EnemyType.Scout), "temp"));

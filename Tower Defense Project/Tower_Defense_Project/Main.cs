@@ -168,30 +168,36 @@ namespace Tower_Defense_Project
         {
             keyDidSomething = keyPressed && keyDidSomething;
 
-            if(keyboard.IsKeyPressed(Keys.E))
+            if (keyboard.IsKeyPressed(Keys.E))
             {
                 //keyPressed = true;
                 //if(!keyDidSomething)
                 //{
-                if((int)CursorType + 1 > 7)
+                if ((int)CursorType + 1 > 7)
                 {
                     CursorType = (CustomCursor)0;
                 }
+                else
+                {
                     CursorType = (CustomCursor)((int)CursorType + 1);
-                    keyDidSomething = true;
+                }
+                keyDidSomething = true;
                 //}
             }
-            else if(keyboard.IsKeyPressed(Keys.Q))
+            else if (keyboard.IsKeyPressed(Keys.Q))
             {
                 //keyPressed = true;
                 //if (!keyDidSomething)
                 //{
-                if ((int)CursorType + 1 < 0)
+                if ((int)CursorType - 1 < 0)
                 {
                     CursorType = (CustomCursor)7;
                 }
-                CursorType = (CustomCursor)((int)CursorType - 1);
-                    keyDidSomething = true;
+                else
+                {
+                    CursorType = (CustomCursor)((int)CursorType - 1);
+                }
+                keyDidSomething = true;
                 //}
             }
         }
@@ -210,7 +216,7 @@ namespace Tower_Defense_Project
 
             level.Draw(gameTime, spriteBatch);
 
-            spriteBatch.Draw(currentCursor, new Vector2(CurrentMouse.X - offset, CurrentMouse.Y - offset), Color.White);
+            spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * graphics.PreferredBackBufferWidth) - offset, (CurrentMouse.Y * graphics.PreferredBackBufferHeight) - offset), Color.White);
 
             spriteBatch.End();
 

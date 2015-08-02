@@ -11,6 +11,8 @@ using Duality;
 using Duality.Encrypting;
 using Duality.Interaction;
 using Duality.Records;
+using SharpDX.Serialization;
+using System.Reflection;
 
 namespace Tower_Defense_Project
 {
@@ -20,8 +22,10 @@ namespace Tower_Defense_Project
         private bool keyPressed, keyDidSomething, pause = false;
         private float timer = 0, minTimer = 1f, escapeTimer = 0, minEscapeTimer = .05f;
         public FloatingRectangle storeSection;
+        private int pointsNum, pathSetNum;
         private Texture2D tex, background, tempButton1, tempButton2;
-        private StreamReader reader;
+        private StreamWriter sw;
+        private StreamReader temp, read;
 
         public List<Enemy> enemies = new List<Enemy>();
         public List<Tower> towers = new List<Tower>();
@@ -68,8 +72,25 @@ namespace Tower_Defense_Project
 
         public void LoadLevel(int levelIndex)
         {
-            reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
-            path = Serialization.DeserializeFromString<Path>(StringCipher.Decrypt(reader.ReadLine(), "temp2"));
+            //reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".level");
+            temp = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
+            sw = new StreamWriter("temp2.temp");
+            sw.Write(StringCipher.Decrypt(temp.ReadLine(), "temp2"));
+            sw.Close();
+            read = new StreamReader("temp2.temp");
+            pointsNum = int.Parse(read.ReadLine());
+            pathSetNum = int.Parse(read.ReadLine());
+            path = new Path();
+            for (int i = 0; i < pointsNum; i++)
+            {
+                path.points.Add(new Vector2(float.Parse(read.ReadLine()), float.Parse(read.ReadLine())));
+            }
+            for (int i = 0; i < pathSetNum; i++)
+            {
+                path.pathSet.Add(new FloatingRectangle(float.Parse(read.ReadLine()), float.Parse(read.ReadLine()), float.Parse(read.ReadLine()), float.Parse(read.ReadLine())));
+            }
+            read.Close();
+            File.Delete("temp2.temp");
             path.Build(true);
             currency = 1000;
 
@@ -80,6 +101,7 @@ namespace Tower_Defense_Project
         {
             content = new ContentManager(serviceProvider);
             content.RootDirectory = "Content";
+            content.Resolvers.Add(new FileSystemContentResolver(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)));
             Level.graphics = graphics;
             storeSection = new FloatingRectangle(.75f * Graphics.PreferredBackBufferWidth, 0f * Graphics.PreferredBackBufferHeight, (.25f * Graphics.PreferredBackBufferWidth) + 1, (Graphics.PreferredBackBufferHeight) + 1);
         }

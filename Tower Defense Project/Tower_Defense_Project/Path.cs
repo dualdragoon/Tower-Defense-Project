@@ -87,7 +87,7 @@ namespace Tower_Defense_Project
 
         public void Serialize(BinarySerializer serializer)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 

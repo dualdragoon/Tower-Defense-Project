@@ -121,7 +121,7 @@ namespace Tower_Defense_Project
                 range.Center = new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
                 if (CanPlace())
                 {
-                    rangeColor = Color.Gray;
+                    rangeColor = Color.Black;
                     if (mouse.LeftButton.Pressed)
                     {
                         placed = true;
