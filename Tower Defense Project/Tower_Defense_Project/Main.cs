@@ -210,7 +210,7 @@ namespace Tower_Defense_Project
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, graphics.GraphicsDevice.BlendStates.NonPremultiplied);
 
             // TODO: Add your drawing code here
 
