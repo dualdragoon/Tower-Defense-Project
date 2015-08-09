@@ -11,7 +11,7 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
-    enum TowerType { Small, Medium, Large, };
+    enum TowerType { GL, RL, BLL, };
 
     class Tower
     {
@@ -50,28 +50,28 @@ namespace Tower_Defense_Project
 
             switch (type)
             {
-                case TowerType.Small:
-                    collision = new FloatingRectangle(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight, 10, 10);
+                case TowerType.GL:
+                    collision = new FloatingRectangle(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight, 32, 32);
                     range = new Circle(new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 100);
                     minAttackTimer = 1f;
                     projectileType = ProjectileType.Small;
-                    spriteSet = "Small";
+                    spriteSet = "GL";
                     cost = 500;
                     break;
 
-                case TowerType.Medium:
-                    collision = new FloatingRectangle(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight, 20, 20);
+                case TowerType.RL:
+                    collision = new FloatingRectangle(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight, 32, 32);
                     range = new Circle(new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 120);
                     minAttackTimer = .3f;
                     projectileType = ProjectileType.Medium;
-                    spriteSet = "Medium";
+                    spriteSet = "RL";
                     break;
 
-                case TowerType.Large:
+                case TowerType.BLL:
                     collision = new FloatingRectangle(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight, 30, 30);
                     range = new Circle(new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Level.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 60);
                     projectileType = ProjectileType.Large;
-                    spriteSet = "Large";
+                    spriteSet = "BLL";
                     break;
 
                 default:

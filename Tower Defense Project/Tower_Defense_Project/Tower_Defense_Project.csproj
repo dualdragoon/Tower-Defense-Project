@@ -146,10 +146,10 @@
     <ToolkitTexture Include="Content\Textures\Null.png" />
     <ToolkitTexture Include="Content\Textures\SQUARE.png" />
     <ToolkitTexture Include="Content\Towers\Large Range.png" />
-    <ToolkitTexture Include="Content\Towers\Medium Range.png" />
-    <ToolkitTexture Include="Content\Towers\Medium.png" />
-    <ToolkitTexture Include="Content\Towers\Small Range.png" />
-    <ToolkitTexture Include="Content\Towers\Small.png" />
+    <ToolkitTexture Include="Content\Towers\RL Range.png" />
+    <ToolkitTexture Include="Content\Towers\GL Range.png" />
+    <ToolkitTexture Include="Content\Towers\GL.png" />
+    <ToolkitTexture Include="Content\Towers\RL.png" />
     <Content Include="Decided Theme.txt" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png">

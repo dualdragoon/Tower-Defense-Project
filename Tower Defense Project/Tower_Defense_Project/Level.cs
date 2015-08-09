@@ -135,7 +135,7 @@ namespace Tower_Defense_Project
                     keyPressed = true;
                     if (!keyDidSomething)
                     {
-                        towers.Add(new Tower(this, TowerType.Small, Main.CurrentMouse));
+                        towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
                         currency -= towers[towers.Count - 1].Cost;
                         keyDidSomething = true;
                     }
@@ -209,7 +209,7 @@ namespace Tower_Defense_Project
                 keyPressed = true;
                 if (!keyDidSomething)
                 {
-                    towers.Add(new Tower(this, TowerType.Small, Main.CurrentMouse));
+                    towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
                     currency -= towers[towers.Count - 1].Cost;
                     keyDidSomething = true;
                 }
@@ -219,7 +219,7 @@ namespace Tower_Defense_Project
                 keyPressed = true;
                 if (!keyDidSomething)
                 {
-                    towers.Add(new Tower(this, TowerType.Medium, Main.CurrentMouse));
+                    towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
                     keyDidSomething = true;
                 }
             }
@@ -227,7 +227,7 @@ namespace Tower_Defense_Project
 
         public void Draw(GameTime gameTime, SpriteBatch spritebatch)
         {
-            spritebatch.Draw(background, new Rectangle(0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight), Color.White);
+            spritebatch.Draw(background, new RectangleF(0, 0, Graphics.GraphicsDevice.Viewport.Width, Graphics.GraphicsDevice.Viewport.Height), Color.White);
 
             spritebatch.Draw(tex, storeSection.Draw, Color.Black);
 

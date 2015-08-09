@@ -216,7 +216,7 @@ namespace Tower_Defense_Project
 
             level.Draw(gameTime, spriteBatch);
 
-            spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * graphics.PreferredBackBufferWidth) - offset, (CurrentMouse.Y * graphics.PreferredBackBufferHeight) - offset), Color.White);
+            spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * graphics.GraphicsDevice.Viewport.Width) - offset, (CurrentMouse.Y * graphics.GraphicsDevice.Viewport.Height) - offset), Color.White);
 
             spriteBatch.End();
 
