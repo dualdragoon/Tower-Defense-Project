@@ -18,6 +18,8 @@
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>4e6b0e1b</NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,10 +32,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>4e6b0e1b</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +47,8 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>false</XnaCompressContent>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -62,6 +64,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Duality, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
@@ -174,7 +179,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ToolkitFont Include="Content\Fonts\Font.spritefont" />
+    <ToolkitFont Include="Content\Fonts\Font.spritefont">
+      <SubType>Designer</SubType>
+    </ToolkitFont>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
     <None Include="Content\Levels\Level1.enemies">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -195,6 +204,13 @@
     <Error Condition="!Exists('..\..\packages\SharpDX.Toolkit.2.6.3\build\SharpDX.Toolkit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SharpDX.Toolkit.2.6.3\build\SharpDX.Toolkit.targets'))" />
   </Target>
   <Import Project="..\..\packages\SharpDX.Toolkit.2.6.3\build\SharpDX.Toolkit.targets" Condition="Exists('..\..\packages\SharpDX.Toolkit.2.6.3\build\SharpDX.Toolkit.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(TargetDir)Lib" mkdir "$(TargetDir)Lib"
+xcopy "$(TargetDir)*.dll" "$(TargetDir)Lib" /Y
+xcopy "$(TargetDir)*.xml" "$(TargetDir)Lib" /Y
+del "$(TargetDir)*.dll"
+del "$(TargetDir)*.xml"</PostBuildEvent>
+  </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 
       Other similar extension points exist, see Microsoft.Common.targets.
