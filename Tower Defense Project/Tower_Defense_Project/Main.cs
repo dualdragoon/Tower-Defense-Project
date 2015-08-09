@@ -77,6 +77,8 @@ namespace Tower_Defense_Project
             Content.RootDirectory = "Content";
             mouseManager = new MouseManager(this);
             keyboardManager = new KeyboardManager(this);
+            graphics.PreferredBackBufferHeight = 480;
+            graphics.PreferredBackBufferWidth = 800;
             /*graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1440;
             graphics.IsFullScreen = true;
