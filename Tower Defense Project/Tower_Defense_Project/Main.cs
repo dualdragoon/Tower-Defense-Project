@@ -23,9 +23,9 @@ namespace Tower_Defense_Project
 
         bool keyPressed, keyDidSomething;
         static CustomCursor cursorType = CustomCursor.GL_Cursor;
+        int offset;
         static Texture2D currentCursor, emptyCursor, selectedCursor;
         Texture2D[] cursors = new Texture2D[8];
-        int offset;
 
         public static bool IsCustomMouseVisible
         {
@@ -77,8 +77,8 @@ namespace Tower_Defense_Project
             Content.RootDirectory = "Content";
             mouseManager = new MouseManager(this);
             keyboardManager = new KeyboardManager(this);
-            graphics.PreferredBackBufferHeight = 480;
-            graphics.PreferredBackBufferWidth = 800;
+            //graphics.PreferredBackBufferHeight = 480;
+            //graphics.PreferredBackBufferWidth = 800;
             /*graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1440;
             graphics.IsFullScreen = true;
@@ -213,6 +213,8 @@ namespace Tower_Defense_Project
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(SpriteSortMode.Deferred, graphics.GraphicsDevice.BlendStates.NonPremultiplied);
+
+            Window.AllowUserResizing = false;
 
             // TODO: Add your drawing code here
 

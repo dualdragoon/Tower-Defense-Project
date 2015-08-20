@@ -108,6 +108,7 @@
       <HintPath>..\..\packages\SharpYaml.1.2.0\lib\SharpYaml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -150,23 +151,23 @@
     <ToolkitTexture Include="Content\Towers\GL Range.png" />
     <ToolkitTexture Include="Content\Towers\GL.png" />
     <ToolkitTexture Include="Content\Towers\RL.png" />
-    <Content Include="Content\Towers\BLL.png" />
-    <Content Include="Content\Towers\BL.png" />
-    <Content Include="Content\Towers\BL S.png" />
-    <Content Include="Content\Towers\GL S.png" />
-    <Content Include="Content\Towers\GL O.png" />
-    <Content Include="Content\Towers\IT.png" />
-    <Content Include="Content\Towers\IT S.png" />
-    <Content Include="Content\Towers\IT O.png" />
-    <Content Include="Content\Towers\OL.png" />
-    <Content Include="Content\Towers\OL S.png" />
-    <Content Include="Content\Towers\OL O.png" />
-    <Content Include="Content\Towers\RL S.png" />
-    <Content Include="Content\Towers\RL O.png" />
-    <Content Include="Content\Towers\SS.png" />
-    <Content Include="Content\Towers\SS S.png" />
-    <Content Include="Content\Towers\YL S.png" />
-    <Content Include="Content\Towers\YL.png" />
+    <ToolkitTexture Include="Content\Towers\BLL.png" />
+    <ToolkitTexture Include="Content\Towers\BL.png" />
+    <ToolkitTexture Include="Content\Towers\BL S.png" />
+    <ToolkitTexture Include="Content\Towers\GL S.png" />
+    <ToolkitTexture Include="Content\Towers\GL O.png" />
+    <ToolkitTexture Include="Content\Towers\IT.png" />
+    <ToolkitTexture Include="Content\Towers\IT S.png" />
+    <ToolkitTexture Include="Content\Towers\IT O.png" />
+    <ToolkitTexture Include="Content\Towers\OL.png" />
+    <ToolkitTexture Include="Content\Towers\OL S.png" />
+    <ToolkitTexture Include="Content\Towers\OL O.png" />
+    <ToolkitTexture Include="Content\Towers\RL S.png" />
+    <ToolkitTexture Include="Content\Towers\RL O.png" />
+    <ToolkitTexture Include="Content\Towers\SS.png" />
+    <ToolkitTexture Include="Content\Towers\SS S.png" />
+    <ToolkitTexture Include="Content\Towers\YL S.png" />
+    <ToolkitTexture Include="Content\Towers\YL.png" />
     <Content Include="Decided Theme.txt" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png">
@@ -209,7 +210,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <Import Project="..\..\packages\SharpDX.2.6.3\build\SharpDX.targets" Condition="Exists('..\..\packages\SharpDX.2.6.3\build\SharpDX.targets')" />

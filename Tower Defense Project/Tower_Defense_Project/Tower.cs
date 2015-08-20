@@ -6,7 +6,6 @@ using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
-
 using Duality;
 
 namespace Tower_Defense_Project
@@ -28,7 +27,8 @@ namespace Tower_Defense_Project
         private uint cost;
 
         public bool isPlaced = false;
-        float attackTimer = 0, minAttackTimer;
+        private bool isSelected;
+        private float attackTimer = 0, minAttackTimer;
         public Circle range;
         private Color rangeColor = Color.Gray;
         public FloatingRectangle collision;
@@ -94,6 +94,18 @@ namespace Tower_Defense_Project
                 {
                     Fire();
                 }
+
+                if (mouse.RightButton.Pressed)
+                {
+                    if (collision.Contains(new Vector2(mouse.X * Level.Graphics.PreferredBackBufferWidth, mouse.Y * Level.Graphics.PreferredBackBufferHeight)))
+                    {
+                        isSelected = true;
+                    }
+                    else
+                    {
+                        isSelected = false;
+                    }
+                }
             }
         }
 
@@ -125,6 +137,7 @@ namespace Tower_Defense_Project
                     if (mouse.LeftButton.Pressed)
                     {
                         placed = true;
+                        isSelected = false;
                         Main.IsCustomMouseVisible = true;
                     }
                 }
@@ -219,7 +232,7 @@ namespace Tower_Defense_Project
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (!isPlaced)
+            if (!isPlaced || isSelected)
             {
                 spriteBatch.Draw(rangeTex, range.Location, rangeColor);
             }
