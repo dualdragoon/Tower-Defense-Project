@@ -96,15 +96,6 @@ namespace Tower_Defense_Project
             // TODO: Add your initialization logic here
             ErrorHandler.Initialize();
 
-            try
-            {
-                throw new Exception("Test");
-            }
-            catch (Exception ex)
-            {
-                ErrorHandler.RecordError(2, 102, "Test", ex.Message);
-            }
-
             base.Initialize();
         }
 
