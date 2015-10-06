@@ -23,7 +23,7 @@ namespace Tower_Defense_Project
         private float timer = 0, minTimer = 1f, escapeTimer = 0, minEscapeTimer = .05f;
         public FloatingRectangle storeSection;
         private int pointsNum, pathSetNum;
-        private Texture2D tex, background, tempButton1, tempButton2;
+        private Texture2D tex, background, tempButton1, tempButton2, testTex;
         private StreamWriter sw;
         private StreamReader temp, read;
 
@@ -72,6 +72,8 @@ namespace Tower_Defense_Project
 
         public void LoadLevel(int levelIndex)
         {
+            LoadContent(levelIndex);
+
             //reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".level");
             temp = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
             sw = new StreamWriter("temp2.temp");
@@ -94,7 +96,8 @@ namespace Tower_Defense_Project
             path.Build(true);
             currency = 1000;
 
-            LoadContent(levelIndex);
+            temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight);
+            temp1.ButtonPressed += ButtonHandling;
         }
 
         public Level(IServiceProvider serviceProvider, GraphicsDeviceManager graphics)
@@ -121,24 +124,13 @@ namespace Tower_Defense_Project
             if (!pause)
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight);
+                
+                temp1.Update(Main.CurrentMouse);
 
                 if (timer > minTimer)
                 {
                     enemies.Add(new Enemy(this, (EnemyType)101));
                     timer = 0;
-                }
-
-                if (temp1.getButtonState() && Currency >= 500)
-                {
-                    keyPressed = true;
-                    if (!keyDidSomething)
-                    {
-                        towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
-                        currency -= towers[towers.Count - 1].Cost;
-                        keyDidSomething = true;
-                    }
                 }
 
                 try
@@ -195,6 +187,23 @@ namespace Tower_Defense_Project
             }
         }
 
+        private void ButtonHandling(object sender, EventArgs e)
+        {
+            switch (((Button)sender).ButtonNum)
+            {
+                case 1:
+                    if (Currency >= 500)
+                    {
+                        towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
+                        currency -= towers[towers.Count - 1].Cost;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         private void Input()
         {
             if (towers.Count > 0 && towers[towers.Count - 1].isPlaced)
@@ -228,16 +237,16 @@ namespace Tower_Defense_Project
         public void Draw(GameTime gameTime, SpriteBatch spritebatch)
         {
             spritebatch.Draw(background, new RectangleF(0, 0, Graphics.GraphicsDevice.Viewport.Width, Graphics.GraphicsDevice.Viewport.Height), Color.White);
-
+        
             spritebatch.Draw(tex, storeSection.Draw, Color.Black);
 
             #region ButtonDrawing
             try
             {
-                spritebatch.Draw(temp1.getTexture(), temp1.Collision, Color.White);
+                spritebatch.Draw(temp1.Texture, temp1.Collision, Color.White);
             }
             catch
-            { } 
+            { }
             #endregion
 
             foreach (FloatingRectangle i in Path.pathSet)
