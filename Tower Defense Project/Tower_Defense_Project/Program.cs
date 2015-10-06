@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 using SharpDX;
 using SharpDX.Serialization;
 using Duality;
@@ -79,6 +80,9 @@ namespace Tower_Defense_Project
             /*StreamWriter write = new StreamWriter("Level1.enemies");
             write.Write(StringCipher.Encrypt(Serialization.SerializeToString<EnemyType>(EnemyType.Scout), "temp"));
             write.Close();*/
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
             using (Main game = new Main())
             {
