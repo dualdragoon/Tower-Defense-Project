@@ -1,0 +1,36 @@
+Short Term:
+
+
+Long Term:
+
+	Gamemode Type: open field where towers are placed freely and enemies use path finding to get to the end.
+
+	Game Type: Survival mode with endless waves of enemies.
+
+	Use custom solar system.
+		-have individual planets have unique features that affect gameplay in interesting ways.
+
+
+
+
+Mutagens:
+
+	Zero gravity environments in a psuedo-3D space.
+
+	World/Zone-based events that can affect any number of things.
+
+
+
+Planets:
+	
+	Crystal covered/infested planet akin to smaller scale versions of the common form of superman's fortress of solitude
+		for infected - the planet has some sort of atmospheric destabilization that allows in more of one wavelength of light than others allowing for strange and wonderous evolution to occur
+
+	Ancient deserted city-planet full of the desiccated bodies of a forgotten race as if they all died at once to an unknown threat (possibly an explorative planet for loot or lore elements or some such)
+
+
+
+
+Side-Side-Side Idea:
+
+	Rather than a linear story, have it be open ended with you being sort of a mercenary leader that takes on randomly generated tasks themed toward the environment.

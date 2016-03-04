@@ -9,7 +9,9 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
-    public enum CustomCursor { BL_Cursor, BLL_Cursor, GL_Cursor, IT_Cursor, OL_Cursor, RL_Cursor, SS_Cursor, YL_Cursor, }
+    public enum CustomCursor { BL_Cursor, BLL_Cursor, GL_Cursor, IT_Cursor, OL_Cursor, RL_Cursor, SS_Cursor, YL_Cursor }
+
+    public enum GameState { Menu, Play, LevelDesigner }
 
     /// <summary>
     /// This is the main type for your game
@@ -21,18 +23,24 @@ namespace Tower_Defense_Project
 
         Level level;
 
+        static bool isCustomMouseVisible = true;
         bool keyPressed, keyDidSomething;
         static CustomCursor cursorType = CustomCursor.GL_Cursor;
+        static GameState currentState = GameState.LevelDesigner;
         int offset;
+        static KeyboardManager keyboardManager;
+        static KeyboardState keyboard;
+        static MouseManager mouseManager;
+        static MouseState mouse;
         static Texture2D currentCursor, emptyCursor, selectedCursor;
         Texture2D[] cursors = new Texture2D[8];
 
+        #region Properties
         public static bool IsCustomMouseVisible
         {
             get { return isCustomMouseVisible; }
             set { isCustomMouseVisible = value; }
         }
-        private static bool isCustomMouseVisible = true;
 
         public static CustomCursor CursorType
         {
@@ -40,36 +48,39 @@ namespace Tower_Defense_Project
             set { cursorType = value; }
         }
 
-        public static MouseState CurrentMouse
+        public static GameState CurrentState
         {
-            get { return mouse; }
-            set { mouse = value; }
+            get { return currentState; }
+            set { currentState = value; }
         }
-        private static MouseState mouse;
+
+        public static KeyboardManager Keyboard
+        {
+            get { return keyboardManager; }
+        }
 
         public static KeyboardState CurrentKeyboard
         {
             get { return keyboard; }
-        }
-        private static KeyboardState keyboard;
-
-        private static Texture2D SelectedCursor
-        {
-            get { return selectedCursor; }
-            set { selectedCursor = value; }
         }
 
         public static MouseManager Mouse
         {
             get { return mouseManager; }
         }
-        private static MouseManager mouseManager;
 
-        public static KeyboardManager Keyboard
+        public static MouseState CurrentMouse
         {
-            get { return keyboardManager; }
+            get { return mouse; }
+            set { mouse = value; }
         }
-        private static KeyboardManager keyboardManager;
+
+        private static Texture2D SelectedCursor
+        {
+            get { return selectedCursor; }
+            set { selectedCursor = value; }
+        }
+        #endregion
 
         public Main()
         {
@@ -145,7 +156,7 @@ namespace Tower_Defense_Project
             if (IsCustomMouseVisible)
             {
                 currentCursor = cursors[(int)CursorType];
-                if (currentCursor == Content.Load<Texture2D>(@"Textures/Cursors/BL Cursor"))
+                if (currentCursor == cursors[1])
                 {
                     offset = 2;
                 }
@@ -161,7 +172,21 @@ namespace Tower_Defense_Project
 
             Input();
 
-            level.Update(gameTime);
+            switch (CurrentState)
+            {
+                case GameState.Menu:
+                    break;
+
+                case GameState.Play:
+                    level.Update(gameTime);
+                    break;
+
+                case GameState.LevelDesigner:
+                    break;
+
+                default:
+                    break;
+            }
 
             base.Update(gameTime);
         }
@@ -216,9 +241,21 @@ namespace Tower_Defense_Project
 
             Window.AllowUserResizing = false;
 
-            // TODO: Add your drawing code here
+            switch (CurrentState)
+            {
+                case GameState.Menu:
+                    break;
 
-            level.Draw(gameTime, spriteBatch);
+                case GameState.Play:
+                    level.Draw(gameTime, spriteBatch);
+                    break;
+
+                case GameState.LevelDesigner:
+                    break;
+
+                default:
+                    break;
+            }
 
             spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * graphics.GraphicsDevice.Viewport.Width) - offset, (CurrentMouse.Y * graphics.GraphicsDevice.Viewport.Height) - offset), Color.White);
 
