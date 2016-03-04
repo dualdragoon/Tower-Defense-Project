@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using SharpDX.Toolkit;
+using SharpDX.Toolkit.Content;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
 using Duality;
@@ -18,7 +19,6 @@ namespace Tower_Defense_Project
     /// </summary>
     public class Main : Game
     {
-        GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
         Level level;
@@ -26,8 +26,10 @@ namespace Tower_Defense_Project
         static bool isCustomMouseVisible = true;
         bool keyPressed, keyDidSomething;
         static CustomCursor cursorType = CustomCursor.GL_Cursor;
-        static GameState currentState = GameState.LevelDesigner;
+        GameState currentState = GameState.LevelDesigner;
         int offset;
+        static ContentManager content;
+        static GraphicsDeviceManager graphics;
         static KeyboardManager keyboardManager;
         static KeyboardState keyboard;
         static MouseManager mouseManager;
@@ -42,16 +44,30 @@ namespace Tower_Defense_Project
             set { isCustomMouseVisible = value; }
         }
 
+        public static ContentManager GameContent
+        {
+            get { return content; }
+        }
+
         public static CustomCursor CursorType
         {
             get { return cursorType; }
             set { cursorType = value; }
         }
 
-        public static GameState CurrentState
+        public GameState CurrentState
         {
             get { return currentState; }
-            set { currentState = value; }
+            set 
+            { 
+                currentState = value;
+                StateChanged();
+            }
+        }
+
+        public static GraphicsDeviceManager Graphics
+        {
+            get { return graphics; }
         }
 
         public static KeyboardManager Keyboard
@@ -88,6 +104,7 @@ namespace Tower_Defense_Project
             Content.RootDirectory = "Content";
             mouseManager = new MouseManager(this);
             keyboardManager = new KeyboardManager(this);
+            content = Content;
             //graphics.PreferredBackBufferHeight = 480;
             //graphics.PreferredBackBufferWidth = 800;
             /*graphics.PreferredBackBufferHeight = 900;
@@ -104,7 +121,6 @@ namespace Tower_Defense_Project
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             ErrorHandler.Initialize();
 
             base.Initialize();
@@ -116,7 +132,6 @@ namespace Tower_Defense_Project
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             emptyCursor = Content.Load<Texture2D>(@"Textures/Null");
@@ -129,10 +144,6 @@ namespace Tower_Defense_Project
             cursors[5] = Content.Load<Texture2D>(@"Textures/Cursors/RL Cursor");
             cursors[6] = Content.Load<Texture2D>(@"Textures/Cursors/SS Cursor");
             cursors[7] = Content.Load<Texture2D>(@"Textures/Cursors/YL Cursor");
-
-            level = new Level(Services, graphics);
-            level.LoadLevel(1);
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -197,9 +208,6 @@ namespace Tower_Defense_Project
 
             if (keyboard.IsKeyPressed(Keys.E))
             {
-                //keyPressed = true;
-                //if(!keyDidSomething)
-                //{
                 if ((int)CursorType + 1 > 7)
                 {
                     CursorType = (CustomCursor)0;
@@ -209,13 +217,9 @@ namespace Tower_Defense_Project
                     CursorType = (CustomCursor)((int)CursorType + 1);
                 }
                 keyDidSomething = true;
-                //}
             }
             else if (keyboard.IsKeyPressed(Keys.Q))
             {
-                //keyPressed = true;
-                //if (!keyDidSomething)
-                //{
                 if ((int)CursorType - 1 < 0)
                 {
                     CursorType = (CustomCursor)7;
@@ -225,7 +229,26 @@ namespace Tower_Defense_Project
                     CursorType = (CustomCursor)((int)CursorType - 1);
                 }
                 keyDidSomething = true;
-                //}
+            }
+        }
+
+        private void StateChanged()
+        {
+            switch(currentState)
+            {
+                case GameState.Play:
+                    level = new Level();
+                    level.LoadLevel(1);
+                    break;
+
+                case GameState.Menu:
+                    break;
+
+                case GameState.LevelDesigner:
+                    break;
+
+                default:
+                    break;
             }
         }
 

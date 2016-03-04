@@ -54,7 +54,7 @@ namespace Tower_Defense_Project
             {
                 case EnemyType.Peon:
                     frameWidth = 10;
-                    moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Peon"), 0.1f, true, frameWidth);
+                    moveAnimation = new Animation(Main.GameContent.Load<Texture2D>("Sprites/Peon"), 0.1f, true, frameWidth);
                     speed = .5f;
                     seconds = 1f;
                     Health = 1;
@@ -63,7 +63,7 @@ namespace Tower_Defense_Project
 
                 case EnemyType.Scout:
                     frameWidth = 20;
-                    moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Scout"), 0.1f, true, frameWidth);
+                    moveAnimation = new Animation(Main.GameContent.Load<Texture2D>("Sprites/Scout"), 0.1f, true, frameWidth);
                     speed = .5f;
                     seconds = 2f;
                     Health = 6;
@@ -72,7 +72,7 @@ namespace Tower_Defense_Project
 
                 case EnemyType.Brute:
                     frameWidth = 30;
-                    moveAnimation = new Animation(Level.Content.Load<Texture2D>("Sprites/Brute"), 0.1f, true, frameWidth);
+                    moveAnimation = new Animation(Main.GameContent.Load<Texture2D>("Sprites/Brute"), 0.1f, true, frameWidth);
                     speed = .2f;
                     seconds = 1f;
                     Health = 10;

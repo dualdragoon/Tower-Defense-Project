@@ -47,12 +47,12 @@ namespace Tower_Defense_Project
             {
                 for (int i = 0; i < points.Count; i++)
                 {
-                    points[i] = new Vector2(Level.Graphics.PreferredBackBufferWidth, Level.Graphics.PreferredBackBufferHeight) * points[i];
+                    points[i] = new Vector2(Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight) * points[i];
                 }
 
                 for (int i = 0; i < pathSet.Count; i++)
                 {
-                    pathSet[i] = new FloatingRectangle((float)Level.Graphics.PreferredBackBufferWidth * pathSet[i].X, (float)Level.Graphics.PreferredBackBufferHeight * pathSet[i].Y, (float)Level.Graphics.PreferredBackBufferWidth * pathSet[i].Width, (float)Level.Graphics.PreferredBackBufferHeight * pathSet[i].Height);
+                    pathSet[i] = new FloatingRectangle((float)Main.Graphics.PreferredBackBufferWidth * pathSet[i].X, (float)Main.Graphics.PreferredBackBufferHeight * pathSet[i].Y, (float)Main.Graphics.PreferredBackBufferWidth * pathSet[i].Width, (float)Main.Graphics.PreferredBackBufferHeight * pathSet[i].Height);
                 } 
             }
 

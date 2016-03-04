@@ -49,25 +49,13 @@ namespace Tower_Defense_Project
         }
         SpriteFont font;
 
-        public ContentManager Content
-        {
-            get { return content; }
-        }
-        ContentManager content;
-
-        public static GraphicsDeviceManager Graphics
-        {
-            get { return graphics; }
-        }
-        private static GraphicsDeviceManager graphics;
-
         private void LoadContent(int levelIndex)
         {
-            background = Content.Load<Texture2D>(@"Levels/Level" + levelIndex);
-            tempButton1 = Content.Load<Texture2D>(@"Buttons/Temp Button 1");
-            tempButton2 = Content.Load<Texture2D>(@"Buttons/Temp Button 2");
-            tex = Content.Load<Texture2D>(@"Textures/SQUARE");
-            font = Content.Load<SpriteFont>(@"Fonts/Font");
+            background = Main.GameContent.Load<Texture2D>(@"Levels/Level" + levelIndex);
+            tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");
+            tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");
+            tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
+            font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
         }
 
         public void LoadLevel(int levelIndex)
@@ -96,17 +84,13 @@ namespace Tower_Defense_Project
             path.Build(true);
             currency = 1000;
 
-            temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight);
+            temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
             temp1.ButtonPressed += ButtonHandling;
         }
 
-        public Level(IServiceProvider serviceProvider, GraphicsDeviceManager graphics)
+        public Level()
         {
-            content = new ContentManager(serviceProvider);
-            content.RootDirectory = "Content";
-            content.Resolvers.Add(new FileSystemContentResolver(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)));
-            Level.graphics = graphics;
-            storeSection = new FloatingRectangle(.75f * Graphics.PreferredBackBufferWidth, 0f * Graphics.PreferredBackBufferHeight, (.25f * Graphics.PreferredBackBufferWidth) + 1, (Graphics.PreferredBackBufferHeight) + 1);
+            storeSection = new FloatingRectangle(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
         }
 
         public void Update(GameTime gameTime)
@@ -236,7 +220,7 @@ namespace Tower_Defense_Project
 
         public void Draw(GameTime gameTime, SpriteBatch spritebatch)
         {
-            spritebatch.Draw(background, new RectangleF(0, 0, Graphics.GraphicsDevice.Viewport.Width, Graphics.GraphicsDevice.Viewport.Height), Color.White);
+            spritebatch.Draw(background, new RectangleF(0, 0, Main.Graphics.GraphicsDevice.Viewport.Width, Main.Graphics.GraphicsDevice.Viewport.Height), Color.White);
         
             spritebatch.Draw(tex, storeSection.Draw, Color.Black);
 

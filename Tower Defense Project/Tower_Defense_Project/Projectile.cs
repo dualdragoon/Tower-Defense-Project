@@ -48,15 +48,15 @@ namespace Tower_Defense_Project
             switch (type)
             {
                 case ProjectileType.Small:
-                    tex = Level.Content.Load<Texture2D>(@"Projectiles/Small Projectile");
+                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Small Projectile");
                     break;
                 
                 case ProjectileType.Medium:
-                    tex = Level.Content.Load<Texture2D>(@"Projectiles/Medium Projectile");
+                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Medium Projectile");
                     break;
 
                 case ProjectileType.Large:
-                    tex = Level.Content.Load<Texture2D>(@"Projectiles/Large Projectile");
+                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Large Projectile");
                     break;
 
                 default:
