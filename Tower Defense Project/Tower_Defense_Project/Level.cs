@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Content;
@@ -21,11 +22,16 @@ namespace Tower_Defense_Project
         public Button temp1;
         private bool keyPressed, keyDidSomething, pause = false;
         private float timer = 0, minTimer = 1f, escapeTimer = 0, minEscapeTimer = .05f;
-        public FloatingRectangle storeSection;
-        private int pointsNum, pathSetNum;
-        private Texture2D tex, background, tempButton1, tempButton2, testTex;
+        private int pointsNum, pathSetNum, waveNum;
+        private Path path;
+        public RectangleF storeSection;
+        private SpriteFont font;
         private StreamWriter sw;
         private StreamReader temp, read;
+        private Texture2D tex, background, tempButton1, tempButton2, testTex;
+        private uint currency;
+        private XmlDocument doc;
+        private XmlNode node;
 
         public List<Enemy> enemies = new List<Enemy>();
         public List<Tower> towers = new List<Tower>();
@@ -35,19 +41,21 @@ namespace Tower_Defense_Project
         {
             get { return currency; }
         }
-        uint currency;
 
         public Path Path
         {
             get { return path; }
         }
-        Path path;
 
         public SpriteFont Font
         {
             get { return font; }
         }
-        SpriteFont font;
+
+        public Level()
+        {
+            storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
+        }
 
         private void LoadContent(int levelIndex)
         {
@@ -61,8 +69,7 @@ namespace Tower_Defense_Project
         public void LoadLevel(int levelIndex)
         {
             LoadContent(levelIndex);
-
-            //reader = new StreamReader(@"Content/Levels/Level" + levelIndex + ".level");
+            
             temp = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
             sw = new StreamWriter("temp2.temp");
             sw.Write(StringCipher.Decrypt(temp.ReadLine(), "temp2"));
@@ -77,20 +84,29 @@ namespace Tower_Defense_Project
             }
             for (int i = 0; i < pathSetNum; i++)
             {
-                path.pathSet.Add(new FloatingRectangle(float.Parse(read.ReadLine()), float.Parse(read.ReadLine()), float.Parse(read.ReadLine()), float.Parse(read.ReadLine())));
+                path.pathSet.Add(new RectangleF(float.Parse(read.ReadLine()), float.Parse(read.ReadLine()), float.Parse(read.ReadLine()), float.Parse(read.ReadLine())));
             }
             read.Close();
             File.Delete("temp2.temp");
             path.Build(true);
             currency = 1000;
 
+            node = doc.SelectSingleNode("");
+            waveNum = 1;
+
+            foreach (XmlNode t in node)
+            {
+                if (t.Name.Contains(waveNum.ToString()))
+                {
+                    foreach (XmlNode i in t)
+                    {
+
+                    }
+                }
+            }
+
             temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
             temp1.ButtonPressed += ButtonHandling;
-        }
-
-        public Level()
-        {
-            storeSection = new FloatingRectangle(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
         }
 
         public void Update(GameTime gameTime)
@@ -222,7 +238,7 @@ namespace Tower_Defense_Project
         {
             spritebatch.Draw(background, new RectangleF(0, 0, Main.Graphics.GraphicsDevice.Viewport.Width, Main.Graphics.GraphicsDevice.Viewport.Height), Color.White);
         
-            spritebatch.Draw(tex, storeSection.Draw, Color.Black);
+            spritebatch.Draw(tex, storeSection, Color.Black);
 
             #region ButtonDrawing
             try
@@ -233,9 +249,9 @@ namespace Tower_Defense_Project
             { }
             #endregion
 
-            foreach (FloatingRectangle i in Path.pathSet)
+            foreach (RectangleF i in Path.pathSet)
             {
-                spritebatch.Draw(tex, i.Draw, Color.Green);
+                spritebatch.Draw(tex, i, Color.Green);
             }
 
             foreach (Enemy enemy in enemies)

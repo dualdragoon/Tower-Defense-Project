@@ -31,17 +31,11 @@ namespace Tower_Defense_Project
         private float attackTimer = 0, minAttackTimer;
         public Circle range;
         private Color rangeColor = Color.Gray;
-        public FloatingRectangle collision;
+        public RectangleF collision;
         private ProjectileType projectileType;
         private string spriteSet;
         private Texture2D tex, rangeTex;
         public TowerType type;
-
-        private void LoadContent()
-        {
-            tex = Main.GameContent.Load<Texture2D>(@"Towers/" + spriteSet);
-            rangeTex = Main.GameContent.Load<Texture2D>(@"Towers/" + spriteSet + " Range");
-        }
 
         public Tower(Level level, TowerType type, MouseState mouse)
         {
@@ -51,7 +45,7 @@ namespace Tower_Defense_Project
             switch (type)
             {
                 case TowerType.GL:
-                    collision = new FloatingRectangle(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 32, 32);
+                    collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 32, 32);
                     range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 100);
                     minAttackTimer = 1f;
                     projectileType = ProjectileType.Small;
@@ -60,7 +54,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case TowerType.RL:
-                    collision = new FloatingRectangle(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 32, 32);
+                    collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 32, 32);
                     range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 120);
                     minAttackTimer = .3f;
                     projectileType = ProjectileType.Medium;
@@ -68,7 +62,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case TowerType.BLL:
-                    collision = new FloatingRectangle(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 30, 30);
+                    collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 30, 30);
                     range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 60);
                     projectileType = ProjectileType.Large;
                     spriteSet = "BLL";
@@ -79,6 +73,12 @@ namespace Tower_Defense_Project
             }
 
             LoadContent();
+        }
+
+        private void LoadContent()
+        {
+            tex = Main.GameContent.Load<Texture2D>(@"Towers/" + spriteSet);
+            rangeTex = Main.GameContent.Load<Texture2D>(@"Towers/" + spriteSet + " Range");
         }
 
         public void Update(GameTime gameTime, MouseState mouse)
@@ -148,7 +148,7 @@ namespace Tower_Defense_Project
                 }
                 return placed; 
             }
-            #region OutOfBoundsHandling
+            #region Mouse Off-Screen Handling
             else if (mouse.X * Main.Graphics.PreferredBackBufferWidth <= 0 && mouse.Y * Main.Graphics.PreferredBackBufferHeight >= 0 && mouse.Y * Main.Graphics.PreferredBackBufferHeight <= Main.Graphics.PreferredBackBufferHeight)
             {
                 collision.X = 0;
@@ -236,7 +236,7 @@ namespace Tower_Defense_Project
             {
                 spriteBatch.Draw(rangeTex, range.Location, rangeColor);
             }
-            spriteBatch.Draw(tex, collision.Draw, Color.White);
+            spriteBatch.Draw(tex, collision, Color.White);
         }
     }
 }

@@ -12,6 +12,16 @@ namespace Tower_Defense_Project
 
     class Projectile
     {
+        public int damage;
+        int stageIndex;
+        float stagePos, speed = 0, seconds = 0;
+        public Enemy target;
+        Path path;
+        ProjectileType type;
+        Texture2D tex;
+        Tower origin;
+        Vector2 position;
+
         public Level Level
         {
             get { return level; }
@@ -31,37 +41,6 @@ namespace Tower_Defense_Project
         public Vector2 Position
         {
             get { return position; }
-        }
-
-        public int damage;
-        int stageIndex;
-        float stagePos, speed = 0, seconds = 0;
-        public Enemy target;
-        Path path;
-        ProjectileType type;
-        Texture2D tex;
-        Tower origin;
-        Vector2 position;
-
-        private void LoadContent()
-        {
-            switch (type)
-            {
-                case ProjectileType.Small:
-                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Small Projectile");
-                    break;
-                
-                case ProjectileType.Medium:
-                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Medium Projectile");
-                    break;
-
-                case ProjectileType.Large:
-                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Large Projectile");
-                    break;
-
-                default:
-                    break;
-            }
         }
 
         public Projectile(Tower origin, Vector2 position, Enemy target, ProjectileType type, Level level)
@@ -102,6 +81,27 @@ namespace Tower_Defense_Project
             }
 
             LoadContent();
+        }
+
+        private void LoadContent()
+        {
+            switch (type)
+            {
+                case ProjectileType.Small:
+                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Small Projectile");
+                    break;
+                
+                case ProjectileType.Medium:
+                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Medium Projectile");
+                    break;
+
+                case ProjectileType.Large:
+                    tex = Main.GameContent.Load<Texture2D>(@"Projectiles/Large Projectile");
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         public void Update(GameTime gameTime)

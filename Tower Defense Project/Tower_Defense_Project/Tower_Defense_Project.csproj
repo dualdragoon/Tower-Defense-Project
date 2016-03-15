@@ -125,6 +125,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="InputParser.cs" />
     <Compile Include="Tower.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -202,7 +203,9 @@
     <ToolkitFont Include="Content\Fonts\Font.spritefont">
       <SubType>Designer</SubType>
     </ToolkitFont>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app.manifest" />
     <None Include="Content\Levels\Level1.enemies">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

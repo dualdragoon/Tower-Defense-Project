@@ -17,7 +17,7 @@ namespace Tower_Defense_Project
         public float[] lengths;
         public Vector2[] directions;
 
-        public List<FloatingRectangle> pathSet = new List<FloatingRectangle>();
+        public List<RectangleF> pathSet = new List<RectangleF>();
 
         public Path()
         {
@@ -52,7 +52,7 @@ namespace Tower_Defense_Project
 
                 for (int i = 0; i < pathSet.Count; i++)
                 {
-                    pathSet[i] = new FloatingRectangle((float)Main.Graphics.PreferredBackBufferWidth * pathSet[i].X, (float)Main.Graphics.PreferredBackBufferHeight * pathSet[i].Y, (float)Main.Graphics.PreferredBackBufferWidth * pathSet[i].Width, (float)Main.Graphics.PreferredBackBufferHeight * pathSet[i].Height);
+                    pathSet[i] = new RectangleF(Main.Graphics.PreferredBackBufferWidth * pathSet[i].X, Main.Graphics.PreferredBackBufferHeight * pathSet[i].Y, Main.Graphics.PreferredBackBufferWidth * pathSet[i].Width, Main.Graphics.PreferredBackBufferHeight * pathSet[i].Height);
                 } 
             }
 
@@ -72,10 +72,10 @@ namespace Tower_Defense_Project
             pathSet.Clear();
         }
 
-        public bool Intersects(FloatingRectangle rect)
+        public bool Intersects(RectangleF rect)
         {
             bool intersects = false;
-            foreach (FloatingRectangle pathRectangle in pathSet)
+            foreach (RectangleF pathRectangle in pathSet)
             {
                 if (!intersects)
                 {

@@ -45,6 +45,16 @@ namespace Tower_Defense_Project
         }
 
         /// <summary>
+        /// Constructs a new Enemy.
+        /// </summary>
+        public Enemy(Level level, EnemyType type)
+        {
+            this.level = level;
+
+            LoadContent(type);
+        }
+
+        /// <summary>
         /// Loads a particular enemy sprite sheet and sounds.
         /// </summary>
         public void LoadContent(EnemyType type)
@@ -84,17 +94,6 @@ namespace Tower_Defense_Project
             }
 
             sprite.PlayAnimation(moveAnimation);
-
-        }
-
-        /// <summary>
-        /// Constructs a new Enemy.
-        /// </summary>
-        public Enemy(Level level, EnemyType type)
-        {
-            this.level = level;
-
-            LoadContent(type);
         }
 
         public void Update(GameTime gameTime)
