@@ -53,8 +53,7 @@ namespace Tower_Defense_Project
 
         public Level()
         {
-            storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
-            waves = new WaveManager(this);
+
         }
 
         private void LoadContent(int levelIndex)
@@ -64,6 +63,9 @@ namespace Tower_Defense_Project
             tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");
             tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
             font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
+
+            storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
+            waves = new WaveManager(this);
         }
 
         public void LoadLevel(int levelIndex)

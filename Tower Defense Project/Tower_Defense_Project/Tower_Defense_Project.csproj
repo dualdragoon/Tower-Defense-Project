@@ -130,6 +130,9 @@
     <Compile Include="WaveManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Levels\Level1.enm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />

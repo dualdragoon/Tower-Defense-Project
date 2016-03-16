@@ -47,7 +47,7 @@ namespace Tower_Defense_Project
                 {
                     level.enemies.Add(new Enemy(level, waves.Peek().Dequeue()));
                 }
-                else
+                else if (WaveFinished != null)
                 {
                     waves.Dequeue();
                     WaveFinished(this, EventArgs.Empty);
