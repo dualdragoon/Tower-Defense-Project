@@ -144,6 +144,8 @@ namespace Tower_Defense_Project
             cursors[5] = Content.Load<Texture2D>(@"Textures/Cursors/RL Cursor");
             cursors[6] = Content.Load<Texture2D>(@"Textures/Cursors/SS Cursor");
             cursors[7] = Content.Load<Texture2D>(@"Textures/Cursors/YL Cursor");
+
+            CurrentState = GameState.Play;
         }
 
         /// <summary>

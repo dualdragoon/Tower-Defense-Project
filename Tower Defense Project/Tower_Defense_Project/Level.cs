@@ -21,17 +21,16 @@ namespace Tower_Defense_Project
     {
         public Button temp1;
         private bool keyPressed, keyDidSomething, pause = false;
-        private float timer = 0, minTimer = 1f, escapeTimer = 0, minEscapeTimer = .05f;
+        private float escapeTimer = 0, minEscapeTimer = .05f;
         private int pointsNum, pathSetNum, waveNum;
         private Path path;
         public RectangleF storeSection;
         private SpriteFont font;
         private StreamWriter sw;
-        private StreamReader temp, read;
+        private StreamReader tempFile, read;
         private Texture2D tex, background, tempButton1, tempButton2, testTex;
         private uint currency;
-        private XmlDocument doc;
-        private XmlNode node;
+        private WaveManager waves;
 
         public List<Enemy> enemies = new List<Enemy>();
         public List<Tower> towers = new List<Tower>();
@@ -55,6 +54,7 @@ namespace Tower_Defense_Project
         public Level()
         {
             storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
+            waves = new WaveManager(this);
         }
 
         private void LoadContent(int levelIndex)
@@ -69,10 +69,12 @@ namespace Tower_Defense_Project
         public void LoadLevel(int levelIndex)
         {
             LoadContent(levelIndex);
-            
-            temp = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
+
+            waves.LoadEnemies(string.Format("Level{0}"));
+
+            tempFile = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
             sw = new StreamWriter("temp2.temp");
-            sw.Write(StringCipher.Decrypt(temp.ReadLine(), "temp2"));
+            sw.Write(StringCipher.Decrypt(tempFile.ReadLine(), "temp2"));
             sw.Close();
             read = new StreamReader("temp2.temp");
             pointsNum = int.Parse(read.ReadLine());
@@ -90,20 +92,6 @@ namespace Tower_Defense_Project
             File.Delete("temp2.temp");
             path.Build(true);
             currency = 1000;
-
-            node = doc.SelectSingleNode("");
-            waveNum = 1;
-
-            foreach (XmlNode t in node)
-            {
-                if (t.Name.Contains(waveNum.ToString()))
-                {
-                    foreach (XmlNode i in t)
-                    {
-
-                    }
-                }
-            }
 
             temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
             temp1.ButtonPressed += ButtonHandling;
@@ -123,15 +111,7 @@ namespace Tower_Defense_Project
 
             if (!pause)
             {
-                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                
                 temp1.Update(Main.CurrentMouse);
-
-                if (timer > minTimer)
-                {
-                    enemies.Add(new Enemy(this, (EnemyType)101));
-                    timer = 0;
-                }
 
                 try
                 {
@@ -237,7 +217,7 @@ namespace Tower_Defense_Project
         public void Draw(GameTime gameTime, SpriteBatch spritebatch)
         {
             spritebatch.Draw(background, new RectangleF(0, 0, Main.Graphics.GraphicsDevice.Viewport.Width, Main.Graphics.GraphicsDevice.Viewport.Height), Color.White);
-        
+
             spritebatch.Draw(tex, storeSection, Color.Black);
 
             #region ButtonDrawing
