@@ -10,12 +10,18 @@ namespace Tower_Defense_Project
 {
     class WaveManager
     {
-        public EventHandler WaveFinished;
+        private event EventHandler waveFinished;
         float timer = 0, minTimer = 1f;
         Level level;
         Queue<Queue<EnemyType>> waves = new Queue<Queue<EnemyType>>();
         XmlDocument doc;
         XmlNode node;
+
+        public event EventHandler WaveFinished
+        {
+            add { waveFinished += value; }
+            remove { waveFinished -= value; }
+        }
 
         public WaveManager(Level level)
         {
@@ -24,6 +30,7 @@ namespace Tower_Defense_Project
 
         public void LoadEnemies(string level)
         {
+            doc = new XmlDocument();
             doc.Load(string.Format("Content/Levels/{0}.enm", level));
             node = doc.SelectSingleNode("/Enemies");
 
@@ -47,10 +54,10 @@ namespace Tower_Defense_Project
                 {
                     level.enemies.Add(new Enemy(level, waves.Peek().Dequeue()));
                 }
-                else if (WaveFinished != null)
+                else if (waveFinished != null)
                 {
                     waves.Dequeue();
-                    WaveFinished(this, EventArgs.Empty);
+                    waveFinished(this, EventArgs.Empty);
                 }
                 timer = 0;
             }

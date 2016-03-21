@@ -20,7 +20,7 @@ namespace Tower_Defense_Project
     class Level
     {
         public Button temp1;
-        private bool keyPressed, keyDidSomething, pause = false;
+        private bool keyPressed, keyDidSomething, pause = false, waveRunning = false;
         private float escapeTimer = 0, minEscapeTimer = .05f;
         private int pointsNum, pathSetNum, waveNum;
         private Path path;
@@ -72,7 +72,8 @@ namespace Tower_Defense_Project
         {
             LoadContent(levelIndex);
 
-            waves.LoadEnemies(string.Format("Level{0}"));
+            waves.LoadEnemies(string.Format("Level{0}", levelIndex));
+            waves.WaveFinished += WaveEnd;
 
             tempFile = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
             sw = new StreamWriter("temp2.temp");
@@ -114,6 +115,11 @@ namespace Tower_Defense_Project
             if (!pause)
             {
                 temp1.Update(Main.CurrentMouse);
+                
+                if (waveRunning)
+                {
+                    waves.UpdateWave(gameTime);
+                }
 
                 try
                 {
@@ -184,6 +190,12 @@ namespace Tower_Defense_Project
                 default:
                     break;
             }
+        }
+
+        private void WaveEnd(object sender, EventArgs e)
+        {
+            waves.WaveFinished -= WaveEnd;
+            waveRunning = false;
         }
 
         private void Input()

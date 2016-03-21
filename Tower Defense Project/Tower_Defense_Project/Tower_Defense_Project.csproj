@@ -133,6 +133,8 @@
     <None Include="Content\Levels\Level1.enm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <ToolkitTexture Include="Content\Buttons\Start Wave Pressed.png" />
+    <ToolkitTexture Include="Content\Buttons\Start Wave.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />
