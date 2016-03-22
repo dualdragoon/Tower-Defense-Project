@@ -19,7 +19,7 @@ namespace Tower_Defense_Project
 {
     class Level
     {
-        public Button temp1;
+        public Button temp1, start;
         private bool keyPressed, keyDidSomething, pause = false, waveRunning = false;
         private float escapeTimer = 0, minEscapeTimer = .05f;
         private int pointsNum, pathSetNum, waveNum;
@@ -28,7 +28,7 @@ namespace Tower_Defense_Project
         private SpriteFont font;
         private StreamWriter sw;
         private StreamReader tempFile, read;
-        private Texture2D tex, background, tempButton1, tempButton2, testTex;
+        private Texture2D tex, background, tempButton1, tempButton2, startWave, startWavePressed;
         private uint currency;
         private WaveManager waves;
 
@@ -61,6 +61,8 @@ namespace Tower_Defense_Project
             background = Main.GameContent.Load<Texture2D>(@"Levels/Level" + levelIndex);
             tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");
             tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");
+            startWave = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave");
+            startWavePressed = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave Pressed");
             tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
             font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
 
@@ -98,6 +100,9 @@ namespace Tower_Defense_Project
 
             temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
             temp1.ButtonPressed += ButtonHandling;
+
+            start = new Button(new Vector2(610, 380), 180, 90, 2, Main.CurrentMouse, startWave, startWavePressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            start.ButtonPressed += ButtonHandling;
         }
 
         public void Update(GameTime gameTime)
@@ -119,6 +124,10 @@ namespace Tower_Defense_Project
                 if (waveRunning)
                 {
                     waves.UpdateWave(gameTime);
+                }
+                else
+                {
+                    start.Update(Main.CurrentMouse);
                 }
 
                 try
@@ -187,6 +196,12 @@ namespace Tower_Defense_Project
                     }
                     break;
 
+                case 2:
+                    waves.WaveFinished += WaveEnd;
+                    start.ButtonPressed -= ButtonHandling;
+                    waveRunning = true;
+                    break;
+
                 default:
                     break;
             }
@@ -195,6 +210,7 @@ namespace Tower_Defense_Project
         private void WaveEnd(object sender, EventArgs e)
         {
             waves.WaveFinished -= WaveEnd;
+            start.ButtonPressed += ButtonHandling;
             waveRunning = false;
         }
 
@@ -238,6 +254,7 @@ namespace Tower_Defense_Project
             try
             {
                 spritebatch.Draw(temp1.Texture, temp1.Collision, Color.White);
+                if (!waveRunning) spritebatch.Draw(start.Texture, start.Collision, Color.White);
             }
             catch
             { }

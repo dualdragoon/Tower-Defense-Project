@@ -10,7 +10,7 @@ namespace Tower_Defense_Project
 {
     class WaveManager
     {
-        private event EventHandler waveFinished;
+        private event EventHandler waveFinished, levelComplete;
         float timer = 0, minTimer = 1f;
         Level level;
         Queue<Queue<EnemyType>> waves = new Queue<Queue<EnemyType>>();
@@ -21,6 +21,12 @@ namespace Tower_Defense_Project
         {
             add { waveFinished += value; }
             remove { waveFinished -= value; }
+        }
+
+        public event EventHandler LevelComplete
+        {
+            add { levelComplete += value; }
+            remove { levelComplete -= value; }
         }
 
         public WaveManager(Level level)
@@ -54,10 +60,15 @@ namespace Tower_Defense_Project
                 {
                     level.enemies.Add(new Enemy(level, waves.Peek().Dequeue()));
                 }
-                else if (waveFinished != null)
+                else if (waveFinished != null && level.enemies.Count == 0 && waves.Count > 1)
                 {
                     waves.Dequeue();
                     waveFinished(this, EventArgs.Empty);
+                }
+                else if (waveFinished != null && level.enemies.Count == 0 && waves.Count == 1)
+                {
+                    waves.Dequeue();
+                    levelComplete(this, EventArgs.Empty);
                 }
                 timer = 0;
             }
