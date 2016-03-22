@@ -135,6 +135,7 @@
     </None>
     <ToolkitTexture Include="Content\Buttons\Start Wave Pressed.png" />
     <ToolkitTexture Include="Content\Buttons\Start Wave.png" />
+    <None Include="Content\Towers\Stats\Tower Data.twd" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />
@@ -218,6 +219,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <Import Project="..\..\packages\SharpDX.2.6.3\build\SharpDX.targets" Condition="Exists('..\..\packages\SharpDX.2.6.3\build\SharpDX.targets')" />

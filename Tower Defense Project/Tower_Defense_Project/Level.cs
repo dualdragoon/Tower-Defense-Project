@@ -12,7 +12,6 @@ using Duality;
 using Duality.Encrypting;
 using Duality.Interaction;
 using Duality.Records;
-using SharpDX.Serialization;
 using System.Reflection;
 
 namespace Tower_Defense_Project
@@ -31,10 +30,20 @@ namespace Tower_Defense_Project
         private Texture2D tex, background, tempButton1, tempButton2, startWave, startWavePressed;
         private uint currency;
         private WaveManager waves;
+        XmlDocument doc;
+        XmlNode node;
 
         public List<Enemy> enemies = new List<Enemy>();
         public List<Tower> towers = new List<Tower>();
         public List<Projectile> projectiles = new List<Projectile>();
+
+        private static Dictionary<int, object[]> towerStats = new Dictionary<int, object[]>();
+
+        public static Dictionary<int, object[]> TowerStats
+        {
+            get { return towerStats; }
+            set { towerStats = value; }
+        }
 
         public uint Currency
         {
@@ -58,6 +67,12 @@ namespace Tower_Defense_Project
 
         private void LoadContent(int levelIndex)
         {
+            doc = new XmlDocument();
+            doc.Load("Content/Towers/Stats/Tower Data.twd");
+            node = doc.SelectSingleNode("/Enemies");
+
+            //for ()
+
             background = Main.GameContent.Load<Texture2D>(@"Levels/Level" + levelIndex);
             tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");
             tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");

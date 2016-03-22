@@ -65,7 +65,7 @@ namespace Tower_Defense_Project
                     waves.Dequeue();
                     waveFinished(this, EventArgs.Empty);
                 }
-                else if (waveFinished != null && level.enemies.Count == 0 && waves.Count == 1)
+                else if (levelComplete != null && level.enemies.Count == 0 && waves.Count == 1)
                 {
                     waves.Dequeue();
                     levelComplete(this, EventArgs.Empty);
