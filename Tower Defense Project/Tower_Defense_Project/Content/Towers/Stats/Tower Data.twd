@@ -1,1 +1,26 @@
-﻿
+﻿<Towers>
+	<T101>
+		<Name>GL</Name>
+		<Size>32</Size>
+		<Range>100</Range>
+		<AttackSpeed>1</AttackSpeed>
+		<FiredProjectile>101</FireProjectile>
+		<Cost>500</Cost>
+	</T101>
+	<T102>
+		<Name>RL</Name>
+		<Size>32</Size>
+		<Range>120</Range>
+		<AttackSpeed>.3</AttackSpeed>
+		<FiredProjectile>102</FiredProjectile>
+		<Cost>0</Cost>
+	</T102>
+	<T103>
+		<Name>BLL</Name>
+		<Size>32</Size>
+		<Range>140</Range>
+		<AttackSpeed>.1</AttackSpeed>
+		<FiredProjectile>103</FiredProjectile>
+		<Cost>0</Cost>
+	</T103>
+</Towers>

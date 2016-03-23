@@ -69,9 +69,17 @@ namespace Tower_Defense_Project
         {
             doc = new XmlDocument();
             doc.Load("Content/Towers/Stats/Tower Data.twd");
-            node = doc.SelectSingleNode("/Enemies");
+            node = doc.SelectSingleNode("/Towers");
 
-            //for ()
+            for (int i = 0; i < node.ChildNodes.Count; i++)
+            {
+                object[] stats = new object[6];
+                for (int t = 0; t < node.ChildNodes[i].ChildNodes.Count; t++)
+                {
+                    stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;
+                }
+                towerStats.Add(101 + i, stats);
+            }
 
             background = Main.GameContent.Load<Texture2D>(@"Levels/Level" + levelIndex);
             tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");

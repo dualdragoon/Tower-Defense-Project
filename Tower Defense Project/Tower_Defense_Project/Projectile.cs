@@ -8,7 +8,12 @@ using SharpDX.Toolkit.Graphics;
 
 namespace Tower_Defense_Project
 {
-    enum ProjectileType { Small, Medium, Large, }
+    enum ProjectileType
+    { 
+        Small = 101, 
+        Medium = 102, 
+        Large = 103,
+    }
 
     class Projectile
     {
