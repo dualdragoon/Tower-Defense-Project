@@ -10,67 +10,53 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
-    enum TowerType { GL, RL, BLL, };
+    enum TowerType
+    {
+        GL = 101,
+        RL = 102,
+        BLL = 103,
+    }
 
     class Tower
     {
+        public bool isPlaced = false;
+        private bool isSelected;
+        public Circle range;
+        private Color rangeColor = Color.Gray;
+        private float attackTimer = 0, minAttackTimer, diameter;
+        private int size;
+        private Level level;
+        private ProjectileType projectileType;
+        public RectangleF collision;
+        private string spriteSet;
+        private Texture2D tex, rangeTex;
+        public TowerType type;
+        private uint cost;
+
         public Level Level
         {
             get { return level; }
         }
-        private Level level;
 
         public uint Cost
         {
             get { return cost; }
         }
-        private uint cost;
-
-        public bool isPlaced = false;
-        private bool isSelected;
-        private float attackTimer = 0, minAttackTimer;
-        public Circle range;
-        private Color rangeColor = Color.Gray;
-        public RectangleF collision;
-        private ProjectileType projectileType;
-        private string spriteSet;
-        private Texture2D tex, rangeTex;
-        public TowerType type;
 
         public Tower(Level level, TowerType type, MouseState mouse)
         {
             this.level = level;
             this.type = type;
 
-            switch (type)
-            {
-                case TowerType.GL:
-                    collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 32, 32);
-                    range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 100);
-                    minAttackTimer = 1f;
-                    projectileType = ProjectileType.Small;
-                    spriteSet = "GL";
-                    cost = 500;
-                    break;
+            spriteSet = Level.TowerStats[(int)type][0];
+            size = int.Parse(Level.TowerStats[(int)type][1]);
+            diameter = float.Parse(Level.TowerStats[(int)type][2]);
+            minAttackTimer = float.Parse(Level.TowerStats[(int)type][3]);
+            projectileType = (ProjectileType)int.Parse(Level.TowerStats[(int)type][4]);
+            cost = uint.Parse(Level.TowerStats[(int)type][5]);
 
-                case TowerType.RL:
-                    collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 32, 32);
-                    range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 120);
-                    minAttackTimer = .3f;
-                    projectileType = ProjectileType.Medium;
-                    spriteSet = "RL";
-                    break;
-
-                case TowerType.BLL:
-                    collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, 30, 30);
-                    range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), 60);
-                    projectileType = ProjectileType.Large;
-                    spriteSet = "BLL";
-                    break;
-
-                default:
-                    break;
-            }
+            collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, size, size);
+            range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), diameter);
 
             LoadContent();
         }

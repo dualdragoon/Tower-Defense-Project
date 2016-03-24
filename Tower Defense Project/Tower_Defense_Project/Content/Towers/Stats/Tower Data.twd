@@ -4,7 +4,7 @@
 		<Size>32</Size>
 		<Range>100</Range>
 		<AttackSpeed>1</AttackSpeed>
-		<FiredProjectile>101</FireProjectile>
+		<FiredProjectile>101</FiredProjectile>
 		<Cost>500</Cost>
 	</T101>
 	<T102>

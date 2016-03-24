@@ -37,9 +37,9 @@ namespace Tower_Defense_Project
         public List<Tower> towers = new List<Tower>();
         public List<Projectile> projectiles = new List<Projectile>();
 
-        private static Dictionary<int, object[]> towerStats = new Dictionary<int, object[]>();
+        private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
 
-        public static Dictionary<int, object[]> TowerStats
+        public static Dictionary<int, string[]> TowerStats
         {
             get { return towerStats; }
             set { towerStats = value; }
@@ -73,7 +73,7 @@ namespace Tower_Defense_Project
 
             for (int i = 0; i < node.ChildNodes.Count; i++)
             {
-                object[] stats = new object[6];
+                string[] stats = new string[6];
                 for (int t = 0; t < node.ChildNodes[i].ChildNodes.Count; t++)
                 {
                     stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;

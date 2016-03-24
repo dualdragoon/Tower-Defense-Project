@@ -135,7 +135,9 @@
     </None>
     <ToolkitTexture Include="Content\Buttons\Start Wave Pressed.png" />
     <ToolkitTexture Include="Content\Buttons\Start Wave.png" />
-    <None Include="Content\Towers\Stats\Tower Data.twd" />
+    <None Include="Content\Towers\Stats\Tower Data.twd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />
