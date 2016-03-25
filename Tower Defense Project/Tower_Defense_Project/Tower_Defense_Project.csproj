@@ -130,6 +130,9 @@
     <Compile Include="WaveManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Enemies\Stats\Enemy Data.emd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Levels\Level1.enm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -145,9 +148,9 @@
     <ToolkitTexture Include="Content\Projectiles\Large Projectile.png" />
     <ToolkitTexture Include="Content\Projectiles\Medium Projectile.png" />
     <ToolkitTexture Include="Content\Projectiles\Small Projectile.png" />
-    <ToolkitTexture Include="Content\Sprites\Brute.png" />
-    <ToolkitTexture Include="Content\Sprites\Peon.png" />
-    <ToolkitTexture Include="Content\Sprites\Scout.png" />
+    <ToolkitTexture Include="Content\Enemies\Brute.png" />
+    <ToolkitTexture Include="Content\Enemies\Peon.png" />
+    <ToolkitTexture Include="Content\Enemies\Scout.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\BL Cursor.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\BLL Cursor.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\GL Cursor.png" />

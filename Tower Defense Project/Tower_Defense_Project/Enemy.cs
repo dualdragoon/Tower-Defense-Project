@@ -10,7 +10,7 @@ using Duality.Graphics;
 namespace Tower_Defense_Project
 {
     enum EnemyType
-    { 
+    {
         Peon = 101,
         Scout = 102,
         Brute = 103,
@@ -18,20 +18,20 @@ namespace Tower_Defense_Project
 
     class Enemy
     {
-        public Vector2 position;
-        public float stagePos;
-        int stageIndex, frameWidth, health;
-        float speed = 0, seconds = 0;
-        uint worth;
-
         private Animation moveAnimation;
         private AnimationPlayer sprite;
+        public float stagePos;
+        private float speed = 0, seconds = 0;
+        private int stageIndex, frameWidth, health;
+        private Level level;
+        private string spriteSet;
+        private uint worth;
+        public Vector2 position;
 
         public Level Level
         {
             get { return level; }
         }
-        Level level;
 
         public int Health
         {
@@ -51,47 +51,22 @@ namespace Tower_Defense_Project
         {
             this.level = level;
 
-            LoadContent(type);
+            spriteSet = Level.EnemyStats[(int)type][0];
+            frameWidth = int.Parse(Level.EnemyStats[(int)type][1]);
+            speed = float.Parse(Level.EnemyStats[(int)type][2]);
+            seconds = float.Parse(Level.EnemyStats[(int)type][3]);
+            health = int.Parse(Level.EnemyStats[(int)type][4]);
+            worth = uint.Parse(Level.EnemyStats[(int)type][5]);
+
+            LoadContent();
         }
 
         /// <summary>
         /// Loads a particular enemy sprite sheet and sounds.
         /// </summary>
-        public void LoadContent(EnemyType type)
+        public void LoadContent()
         {
-            // Load animations.
-            switch (type)
-            {
-                case EnemyType.Peon:
-                    frameWidth = 10;
-                    moveAnimation = new Animation(Main.GameContent.Load<Texture2D>("Sprites/Peon"), 0.1f, true, frameWidth);
-                    speed = .5f;
-                    seconds = 1f;
-                    Health = 1;
-                    worth = 1;
-                    break;
-
-                case EnemyType.Scout:
-                    frameWidth = 20;
-                    moveAnimation = new Animation(Main.GameContent.Load<Texture2D>("Sprites/Scout"), 0.1f, true, frameWidth);
-                    speed = .5f;
-                    seconds = 2f;
-                    Health = 6;
-                    worth = 5;
-                    break;
-
-                case EnemyType.Brute:
-                    frameWidth = 30;
-                    moveAnimation = new Animation(Main.GameContent.Load<Texture2D>("Sprites/Brute"), 0.1f, true, frameWidth);
-                    speed = .2f;
-                    seconds = 1f;
-                    Health = 10;
-                    worth = 10;
-                    break;
-
-                default:
-                    break;
-            }
+            moveAnimation = new Animation(Main.GameContent.Load<Texture2D>(string.Format("Enemies/{0}", spriteSet)), 0.1f, true, frameWidth);
 
             sprite.PlayAnimation(moveAnimation);
         }

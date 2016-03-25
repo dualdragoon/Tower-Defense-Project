@@ -38,11 +38,18 @@ namespace Tower_Defense_Project
         public List<Projectile> projectiles = new List<Projectile>();
 
         private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
+        private static Dictionary<int, string[]> enemyStats = new Dictionary<int, string[]>();
 
         public static Dictionary<int, string[]> TowerStats
         {
             get { return towerStats; }
             set { towerStats = value; }
+        }
+
+        public static Dictionary<int, string[]> EnemyStats
+        {
+            get { return enemyStats; }
+            set { enemyStats = value; }
         }
 
         public uint Currency
@@ -79,6 +86,19 @@ namespace Tower_Defense_Project
                     stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;
                 }
                 towerStats.Add(101 + i, stats);
+            }
+
+            doc.Load("Content/Enemies/Stats/Enemy Data.emd");
+            node = doc.SelectSingleNode("/Enemies");
+
+            for (int i = 0; i < node.ChildNodes.Count; i++)
+            {
+                string[] stats = new string[6];
+                for (int t = 0; t < node.ChildNodes[i].ChildNodes.Count; t++)
+                {
+                    stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;
+                }
+                enemyStats.Add(101 + i, stats);
             }
 
             background = Main.GameContent.Load<Texture2D>(@"Levels/Level" + levelIndex);
