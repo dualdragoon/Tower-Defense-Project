@@ -79,6 +79,11 @@ namespace Tower_Defense_Project
             particles.Add(GenerateDrippingParticle());
         }
 
+        public void ClearParticles()
+        {
+            particles.Clear();
+        }
+
         public void Update()
         {
             /*int total = 10;

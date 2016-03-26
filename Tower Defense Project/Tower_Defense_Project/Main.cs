@@ -177,8 +177,14 @@ namespace Tower_Defense_Project
                 {
                     offset = 2;
                 }
+                else if (currentCursor == cursors[5])
+                {
+                    generator.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
+                    generator.Update();
+                }
                 else
                 {
+                    generator.ClearParticles();
                     offset = 1;
                 }
             }
@@ -186,9 +192,6 @@ namespace Tower_Defense_Project
             {
                 currentCursor = emptyCursor;
             }
-
-            generator.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
-            generator.Update();
 
             Input();
 
