@@ -10,7 +10,7 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
-    public enum CustomCursor { BL_Cursor, BLL_Cursor, GL_Cursor, IT_Cursor, OL_Cursor, RL_Cursor, SS_Cursor, YL_Cursor }
+    public enum CustomCursor { BLL_Cursor, BL_Cursor, GL_Cursor, IT_Cursor, OL_Cursor, RL_Cursor, SS_Cursor, YL_Cursor }
 
     public enum GameState { Menu, Play, LevelDesigner }
 
@@ -23,8 +23,9 @@ namespace Tower_Defense_Project
         GameState currentState = GameState.LevelDesigner;
         int offset;
         Level level;
-        List<Texture2D> textures = new List<Texture2D>();
-        ParticleEngine generator;
+        List<Texture2D> bloodDrops = new List<Texture2D>();
+        List<Texture2D> bluePulse = new List<Texture2D>();
+        ParticleEngine generator = new ParticleEngine();
         SpriteBatch spriteBatch;
         Texture2D[] cursors = new Texture2D[8];
         static bool isCustomMouseVisible = true;
@@ -145,9 +146,10 @@ namespace Tower_Defense_Project
             cursors[6] = Content.Load<Texture2D>(@"Textures/Cursors/SS Cursor");
             cursors[7] = Content.Load<Texture2D>(@"Textures/Cursors/YL Cursor");
 
-            textures.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Drop1"));
-            textures.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Drop2"));
-            generator = new ParticleEngine(textures, new Vector2(-10, -10), EngineType.Dripping);
+            bloodDrops.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Drop1"));
+            bloodDrops.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Drop2"));
+
+            bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
             CurrentState = GameState.Play;
         }
@@ -175,12 +177,15 @@ namespace Tower_Defense_Project
                 currentCursor = cursors[(int)CursorType];
                 if (currentCursor == cursors[1])
                 {
+                    generator.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
+                    generator.Update();
                     offset = 2;
                 }
                 else if (currentCursor == cursors[5])
                 {
                     generator.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
                     generator.Update();
+                    offset = 1;
                 }
                 else
                 {
@@ -216,31 +221,21 @@ namespace Tower_Defense_Project
 
         private void Input()
         {
-            keyDidSomething = keyPressed && keyDidSomething;
-
             if (keyboard.IsKeyPressed(Keys.E))
             {
-                if ((int)CursorType + 1 > 7)
-                {
-                    CursorType = (CustomCursor)0;
-                }
-                else
-                {
-                    CursorType = (CustomCursor)((int)CursorType + 1);
-                }
-                keyDidSomething = true;
+                if ((int)CursorType + 1 > 7) CursorType = (CustomCursor)0;
+                else CursorType = (CustomCursor)((int)CursorType + 1);
             }
             else if (keyboard.IsKeyPressed(Keys.Q))
             {
-                if ((int)CursorType - 1 < 0)
-                {
-                    CursorType = (CustomCursor)7;
-                }
-                else
-                {
-                    CursorType = (CustomCursor)((int)CursorType - 1);
-                }
-                keyDidSomething = true;
+                if ((int)CursorType - 1 < 0) CursorType = (CustomCursor)7;
+                else CursorType = (CustomCursor)((int)CursorType - 1);
+            }
+
+            if (keyboard.IsKeyPressed(Keys.E) || keyboard.IsKeyPressed(Keys.Q))
+            {
+                if (CursorType == (CustomCursor)5) generator = new ParticleEngine(bloodDrops, new Vector2(-10, -10), EngineType.Dripping);
+                else if (CursorType == (CustomCursor)1) generator = new ParticleEngine(bluePulse, new Vector2(-10, -10), EngineType.Pulsing); 
             }
         }
 

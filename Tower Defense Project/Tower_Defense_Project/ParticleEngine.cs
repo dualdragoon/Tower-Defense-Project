@@ -10,11 +10,12 @@ using SharpDX.Toolkit.Graphics;
 
 namespace Tower_Defense_Project
 {
-    public enum EngineType { Dripping }
+    public enum EngineType { Dripping, Pulsing }
 
     public class ParticleEngine
     {
-        private List<Particle> particles;
+        private EngineType type;
+        private List<Particle> particles = new List<Particle>();
         private List<Texture2D> textures;
         private Random random;
         private Timer timer;
@@ -23,19 +24,43 @@ namespace Tower_Defense_Project
         public Vector2 EmitterLocation
         {
             get { return location; }
-            set { location = new Vector2((value.X * 800) + random.Next(13), (value.Y * 480) + 13); }
+            set
+            {
+                switch (type)
+                {
+                    case EngineType.Dripping:
+                        location = new Vector2((value.X * 800) + random.Next(13), (value.Y * 480) + 13);
+                        break;
+
+                    case EngineType.Pulsing:
+                        location = new Vector2((value.X * 800) - 2, (value.Y * 480) - 2);
+                        break;
+
+                    default: break;
+                }
+            }
         }
+
+        public ParticleEngine() { }
 
         public ParticleEngine(List<Texture2D> textures, Vector2 location, EngineType type)
         {
             this.location = location;
             this.textures = textures;
+            this.type = type;
             particles = new List<Particle>();
             random = new Random();
             switch (type)
             {
                 case EngineType.Dripping:
                     timer = new Timer(500);
+                    timer.Elapsed += ParticleTimed;
+                    timer.AutoReset = true;
+                    timer.Start();
+                    break;
+
+                case EngineType.Pulsing:
+                    timer = new Timer(750);
                     timer.Elapsed += ParticleTimed;
                     timer.AutoReset = true;
                     timer.Start();
@@ -74,9 +99,31 @@ namespace Tower_Defense_Project
             return new Particle(texture, position, velocity, angle, angularVelocity, color, size, ttl);
         }
 
+        private Pulse GeneratePulse()
+        {
+            Texture2D texture = textures[random.Next(textures.Count)];
+            Vector2 position = EmitterLocation;
+            float speed = 1;
+            Color color = Color.White;
+            int ttl = 20 + random.Next(40);
+
+            return new Pulse(texture, position, speed, 0, 0, color, 1, ttl);
+        }
+
         private void ParticleTimed(object sender, EventArgs e)
         {
-            particles.Add(GenerateDrippingParticle());
+            switch (type)
+            {
+                case EngineType.Dripping:
+                    particles.Add(GenerateDrippingParticle());
+                    break;
+
+                case EngineType.Pulsing:
+                    particles.Add(GeneratePulse());
+                    break;
+
+                default: break;
+            }
         }
 
         public void ClearParticles()

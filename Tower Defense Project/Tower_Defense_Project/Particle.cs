@@ -23,6 +23,8 @@ namespace Tower_Defense_Project
         /// </summary>
         public int TTL { get; set; }
 
+        public Particle() { }
+
         public Particle(Texture2D texture, Vector2 position, Vector2 velocity, float angle, float angularVelocity, Color color, float size, int ttl)
         {
             Texture = texture;
@@ -35,19 +37,53 @@ namespace Tower_Defense_Project
             TTL = ttl;
         }
 
-        public void Update()
+        public virtual void Update()
         {
             TTL--;
             Position += Velocity;
             Angle += AngularVelocity;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle sourceRectangle = new Rectangle(0, 0, Texture.Width, Texture.Height);
             Vector2 origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
 
-            spriteBatch.Draw(Texture, Position, sourceRectangle, Color, Angle, origin, Size, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Texture, Position, null, Color, Angle, origin, Size, SpriteEffects.None, 0f);
+        }
+    }
+
+    class Pulse : Particle
+    {
+        RectangleF placement;
+        float Speed { get; set; }
+
+        public Pulse(Texture2D texture, Vector2 position, float speed, float angle, float angularVelocity, Color color, float size, int ttl)
+        {
+            Texture = texture;
+            Position = position;
+            Speed = speed;
+            Angle = angle;
+            AngularVelocity = angularVelocity;
+            Color = color;
+            TTL = ttl;
+            placement = new RectangleF(position.X, position.Y, 16 * size, 23 * size);
+        }
+
+        public override void Update()
+        {
+            TTL--;
+            Angle += AngularVelocity;
+            placement.X -= Speed / 4;
+            placement.Y -= Speed / 4;
+            placement.Width += Speed / 2;
+            placement.Height += Speed / 2;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Vector2 origin = new Vector2(placement.Width / 2, placement.Height / 2);
+
+            spriteBatch.Draw(Texture, placement, null, Color, Angle, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }
