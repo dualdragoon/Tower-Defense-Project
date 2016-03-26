@@ -120,6 +120,8 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Designer.cs" />
+    <Compile Include="Particle.cs" />
+    <Compile Include="ParticleEngine.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -141,6 +143,8 @@
     <None Include="Content\Towers\Stats\Tower Data.twd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <ToolkitTexture Include="Content\Textures\Cursors\Particles\Drop1.png" />
+    <ToolkitTexture Include="Content\Textures\Cursors\Particles\Drop2.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />

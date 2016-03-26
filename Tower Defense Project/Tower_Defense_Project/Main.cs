@@ -19,23 +19,23 @@ namespace Tower_Defense_Project
     /// </summary>
     public class Main : Game
     {
-        SpriteBatch spriteBatch;
-
-        Level level;
-
-        static bool isCustomMouseVisible = true;
         bool keyPressed, keyDidSomething;
-        static CustomCursor cursorType = CustomCursor.GL_Cursor;
         GameState currentState = GameState.LevelDesigner;
         int offset;
+        Level level;
+        List<Texture2D> textures = new List<Texture2D>();
+        ParticleEngine generator;
+        SpriteBatch spriteBatch;
+        Texture2D[] cursors = new Texture2D[8];
+        static bool isCustomMouseVisible = true;
         static ContentManager content;
+        static CustomCursor cursorType = CustomCursor.GL_Cursor;
         static GraphicsDeviceManager graphics;
         static KeyboardManager keyboardManager;
         static KeyboardState keyboard;
         static MouseManager mouseManager;
         static MouseState mouse;
         static Texture2D currentCursor, emptyCursor, selectedCursor;
-        Texture2D[] cursors = new Texture2D[8];
 
         #region Properties
         public static bool IsCustomMouseVisible
@@ -145,6 +145,10 @@ namespace Tower_Defense_Project
             cursors[6] = Content.Load<Texture2D>(@"Textures/Cursors/SS Cursor");
             cursors[7] = Content.Load<Texture2D>(@"Textures/Cursors/YL Cursor");
 
+            textures.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Drop1"));
+            textures.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Drop2"));
+            generator = new ParticleEngine(textures, new Vector2(-10, -10), EngineType.Dripping);
+
             CurrentState = GameState.Play;
         }
 
@@ -182,6 +186,9 @@ namespace Tower_Defense_Project
             {
                 currentCursor = emptyCursor;
             }
+
+            generator.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
+            generator.Update();
 
             Input();
 
@@ -282,6 +289,7 @@ namespace Tower_Defense_Project
                     break;
             }
 
+            generator.Draw(spriteBatch);
             spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * graphics.GraphicsDevice.Viewport.Width) - offset, (CurrentMouse.Y * graphics.GraphicsDevice.Viewport.Height) - offset), Color.White);
 
             spriteBatch.End();
