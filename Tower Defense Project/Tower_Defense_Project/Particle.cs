@@ -81,8 +81,6 @@ namespace Tower_Defense_Project
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Vector2 origin = new Vector2(placement.Width / 2, placement.Height / 2);
-
             spriteBatch.Draw(Texture, placement, null, Color, Angle, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
