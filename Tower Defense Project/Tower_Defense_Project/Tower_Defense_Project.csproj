@@ -146,6 +146,8 @@
     <ToolkitTexture Include="Content\Textures\Cursors\Particles\Drop1.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\Particles\Drop2.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\Particles\Pulse.png" />
+    <Content Include="Content\Towers\Start.png" />
+    <Content Include="Content\Towers\Stop.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />

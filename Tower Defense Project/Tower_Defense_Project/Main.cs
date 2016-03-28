@@ -20,6 +20,7 @@ namespace Tower_Defense_Project
     public class Main : Game
     {
         bool keyPressed, keyDidSomething;
+        Designer designer;
         GameState currentState = GameState.LevelDesigner;
         int offset;
         Level level;
@@ -151,7 +152,7 @@ namespace Tower_Defense_Project
 
             bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
-            CurrentState = GameState.Play;
+            CurrentState = GameState.LevelDesigner;
         }
 
         /// <summary>
@@ -252,6 +253,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case GameState.LevelDesigner:
+                    designer = new Designer();
                     break;
 
                 default:

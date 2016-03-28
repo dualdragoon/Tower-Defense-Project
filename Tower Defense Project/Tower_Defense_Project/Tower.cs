@@ -69,10 +69,7 @@ namespace Tower_Defense_Project
 
         public void Update(GameTime gameTime, MouseState mouse)
         {
-            if (!isPlaced)
-            {
-                isPlaced = Placed(mouse);
-            }
+            if (!isPlaced) isPlaced = Placed(mouse);
             else
             {
                 attackTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -84,6 +81,25 @@ namespace Tower_Defense_Project
                 if (mouse.RightButton.Pressed)
                 {
                     if (collision.Contains(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight)))
+                    {
+                        isSelected = true;
+                    }
+                    else
+                    {
+                        isSelected = false;
+                    }
+                }
+            }
+        }
+
+        public void UpdateDesigner(GameTime gameTime, MouseState mouse)
+        {
+            if (!isPlaced) isPlaced = Placed(mouse);
+            else
+            {
+                if (mouse.RightButton.Pressed)
+                {
+                    if (collision.Contains(new Vector2((mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight)))
                     {
                         isSelected = true;
                     }
