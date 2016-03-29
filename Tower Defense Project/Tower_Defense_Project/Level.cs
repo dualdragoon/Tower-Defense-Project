@@ -19,7 +19,7 @@ namespace Tower_Defense_Project
     class Level
     {
         public Button temp1, start;
-        private bool keyPressed, keyDidSomething, pause = false, waveRunning = false;
+        private bool pause = false, waveRunning = false;
         private float escapeTimer = 0, minEscapeTimer = .05f;
         private int pointsNum, pathSetNum, waveNum;
         private Path path;
@@ -163,7 +163,7 @@ namespace Tower_Defense_Project
             if (!pause)
             {
                 temp1.Update(Main.CurrentMouse);
-                
+
                 if (waveRunning)
                 {
                     waves.UpdateWave(gameTime);
@@ -259,31 +259,14 @@ namespace Tower_Defense_Project
 
         private void Input()
         {
-            if (towers.Count > 0 && towers[towers.Count - 1].isPlaced)
-            {
-                keyPressed = false;
-            }
-
-            keyDidSomething = keyPressed && keyDidSomething;
-
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500)
             {
-                keyPressed = true;
-                if (!keyDidSomething)
-                {
-                    towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
-                    currency -= towers[towers.Count - 1].Cost;
-                    keyDidSomething = true;
-                }
+                towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
+                currency -= towers[towers.Count - 1].Cost;
             }
             else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2))
             {
-                keyPressed = true;
-                if (!keyDidSomething)
-                {
-                    towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
-                    keyDidSomething = true;
-                }
+                towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
             }
         }
 

@@ -12,6 +12,9 @@ namespace Tower_Defense_Project
 {
     enum TowerType
     {
+        Start = 0,
+        Point = 1,
+        Stop = 2,
         GL = 101,
         RL = 102,
         BLL = 103,
@@ -23,6 +26,7 @@ namespace Tower_Defense_Project
         private bool isSelected;
         public Circle range;
         private Color rangeColor = Color.Gray;
+        private Designer designer;
         private float attackTimer = 0, minAttackTimer, diameter;
         private int size;
         private Level level;
@@ -36,6 +40,11 @@ namespace Tower_Defense_Project
         public Level Level
         {
             get { return level; }
+        }
+
+        public Designer Designer
+        {
+            get { return designer; }
         }
 
         public uint Cost
@@ -54,6 +63,21 @@ namespace Tower_Defense_Project
             minAttackTimer = float.Parse(Level.TowerStats[(int)type][3]);
             projectileType = (ProjectileType)int.Parse(Level.TowerStats[(int)type][4]);
             cost = uint.Parse(Level.TowerStats[(int)type][5]);
+
+            collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, size, size);
+            range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), diameter);
+
+            LoadContent();
+        }
+
+        public Tower(Designer designer, TowerType type, MouseState mouse)
+        {
+            this.designer = designer;
+            this.type = type;
+
+            spriteSet = Level.TowerStats[(int)type][0];
+            size = int.Parse(Level.TowerStats[(int)type][1]);
+            diameter = float.Parse(Level.TowerStats[(int)type][2]);
 
             collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, size, size);
             range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), diameter);
@@ -95,18 +119,15 @@ namespace Tower_Defense_Project
         public void UpdateDesigner(GameTime gameTime, MouseState mouse)
         {
             if (!isPlaced) isPlaced = Placed(mouse);
-            else
+            else if (mouse.RightButton.Pressed)
             {
-                if (mouse.RightButton.Pressed)
+                if (collision.Contains(new Vector2((mouse.X * Main.Graphics.PreferredBackBufferWidth), mouse.Y * Main.Graphics.PreferredBackBufferHeight)))
                 {
-                    if (collision.Contains(new Vector2((mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight)))
-                    {
-                        isSelected = true;
-                    }
-                    else
-                    {
-                        isSelected = false;
-                    }
+                    isSelected = true;
+                }
+                else
+                {
+                    isSelected = false;
                 }
             }
         }
@@ -148,7 +169,7 @@ namespace Tower_Defense_Project
                     rangeColor = Color.Red;
                     placed = false;
                 }
-                return placed; 
+                return placed;
             }
             #region Mouse Off-Screen Handling
             else if (mouse.X * Main.Graphics.PreferredBackBufferWidth <= 0 && mouse.Y * Main.Graphics.PreferredBackBufferHeight >= 0 && mouse.Y * Main.Graphics.PreferredBackBufferHeight <= Main.Graphics.PreferredBackBufferHeight)
@@ -206,7 +227,7 @@ namespace Tower_Defense_Project
                 collision.Y = Main.Graphics.PreferredBackBufferHeight;
                 range.Center = new Vector2(Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
                 return placed;
-            } 
+            }
             #endregion
             else
             {
