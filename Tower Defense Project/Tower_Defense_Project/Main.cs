@@ -211,6 +211,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case GameState.LevelDesigner:
+                    designer.Update(gameTime);
                     break;
 
                 default:
@@ -254,6 +255,7 @@ namespace Tower_Defense_Project
 
                 case GameState.LevelDesigner:
                     designer = new Designer();
+                    designer.LoadContent();
                     break;
 
                 default:
@@ -283,6 +285,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case GameState.LevelDesigner:
+                    designer.Draw(spriteBatch);
                     break;
 
                 default:

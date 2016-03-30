@@ -11,17 +11,49 @@ namespace Tower_Defense_Project
 {
     class Designer
     {
-        private bool startPlaced;
+        private bool startPlaced, fin = false;
         private Path path;
+        private RectangleF x, y;
         public RectangleF storeSection;
+        private SpriteFont font;
+        private Texture2D tex;
 
         public List<Tower> towers = new List<Tower>();
+
+        private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
+
+        public static Dictionary<int, string[]> TowerStats
+        {
+            get { return towerStats; }
+            set { towerStats = value; }
+        }
+
+        public Path Path
+        {
+            get { return path; }
+        }
 
         public Designer() { }
 
         public void LoadContent()
         {
+            string[] s = new string[] { "Start", "32", "100" };
+            towerStats.Add(0, s);
 
+            s = new string[] { "Point", "32", "100" };
+            towerStats.Add(1, s);
+
+            s = new string[] { "Stop", "32", "100" };
+            towerStats.Add(2, s);
+
+            tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
+            font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
+
+            path = new Path();
+            
+            storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
+            x = new RectangleF(610, 300, 75, 30);
+            y = new RectangleF(715, 300, 75, 30);
         }
 
         public void Update(GameTime gameTime)
@@ -30,30 +62,50 @@ namespace Tower_Defense_Project
 
             if (!startPlaced)
             {
-                startPlaced = towers[0].isPlaced;
+                try { startPlaced = towers[0].isPlaced; }
+                catch { }
+            }
+
+            foreach (Tower i in towers)
+            {
+                i.UpdateDesigner(gameTime, Main.CurrentMouse);
             }
 
             Input();
         }
+        
+        private void Selected()
+        {
+
+        }
 
         private void Input()
         {
-            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && !startPlaced)
+            if (!fin)
             {
-                towers.Add(new Tower(this, TowerType.Start, Main.CurrentMouse));
-            }
-            else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && startPlaced)
-            {
-                towers.Add(new Tower(this, TowerType.Point, Main.CurrentMouse));
-            }
-            else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && startPlaced)
-            {
-                towers.Add(new Tower(this, TowerType.Stop, Main.CurrentMouse));
+                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && !startPlaced)
+                {
+                    towers.Add(new Tower(this, TowerType.Start, Main.CurrentMouse));
+                }
+                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && startPlaced)
+                {
+                    towers.Add(new Tower(this, TowerType.Point, Main.CurrentMouse));
+                }
+                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && startPlaced)
+                {
+                    towers.Add(new Tower(this, TowerType.Stop, Main.CurrentMouse));
+                    fin = true;
+                } 
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(tex, storeSection, Color.Black);
+            spriteBatch.Draw(tex, x, Color.LightGray);
+            spriteBatch.Draw(tex, y, Color.LightGray);
+            spriteBatch.DrawString(font, "", Vector2.Zero, Color.Black);
+
             foreach (Tower i in towers)
             {
                 i.Draw(spriteBatch);

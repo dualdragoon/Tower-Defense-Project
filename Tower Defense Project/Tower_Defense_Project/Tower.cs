@@ -33,7 +33,7 @@ namespace Tower_Defense_Project
         private ProjectileType projectileType;
         public RectangleF collision;
         private string spriteSet;
-        private Texture2D tex, rangeTex;
+        private Texture2D texture, rangeTex;
         public TowerType type;
         private uint cost;
 
@@ -75,9 +75,9 @@ namespace Tower_Defense_Project
             this.designer = designer;
             this.type = type;
 
-            spriteSet = Level.TowerStats[(int)type][0];
-            size = int.Parse(Level.TowerStats[(int)type][1]);
-            diameter = float.Parse(Level.TowerStats[(int)type][2]);
+            spriteSet = Designer.TowerStats[(int)type][0];
+            size = int.Parse(Designer.TowerStats[(int)type][1]);
+            diameter = float.Parse(Designer.TowerStats[(int)type][2]);
 
             collision = new RectangleF(mouse.X * Main.Graphics.PreferredBackBufferWidth, mouse.Y * Main.Graphics.PreferredBackBufferHeight, size, size);
             range = new Circle(new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2)), diameter);
@@ -87,7 +87,7 @@ namespace Tower_Defense_Project
 
         private void LoadContent()
         {
-            tex = Main.GameContent.Load<Texture2D>(@"Towers/" + spriteSet);
+            texture = Main.GameContent.Load<Texture2D>(@"Towers/" + spriteSet);
             rangeTex = Main.GameContent.Load<Texture2D>(@"Towers/" + spriteSet + " Range");
         }
 
@@ -154,7 +154,7 @@ namespace Tower_Defense_Project
                 collision.X = mouse.X * Main.Graphics.PreferredBackBufferWidth;
                 collision.Y = mouse.Y * Main.Graphics.PreferredBackBufferHeight;
                 range.Center = new Vector2(mouse.X * Main.Graphics.PreferredBackBufferWidth + (collision.Width / 2), mouse.Y * Main.Graphics.PreferredBackBufferHeight + (collision.Height / 2));
-                if (CanPlace())
+                if (CanPlace() || CanPlaceDesigner())
                 {
                     rangeColor = Color.Gray;
                     if (mouse.LeftButton.Pressed)
@@ -237,7 +237,14 @@ namespace Tower_Defense_Project
 
         private bool CanPlace()
         {
-            return !Level.Path.Intersects(collision) && TowerCheck() && !Level.storeSection.Intersects(collision);
+            try { return !Level.Path.Intersects(collision) && TowerCheck() && !Level.storeSection.Intersects(collision); }
+            catch { return false; }
+        }
+
+        private bool CanPlaceDesigner()
+        {
+            try { return !Designer.Path.Intersects(collision) && PointCheck() && !Designer.storeSection.Intersects(collision); }
+            catch { return false; }
         }
 
         private bool TowerCheck()
@@ -253,13 +260,26 @@ namespace Tower_Defense_Project
             return check;
         }
 
+        private bool PointCheck()
+        {
+            bool check = true;
+            for (int i = 0; i < Designer.towers.Count - 1; i++)
+            {
+                if (collision.Intersects(Designer.towers[i].collision))
+                {
+                    check = false;
+                }
+            }
+            return check;
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!isPlaced || isSelected)
             {
                 spriteBatch.Draw(rangeTex, range.Location, rangeColor);
             }
-            spriteBatch.Draw(tex, collision, Color.White);
+            spriteBatch.Draw(texture, collision, Color.White);
         }
     }
 }

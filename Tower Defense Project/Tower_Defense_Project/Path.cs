@@ -74,15 +74,19 @@ namespace Tower_Defense_Project
 
         public bool Intersects(RectangleF rect)
         {
-            bool intersects = false;
-            foreach (RectangleF pathRectangle in pathSet)
+            try
             {
-                if (!intersects)
+                bool intersects = false;
+                foreach (RectangleF pathRectangle in pathSet)
                 {
-                    intersects = rect.Left < pathRectangle.Right && pathRectangle.Left < rect.Right && rect.Top < pathRectangle.Bottom && pathRectangle.Top < rect.Bottom; 
+                    if (!intersects)
+                    {
+                        intersects = rect.Left < pathRectangle.Right && pathRectangle.Left < rect.Right && rect.Top < pathRectangle.Bottom && pathRectangle.Top < rect.Bottom;
+                    }
                 }
+                return intersects;
             }
-            return intersects;
+            catch { return false; }
         }
 
         public void Serialize(BinarySerializer serializer)

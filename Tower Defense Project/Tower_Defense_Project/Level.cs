@@ -270,17 +270,17 @@ namespace Tower_Defense_Project
             }
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spritebatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spritebatch.Draw(background, new RectangleF(0, 0, Main.Graphics.GraphicsDevice.Viewport.Width, Main.Graphics.GraphicsDevice.Viewport.Height), Color.White);
+            spriteBatch.Draw(background, new RectangleF(0, 0, Main.Graphics.GraphicsDevice.Viewport.Width, Main.Graphics.GraphicsDevice.Viewport.Height), Color.White);
 
-            spritebatch.Draw(tex, storeSection, Color.Black);
+            spriteBatch.Draw(tex, storeSection, Color.Black);
 
             #region ButtonDrawing
             try
             {
-                spritebatch.Draw(temp1.Texture, temp1.Collision, Color.White);
-                if (!waveRunning) spritebatch.Draw(start.Texture, start.Collision, Color.White);
+                spriteBatch.Draw(temp1.Texture, temp1.Collision, Color.White);
+                if (!waveRunning) spriteBatch.Draw(start.Texture, start.Collision, Color.White);
             }
             catch
             { }
@@ -288,25 +288,25 @@ namespace Tower_Defense_Project
 
             foreach (RectangleF i in Path.pathSet)
             {
-                spritebatch.Draw(tex, i, Color.Green);
+                spriteBatch.Draw(tex, i, Color.Green);
             }
 
             foreach (Enemy enemy in enemies)
             {
-                enemy.Draw(gameTime, spritebatch);
+                enemy.Draw(gameTime, spriteBatch);
             }
 
             foreach (Tower tower in towers)
             {
-                tower.Draw(spritebatch);
+                tower.Draw(spriteBatch);
             }
 
             foreach (Projectile projectile in projectiles)
             {
-                projectile.Draw(spritebatch);
+                projectile.Draw(spriteBatch);
             }
 
-            spritebatch.DrawString(Font, Currency.ToString(), Vector2.Zero, Color.Black);
+            spriteBatch.DrawString(Font, Currency.ToString(), Vector2.Zero, Color.Black);
         }
     }
 }
