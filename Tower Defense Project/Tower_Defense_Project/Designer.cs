@@ -17,6 +17,8 @@ namespace Tower_Defense_Project
         public RectangleF storeSection;
         private SpriteFont font;
         private Texture2D tex;
+        private Tower selected;
+        private Vector2 selectedLocation;
 
         public List<Tower> towers = new List<Tower>();
 
@@ -50,6 +52,7 @@ namespace Tower_Defense_Project
             font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
 
             path = new Path();
+            selected = new Tower(this, TowerType.Start, Main.CurrentMouse);
             
             storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
             x = new RectangleF(610, 300, 75, 30);
@@ -71,12 +74,27 @@ namespace Tower_Defense_Project
                 i.UpdateDesigner(gameTime, Main.CurrentMouse);
             }
 
+            selected = Selected();
+
             Input();
         }
         
-        private void Selected()
+        private Tower Selected()
         {
-
+            Tower t;
+            foreach (Tower i in towers)
+            {
+                if (i.isSelected)
+                {
+                    if (i != selected) selectedLocation = i.Position;
+                    return i;
+                }
+            }
+            t = new Tower(this, TowerType.Start, Main.CurrentMouse);
+            t.isPlaced = true;
+            t.Position = Vector2.Zero;
+            selectedLocation = t.Position;
+            return t;
         }
 
         private void Input()
@@ -104,7 +122,8 @@ namespace Tower_Defense_Project
             spriteBatch.Draw(tex, storeSection, Color.Black);
             spriteBatch.Draw(tex, x, Color.LightGray);
             spriteBatch.Draw(tex, y, Color.LightGray);
-            spriteBatch.DrawString(font, "", Vector2.Zero, Color.Black);
+            spriteBatch.DrawString(font, selectedLocation.X.ToString(), new Vector2(615, 298), Color.Black);
+            spriteBatch.DrawString(font, selectedLocation.Y.ToString(), new Vector2(720, 298), Color.Black);
 
             foreach (Tower i in towers)
             {

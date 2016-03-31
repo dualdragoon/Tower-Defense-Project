@@ -22,8 +22,7 @@ namespace Tower_Defense_Project
 
     class Tower
     {
-        public bool isPlaced = false;
-        private bool isSelected;
+        public bool isPlaced = false, isSelected;
         public Circle range;
         private Color rangeColor = Color.Gray;
         private Designer designer;
@@ -31,25 +30,31 @@ namespace Tower_Defense_Project
         private int size;
         private Level level;
         private ProjectileType projectileType;
-        public RectangleF collision;
+        private RectangleF collision;
         private string spriteSet;
         private Texture2D texture, rangeTex;
         public TowerType type;
         private uint cost;
-
-        public Level Level
-        {
-            get { return level; }
-        }
 
         public Designer Designer
         {
             get { return designer; }
         }
 
+        public Level Level
+        {
+            get { return level; }
+        }
+
         public uint Cost
         {
             get { return cost; }
+        }
+
+        public Vector2 Position
+        {
+            get { return collision.Location; }
+            set { collision.Location = value; }
         }
 
         public Tower(Level level, TowerType type, MouseState mouse)
