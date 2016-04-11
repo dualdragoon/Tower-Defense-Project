@@ -54,7 +54,12 @@ namespace Tower_Defense_Project
         public Vector2 Position
         {
             get { return collision.Location; }
-            set { collision.Location = value; }
+            set
+            {
+                Vector2 offset = value - collision.Location;
+                range.Offset(offset);
+                collision.Location = value;
+            }
         }
 
         public Tower(Level level, TowerType type, MouseState mouse)

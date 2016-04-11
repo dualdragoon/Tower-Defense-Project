@@ -19,13 +19,13 @@ namespace Tower_Defense_Project
         /// <param name="key">When this method returns, contains the correct character if conversion succeeded.
         /// Else contains the null, (000), character.</param>
         /// <returns>True if conversion was successful</returns>
-        public static bool TryConvertKeyboardInput(KeyboardState keyboard, KeyboardState oldKeyboard, out char key)
+        public static bool TryConvertKeyboardInput(KeyboardState keyboard, out char? key)
         {
             List<Keys> keys = new List<Keys>();
             keyboard.GetDownKeys(keys);
             bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
 
-            if (keys.Count > 0 && !oldKeyboard.IsKeyDown(keys[0]))
+            if (keys.Count > 0 && keyboard.IsKeyPressed(keys[0]))
             {
                 switch (keys[0])
                 {
@@ -94,10 +94,11 @@ namespace Tower_Defense_Project
                     case Keys.OemMinus: if (shift) { key = '_'; } else { key = '-'; } return true;
                     case Keys.OemComma: if (shift) { key = '<'; } else { key = ','; } return true;
                     case Keys.Space: key = ' '; return true;
+                    case Keys.Back: key = '\b'; return true;
                 }
             }
 
-            key = (char)0;
+            key = null;
             return false;
         }
 
@@ -110,13 +111,12 @@ namespace Tower_Defense_Project
         /// <param name="key">When this method returns, contains the correct character if conversion succeeded.
         /// Else contains the null, (000), character.</param>
         /// <returns>True if conversion was successful</returns>
-        public static bool TryConvertNumberInput(KeyboardState keyboard, KeyboardState oldKeyboard, out char key)
+        public static bool TryConvertNumberInput(KeyboardState keyboard, out char? key)
         {
             List<Keys> keys = new List<Keys>();
             keyboard.GetDownKeys(keys);
-            bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
 
-            if (keys.Count > 0 && !oldKeyboard.IsKeyDown(keys[0]))
+            if (keys.Count > 0 && keyboard.IsKeyPressed(keys[0]))
             {
                 switch (keys[0])
                 {
@@ -146,10 +146,11 @@ namespace Tower_Defense_Project
 
                     //Special keys
                     case Keys.OemPeriod: key = '.'; return true;
+                    case Keys.Back: key = '\b'; return true;
                 }
             }
 
-            key = (char)0;
+            key = null;
             return false;
         }
     }

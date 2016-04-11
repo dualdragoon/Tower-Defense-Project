@@ -128,6 +128,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="InputParser.cs" />
+    <Compile Include="RectangleSelection.cs" />
     <Compile Include="Tower.cs" />
     <Compile Include="WaveManager.cs" />
   </ItemGroup>
@@ -152,6 +153,10 @@
     <ToolkitTexture Include="Content\Towers\Start Range.png" />
     <ToolkitTexture Include="Content\Towers\Point Range.png" />
     <ToolkitTexture Include="Content\Towers\Stop Range.png" />
+    <ToolkitTexture Include="Content\Buttons\Build Path Pressed.png" />
+    <ToolkitTexture Include="Content\Buttons\Build Path.png" />
+    <ToolkitTexture Include="Content\Textures\Point Pressed.png" />
+    <ToolkitTexture Include="Content\Textures\Point.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />
