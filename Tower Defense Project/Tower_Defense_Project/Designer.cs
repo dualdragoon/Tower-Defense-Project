@@ -80,9 +80,9 @@ namespace Tower_Defense_Project
                 catch { }
             }
 
-            if (Main.CurrentMouse.LeftButton.Pressed && towers.Contains(selected))
+            if (Main.CurrentMouse.LeftButton.Pressed)
             {
-                if (x.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight))
+                if (x.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight) && towers.Contains(selected))
                 {
                     xSelected = true;
                     colorX = Color.Aqua;
@@ -93,7 +93,7 @@ namespace Tower_Defense_Project
                     colorX = Color.LightGray;
                 }
 
-                if (y.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight))
+                if (y.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight) && towers.Contains(selected))
                 {
                     ySelected = true;
                     colorY = Color.Aqua;
@@ -165,9 +165,9 @@ namespace Tower_Defense_Project
                     towers.Add(new Tower(this, TowerType.Stop, Main.CurrentMouse));
                     fin = true;
                 }
-
-                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D3)) pieces.Add(new RectangleSelection(10, 10, 40, 40));
             }
+
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D3)) pieces.Add(new RectangleSelection(10, 10, 40, 40));
 
             try
             {

@@ -157,6 +157,7 @@
     <ToolkitTexture Include="Content\Buttons\Build Path.png" />
     <ToolkitTexture Include="Content\Textures\Point Pressed.png" />
     <ToolkitTexture Include="Content\Textures\Point.png" />
+    <ToolkitTexture Include="Content\Textures\Transparent Pixel.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />
