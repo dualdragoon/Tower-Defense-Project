@@ -12,14 +12,15 @@ namespace Tower_Defense_Project
 {
     class Designer
     {
-        private bool startPlaced, fin = false, xSelected, ySelected;
+        private bool startPlaced, fin, xSelected, ySelected, xSelectedRect, ySelectedRect, widthSelected, heightSelected;
         private Button build;
         private Color colorX, colorY;
         private Path path;
-        private RectangleF x, y;
+        private RectangleF x, y, xRect, yRect, width, height;
         public RectangleF storeSection;
+        private RectangleSelection selectedRectangle;
         private SpriteFont font;
-        private string selectedLocationX, selectedLocationY;
+        private string selectedLocationX, selectedLocationY, rectangleX, rectangleY, rectangleWidth, rectangleHeight;
         private Texture2D tex, buildUnpressed, buildPressed;
         private Tower selected;
 
@@ -68,6 +69,10 @@ namespace Tower_Defense_Project
             storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
             x = new RectangleF(610, 300, 75, 30);
             y = new RectangleF(715, 300, 75, 30);
+            xRect = new RectangleF();
+            yRect = new RectangleF();
+            width = new RectangleF();
+            height = new RectangleF();
         }
 
         public void Update(GameTime gameTime)
@@ -115,7 +120,11 @@ namespace Tower_Defense_Project
                 i.Update();
             }
 
-            if (Main.CurrentMouse.RightButton.Pressed) selected = Selected();
+            if (Main.CurrentMouse.RightButton.Pressed)
+            {
+                selected = Selected();
+                selectedRectangle = SelectedRectangle();
+            }
 
             if (fin) build.Update(Main.CurrentMouse);
 
@@ -145,6 +154,35 @@ namespace Tower_Defense_Project
             selectedLocationY = "0";
             xSelected = false;
             ySelected = false;
+            return t;
+        }
+
+        private RectangleSelection SelectedRectangle()
+        {
+            RectangleSelection t;
+            foreach (RectangleSelection i in pieces)
+            {
+                if (i.isSelected)
+                {
+                    if (i != selectedRectangle)
+                    {
+                        rectangleX = i.SelectedRectangle.X.ToString();
+                        rectangleY = i.SelectedRectangle.Y.ToString();
+                        rectangleWidth = i.SelectedRectangle.Width.ToString();
+                        rectangleHeight = i.SelectedRectangle.Height.ToString();
+                    }
+                    return i;
+                }
+            }
+            t = new RectangleSelection(0, 0, 0, 0);
+            rectangleX = "0";
+            rectangleY = "0";
+            rectangleWidth = "0";
+            rectangleHeight = "0";
+            xSelectedRect = false;
+            ySelectedRect = false;
+            widthSelected = false;
+            heightSelected = false;
             return t;
         }
 

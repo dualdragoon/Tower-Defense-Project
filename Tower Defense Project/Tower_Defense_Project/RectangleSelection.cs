@@ -11,7 +11,9 @@ namespace Tower_Defense_Project
 {
     class RectangleSelection
     {
+        public bool isSelected;
         private Button point1, point2, point3, point4;
+        private Color color;
         private Texture2D unpressed, pressed, tex, back;
 
         #region Properties
@@ -101,6 +103,15 @@ namespace Tower_Defense_Project
             else if (point2.Grabbed) Point2 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
             else if (point3.Grabbed) Point3 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
             else if (point4.Grabbed) Point4 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+
+            if (Main.CurrentMouse.RightButton.Pressed)
+            {
+                if (SelectedRectangle.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight)) isSelected = true;
+                else isSelected = false;
+            }
+
+            if (isSelected) color = Color.Chocolate;
+            else color = Color.White;
         }
 
         private void DrawLine(SpriteBatch spriteBatch, Vector2 begin, Vector2 end, int width = 1)
@@ -114,7 +125,7 @@ namespace Tower_Defense_Project
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(back, SelectedRectangle, Color.White);
+            spriteBatch.Draw(back, SelectedRectangle, color);
 
             DrawLine(spriteBatch, point1.Center, point2.Center);
             DrawLine(spriteBatch, point2.Center, point4.Center);
