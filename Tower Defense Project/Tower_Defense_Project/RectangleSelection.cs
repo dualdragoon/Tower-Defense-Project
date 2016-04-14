@@ -6,6 +6,7 @@ using Duality.Interaction;
 using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
+using SharpDX.Toolkit.Input;
 
 namespace Tower_Defense_Project
 {
@@ -99,10 +100,44 @@ namespace Tower_Defense_Project
             point3.Update(Main.CurrentMouse);
             point4.Update(Main.CurrentMouse);
 
-            if (point1.Grabbed) Point1 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
-            else if (point2.Grabbed) Point2 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
-            else if (point3.Grabbed) Point3 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
-            else if (point4.Grabbed) Point4 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+            if (isSelected || Main.CurrentKeyboard.IsKeyDown(Keys.Control))
+            {
+                if (point1.LeftHeld)
+                {
+                    Point1 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+                    point2.Clickable = false;
+                    point3.Clickable = false;
+                    point4.Clickable = false;
+                }
+                else if (point2.LeftHeld)
+                {
+                    Point2 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+                    point1.Clickable = false;
+                    point3.Clickable = false;
+                    point4.Clickable = false;
+                }
+                else if (point3.LeftHeld)
+                {
+                    Point3 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+                    point1.Clickable = false;
+                    point2.Clickable = false;
+                    point4.Clickable = false;
+                }
+                else if (point4.LeftHeld)
+                {
+                    Point4 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+                    point1.Clickable = false;
+                    point2.Clickable = false;
+                    point3.Clickable = false;
+                }
+                else
+                {
+                    point1.Clickable = true;
+                    point2.Clickable = true;
+                    point3.Clickable = true;
+                    point4.Clickable = true;
+                } 
+            }
 
             if (Main.CurrentMouse.RightButton.Pressed)
             {

@@ -142,10 +142,10 @@ namespace Tower_Defense_Project
             currency = 1000;
 
             temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            temp1.ButtonPressed += ButtonHandling;
+            temp1.LeftClicked += ButtonHandling;
 
             start = new Button(new Vector2(610, 380), 180, 90, 2, Main.CurrentMouse, startWave, startWavePressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            start.ButtonPressed += ButtonHandling;
+            start.LeftClicked += ButtonHandling;
         }
 
         public void Update(GameTime gameTime)
@@ -241,7 +241,7 @@ namespace Tower_Defense_Project
 
                 case 2:
                     waves.WaveFinished += WaveEnd;
-                    start.ButtonPressed -= ButtonHandling;
+                    start.LeftClicked -= ButtonHandling;
                     waveRunning = true;
                     break;
 
@@ -253,7 +253,7 @@ namespace Tower_Defense_Project
         private void WaveEnd(object sender, EventArgs e)
         {
             waves.WaveFinished -= WaveEnd;
-            start.ButtonPressed += ButtonHandling;
+            start.LeftClicked += ButtonHandling;
             waveRunning = false;
         }
 

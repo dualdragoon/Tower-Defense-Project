@@ -64,7 +64,7 @@ namespace Tower_Defense_Project
             buildUnpressed = Main.GameContent.Load<Texture2D>(@"Buttons/Build Path");
             buildPressed = Main.GameContent.Load<Texture2D>(@"Buttons/Build Path Pressed");
             build = new Button(new Vector2(610, 380), 180, 90, 2, Main.CurrentMouse, buildUnpressed, buildPressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            build.ButtonPressed += Build;
+            build.LeftClicked += Build;
 
             storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
             x = new RectangleF(610, 300, 75, 30);
