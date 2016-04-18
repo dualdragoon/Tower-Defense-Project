@@ -14,7 +14,7 @@ namespace Tower_Defense_Project
     {
         private bool startPlaced, fin, xSelected, ySelected, xSelectedRect, ySelectedRect, widthSelected, heightSelected;
         private Button build;
-        private Color colorX, colorY;
+        private Color colorX, colorY, colorXRect, colorYRect, colorWidth, colorHeight;
         private Path path;
         private RectangleF x, y, xRect, yRect, width, height;
         public RectangleF storeSection;
@@ -23,6 +23,8 @@ namespace Tower_Defense_Project
         private string selectedLocationX, selectedLocationY, rectangleX, rectangleY, rectangleWidth, rectangleHeight;
         private Texture2D tex, buildUnpressed, buildPressed;
         private Tower selected;
+
+        Random p = new Random();
 
         public List<Tower> towers = new List<Tower>();
         private List<RectangleSelection> pieces = new List<RectangleSelection>();
@@ -55,6 +57,10 @@ namespace Tower_Defense_Project
 
             colorX = Color.LightGray;
             colorY = Color.LightGray;
+            colorXRect = Color.LightGray;
+            colorYRect = Color.LightGray;
+            colorWidth = Color.LightGray;
+            colorHeight = Color.LightGray;
             tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
             font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
 
@@ -69,10 +75,10 @@ namespace Tower_Defense_Project
             storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
             x = new RectangleF(610, 300, 75, 30);
             y = new RectangleF(715, 300, 75, 30);
-            xRect = new RectangleF();
-            yRect = new RectangleF();
-            width = new RectangleF();
-            height = new RectangleF();
+            xRect = new RectangleF(610, 260, 75, 30);
+            yRect = new RectangleF(715, 260, 75, 30);
+            width = new RectangleF(610, 220, 75, 30);
+            height = new RectangleF(715, 220, 75, 30);
         }
 
         public void Update(GameTime gameTime)
@@ -107,6 +113,50 @@ namespace Tower_Defense_Project
                 {
                     ySelected = false;
                     colorY = Color.LightGray;
+                }
+
+                if (xRect.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight) && pieces.Contains(selectedRectangle))
+                {
+                    xSelectedRect = true;
+                    colorXRect = Color.Aqua;
+                }
+                else
+                {
+                    xSelectedRect = false;
+                    colorXRect = Color.LightGray;
+                }
+
+                if (yRect.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight) && pieces.Contains(selectedRectangle))
+                {
+                    ySelectedRect = true;
+                    colorYRect = Color.Aqua;
+                }
+                else
+                {
+                    ySelectedRect = false;
+                    colorYRect = Color.LightGray;
+                }
+
+                if (width.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight) && pieces.Contains(selectedRectangle))
+                {
+                    widthSelected = true;
+                    colorWidth = Color.Aqua;
+                }
+                else
+                {
+                    widthSelected = false;
+                    colorWidth = Color.LightGray;
+                }
+
+                if (height.Contains(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight) && pieces.Contains(selectedRectangle))
+                {
+                    heightSelected = true;
+                    colorHeight = Color.Aqua;
+                }
+                else
+                {
+                    heightSelected = false;
+                    colorHeight = Color.LightGray;
                 }
             }
 
@@ -213,16 +263,8 @@ namespace Tower_Defense_Project
                 {
                     char? c;
                     InputParser.TryConvertNumberInput(Main.CurrentKeyboard, out c);
-                    if (xSelected)
-                    {
-                        if (c == '\b') selectedLocationX = selectedLocationX.Remove(selectedLocationX.Length - 1);
-                        else selectedLocationX += c;
-                    }
-                    else
-                    {
-                        if (c == '\b') selectedLocationY = selectedLocationY.Remove(selectedLocationY.Length - 1);
-                        else selectedLocationY += c;
-                    }
+                    if (xSelected) StringInput(ref selectedLocationX, c);
+                    else StringInput(ref selectedLocationY, c);
 
                     if (Main.CurrentKeyboard.IsKeyPressed(Keys.Enter))
                     {
@@ -233,11 +275,21 @@ namespace Tower_Defense_Project
             catch { }
         }
 
+        private void StringInput(ref string source, char? c)
+        {
+            if (c == '\b') source = source.Remove(source.Length - 1);
+            else source += c;
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(tex, storeSection, Color.Black);
             spriteBatch.Draw(tex, x, colorX);
             spriteBatch.Draw(tex, y, colorY);
+            spriteBatch.Draw(tex, xRect, colorXRect);
+            spriteBatch.Draw(tex, yRect, colorYRect);
+            spriteBatch.Draw(tex, width, colorWidth);
+            spriteBatch.Draw(tex, height, colorHeight);
             spriteBatch.DrawString(font, selectedLocationX, new Vector2(615, 298), Color.Black);
             spriteBatch.DrawString(font, selectedLocationY, new Vector2(720, 298), Color.Black);
 
