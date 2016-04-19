@@ -18,7 +18,7 @@ namespace Tower_Defense_Project
         private Texture2D unpressed, pressed, tex, back;
 
         #region Properties
-        private Vector2 Point1
+        public Vector2 Point1
         {
             get { return point1.Center; }
             set
@@ -29,7 +29,7 @@ namespace Tower_Defense_Project
             }
         }
 
-        private Vector2 Point2
+        public Vector2 Point2
         {
             get { return point2.Center; }
             set
@@ -40,7 +40,7 @@ namespace Tower_Defense_Project
             }
         }
 
-        private Vector2 Point3
+        public Vector2 Point3
         {
             get { return point3.Center; }
             set
@@ -51,7 +51,7 @@ namespace Tower_Defense_Project
             }
         }
 
-        private Vector2 Point4
+        public Vector2 Point4
         {
             get { return point4.Center; }
             set
@@ -87,10 +87,10 @@ namespace Tower_Defense_Project
             tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
             back = Main.GameContent.Load<Texture2D>(@"Textures/Transparent Pixel");
 
-            point1 = new Button(new Vector2(x, y), 16, 0, Main.CurrentMouse, unpressed, pressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            point2 = new Button(new Vector2(x + width, y), 16, 1, Main.CurrentMouse, unpressed, pressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            point3 = new Button(new Vector2(x, y + height), 16, 2, Main.CurrentMouse, unpressed, pressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            point4 = new Button(new Vector2(x + width, y + height), 16, 3, Main.CurrentMouse, unpressed, pressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            point1 = new Button(new Vector2(x, y), 16, 0, Main.CurrentMouse, unpressed, pressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            point2 = new Button(new Vector2(x + width, y), 16, 1, Main.CurrentMouse, unpressed, pressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            point3 = new Button(new Vector2(x, y + height), 16, 2, Main.CurrentMouse, unpressed, pressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            point4 = new Button(new Vector2(x + width, y + height), 16, 3, Main.CurrentMouse, unpressed, pressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
         }
 
         public void Update()

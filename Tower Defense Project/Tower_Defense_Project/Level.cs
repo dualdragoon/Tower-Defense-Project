@@ -141,10 +141,10 @@ namespace Tower_Defense_Project
             path.Build(true);
             currency = 1000;
 
-            temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
             temp1.LeftClicked += ButtonHandling;
 
-            start = new Button(new Vector2(610, 380), 180, 90, 2, Main.CurrentMouse, startWave, startWavePressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            start = new Button(new Vector2(610, 380), 180, 90, 2, Main.CurrentMouse, startWave, startWavePressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
             start.LeftClicked += ButtonHandling;
         }
 
