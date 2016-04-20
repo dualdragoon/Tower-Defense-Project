@@ -17,7 +17,7 @@ namespace Tower_Defense_Project
         private bool startPlaced, fin, xSelected, ySelected, xSelectedRect, ySelectedRect, widthSelected, heightSelected, nameSelected;
         private Button build;
         private Color colorX, colorY, colorXRect, colorYRect, colorWidth, colorHeight, colorName;
-        private Path path;
+        private Path path = new Path();
         private RectangleF x, y, xRect, yRect, width, height, nameRect;
         public RectangleF storeSection;
         private RectangleSelection selectedRectangle;
@@ -25,7 +25,7 @@ namespace Tower_Defense_Project
         private string selectedLocationX, selectedLocationY, rectangleX, rectangleY, rectangleWidth, rectangleHeight, name;
         private Texture2D tex, buildUnpressed, buildPressed;
         private Tower selected;
-        private Vector2 mousePos, textLocation = new Vector2(700, 8);
+        private Vector2 mousePos, textLocation = new Vector2(690, 8);
 
         Random p = new Random();
 
@@ -54,9 +54,9 @@ namespace Tower_Defense_Project
                 try { backspaced = (value == name.Remove(name.Length - 1)); }
                 catch { }
                 name = value;
-                if (name.Length <= 1) textLocation.X = 700;
-                else if (!backspaced) textLocation.X -= (name.Length - 1) * 2;
-                else textLocation.X += (name.Length - 1) * 2;
+                if (name.Length <= 1) textLocation.X = 690;
+                else if (!backspaced) textLocation.X -= 8.5f;
+                else textLocation.X += 8.5f;
             }
         }
 
@@ -164,7 +164,7 @@ namespace Tower_Defense_Project
             }
 
             StreamWriter temp = new StreamWriter("temp1.temp");
-            StreamWriter write = new StreamWriter("Level1.path");
+            StreamWriter write = new StreamWriter(string.Format("{0}.path", name));
 
             temp.WriteLine(path.points.Count);
             temp.WriteLine(path.pathSet.Count);
@@ -191,6 +191,10 @@ namespace Tower_Defense_Project
             write.Close();
             read.Close();
             File.Delete("temp1.temp");
+
+            towers.Clear();
+            pieces.Clear();
+            fin = false;
         }
 
         private Tower Selected()
@@ -251,11 +255,11 @@ namespace Tower_Defense_Project
                 {
                     towers.Add(new Tower(this, TowerType.Start, Main.CurrentMouse));
                 }
-                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && startPlaced && towers[towers.Count].isPlaced)
+                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && startPlaced && towers[towers.Count - 1].isPlaced)
                 {
                     towers.Add(new Tower(this, TowerType.Point, Main.CurrentMouse));
                 }
-                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && startPlaced && towers[towers.Count].isPlaced)
+                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && startPlaced && towers[towers.Count - 1].isPlaced)
                 {
                     towers.Add(new Tower(this, TowerType.Stop, Main.CurrentMouse));
                     fin = true;
@@ -284,8 +288,7 @@ namespace Tower_Defense_Project
                         selectedRectangle.Point4 = new Vector2(float.Parse(rectangleX) + float.Parse(rectangleWidth), float.Parse(rectangleY) + float.Parse(rectangleHeight));
                     }
                 }
-
-                if (nameSelected)
+                else if (nameSelected)
                 {
                     char? c;
                     InputParser.TryConvertKeyboardInput(Main.CurrentKeyboard, out c);
