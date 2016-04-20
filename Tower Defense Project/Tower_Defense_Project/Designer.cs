@@ -12,11 +12,14 @@ using SharpDX.Toolkit.Input;
 
 namespace Tower_Defense_Project
 {
+    enum DesignerForm { Path, Enemies }
+
     class Designer
     {
         private bool startPlaced, fin, xSelected, ySelected, xSelectedRect, ySelectedRect, widthSelected, heightSelected, nameSelected;
         private Button build;
         private Color colorX, colorY, colorXRect, colorYRect, colorWidth, colorHeight, colorName;
+        private DesignerForm form = DesignerForm.Path;
         private Path path = new Path();
         private RectangleF x, y, xRect, yRect, width, height, nameRect;
         public RectangleF storeSection;
@@ -112,41 +115,52 @@ namespace Tower_Defense_Project
             Main.CurrentMouse = Main.Mouse.GetState();
             mousePos = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
 
-            if (!startPlaced)
+            switch (form)
             {
-                try { startPlaced = towers[0].isPlaced; }
-                catch { }
+                case DesignerForm.Path:
+                    if (!startPlaced)
+                    {
+                        try { startPlaced = towers[0].isPlaced; }
+                        catch { }
+                    }
+
+                    colorX = (xSelected && towers.Contains(selected)) ? Color.Aqua : Color.LightGray;
+                    colorY = (ySelected && towers.Contains(selected)) ? Color.Aqua : Color.LightGray;
+
+                    colorXRect = (xSelectedRect && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
+                    colorYRect = (ySelectedRect && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
+                    colorWidth = (widthSelected && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
+                    colorHeight = (heightSelected && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
+
+                    colorName = (nameSelected) ? Color.Aqua : Color.LightGray;
+
+                    foreach (Tower i in towers)
+                    {
+                        i.UpdateDesigner(gameTime, Main.CurrentMouse);
+                    }
+
+                    foreach (RectangleSelection i in pieces)
+                    {
+                        i.Update();
+                    }
+
+                    if (Main.CurrentMouse.RightButton.Pressed)
+                    {
+                        selected = Selected();
+                        selectedRectangle = SelectedRectangle();
+                    }
+
+                    if (fin && pieces.Count > 0) build.Update(Main.CurrentMouse);
+
+                    Input();
+                    break;
+
+                case DesignerForm.Enemies:
+                    break;
+
+                default:
+                    break;
             }
-
-            colorX = (xSelected && towers.Contains(selected)) ? Color.Aqua : Color.LightGray;
-            colorY = (ySelected && towers.Contains(selected)) ? Color.Aqua : Color.LightGray;
-
-            colorXRect = (xSelectedRect && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
-            colorYRect = (ySelectedRect && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
-            colorWidth = (widthSelected && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
-            colorHeight = (heightSelected && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
-
-            colorName = (nameSelected) ? Color.Aqua : Color.LightGray;
-
-            foreach (Tower i in towers)
-            {
-                i.UpdateDesigner(gameTime, Main.CurrentMouse);
-            }
-
-            foreach (RectangleSelection i in pieces)
-            {
-                i.Update();
-            }
-
-            if (Main.CurrentMouse.RightButton.Pressed)
-            {
-                selected = Selected();
-                selectedRectangle = SelectedRectangle();
-            }
-
-            if (fin && pieces.Count > 0) build.Update(Main.CurrentMouse);
-
-            Input();
         }
 
         private void Build(object sender, EventArgs e)
@@ -329,33 +343,44 @@ namespace Tower_Defense_Project
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(tex, storeSection, Color.Black);
-            spriteBatch.Draw(tex, x, colorX);
-            spriteBatch.Draw(tex, y, colorY);
-            spriteBatch.Draw(tex, xRect, colorXRect);
-            spriteBatch.Draw(tex, yRect, colorYRect);
-            spriteBatch.Draw(tex, width, colorWidth);
-            spriteBatch.Draw(tex, height, colorHeight);
-            spriteBatch.Draw(tex, nameRect, colorName);
-            spriteBatch.DrawString(font, selectedLocationX, new Vector2(615, 298), Color.Black);
-            spriteBatch.DrawString(font, selectedLocationY, new Vector2(720, 298), Color.Black);
-            spriteBatch.DrawString(font, rectangleX, new Vector2(615, 48), Color.Black);
-            spriteBatch.DrawString(font, rectangleY, new Vector2(720, 48), Color.Black);
-            spriteBatch.DrawString(font, rectangleWidth, new Vector2(615, 98), Color.Black);
-            spriteBatch.DrawString(font, rectangleHeight, new Vector2(720, 98), Color.Black);
-            spriteBatch.DrawString(font, name, textLocation, Color.Black);
-
-            try { if (fin) spriteBatch.Draw(build.Texture, build.Collision, Color.White); }
-            catch { }
-
-            foreach (Tower i in towers)
+            switch (form)
             {
-                i.Draw(spriteBatch);
-            }
+                case DesignerForm.Path:
+                    spriteBatch.Draw(tex, storeSection, Color.Black);
+                    spriteBatch.Draw(tex, x, colorX);
+                    spriteBatch.Draw(tex, y, colorY);
+                    spriteBatch.Draw(tex, xRect, colorXRect);
+                    spriteBatch.Draw(tex, yRect, colorYRect);
+                    spriteBatch.Draw(tex, width, colorWidth);
+                    spriteBatch.Draw(tex, height, colorHeight);
+                    spriteBatch.Draw(tex, nameRect, colorName);
+                    spriteBatch.DrawString(font, selectedLocationX, new Vector2(615, 298), Color.Black);
+                    spriteBatch.DrawString(font, selectedLocationY, new Vector2(720, 298), Color.Black);
+                    spriteBatch.DrawString(font, rectangleX, new Vector2(615, 48), Color.Black);
+                    spriteBatch.DrawString(font, rectangleY, new Vector2(720, 48), Color.Black);
+                    spriteBatch.DrawString(font, rectangleWidth, new Vector2(615, 98), Color.Black);
+                    spriteBatch.DrawString(font, rectangleHeight, new Vector2(720, 98), Color.Black);
+                    spriteBatch.DrawString(font, name, textLocation, Color.Black);
 
-            foreach (RectangleSelection i in pieces)
-            {
-                i.Draw(spriteBatch);
+                    try { if (fin) spriteBatch.Draw(build.Texture, build.Collision, Color.White); }
+                    catch { }
+
+                    foreach (Tower i in towers)
+                    {
+                        i.Draw(spriteBatch);
+                    }
+
+                    foreach (RectangleSelection i in pieces)
+                    {
+                        i.Draw(spriteBatch);
+                    }
+                    break;
+
+                case DesignerForm.Enemies:
+                    break;
+
+                default:
+                    break;
             }
         }
     }
