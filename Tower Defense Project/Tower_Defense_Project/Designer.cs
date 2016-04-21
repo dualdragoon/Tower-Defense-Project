@@ -377,6 +377,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case DesignerForm.Enemies:
+                    spriteBatch.Draw(tex, new RectangleF(0, 0, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight), Color.Black);
                     break;
 
                 default:
