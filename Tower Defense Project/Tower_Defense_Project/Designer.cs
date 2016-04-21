@@ -16,7 +16,7 @@ namespace Tower_Defense_Project
 
     class Designer
     {
-        private bool startPlaced, fin, xSelected, ySelected, xSelectedRect, ySelectedRect, widthSelected, heightSelected, nameSelected;
+        private bool startPlaced, fin, xSelected, ySelected, xSelectedRect, ySelectedRect, widthSelected, heightSelected, nameSelected, anythingSelected;
         private Button build;
         private Color colorX, colorY, colorXRect, colorYRect, colorWidth, colorHeight, colorName;
         private DesignerForm form = DesignerForm.Path;
@@ -265,22 +265,22 @@ namespace Tower_Defense_Project
         {
             if (!fin)
             {
-                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && !startPlaced)
+                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && !startPlaced && !anythingSelected)
                 {
                     towers.Add(new Tower(this, TowerType.Start, Main.CurrentMouse));
                 }
-                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && startPlaced && towers[towers.Count - 1].isPlaced)
+                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && startPlaced && towers[towers.Count - 1].isPlaced && !anythingSelected)
                 {
                     towers.Add(new Tower(this, TowerType.Point, Main.CurrentMouse));
                 }
-                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && startPlaced && towers[towers.Count - 1].isPlaced)
+                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && startPlaced && towers[towers.Count - 1].isPlaced && !anythingSelected)
                 {
                     towers.Add(new Tower(this, TowerType.Stop, Main.CurrentMouse));
                     fin = true;
                 }
             }
 
-            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D3)) pieces.Add(new RectangleSelection(10, 10, 40, 40));
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D3) && !anythingSelected) pieces.Add(new RectangleSelection(10, 10, 40, 40));
 
             try
             {
@@ -322,6 +322,7 @@ namespace Tower_Defense_Project
                 heightSelected = height.Contains(mousePos);
                 nameSelected = nameRect.Contains(mousePos);
             }
+            anythingSelected = xSelected || ySelected || xSelectedRect || ySelectedRect || widthSelected || heightSelected || nameSelected;
         }
 
         private void StringInput(ref string source, char? c)
