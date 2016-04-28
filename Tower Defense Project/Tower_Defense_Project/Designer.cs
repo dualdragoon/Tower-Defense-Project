@@ -29,11 +29,13 @@ namespace Tower_Defense_Project
         private Texture2D tex, buildUnpressed, buildPressed;
         private Tower selected;
         private Vector2 mousePos, textLocation = new Vector2(690, 8);
+        //SharpDX.Direct2D1.
 
         Random p = new Random();
 
         public List<Tower> towers = new List<Tower>();
         private List<RectangleSelection> pieces = new List<RectangleSelection>();
+        private List<Enemy> enemies = new List<Enemy>();
 
         private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
 
@@ -142,6 +144,16 @@ namespace Tower_Defense_Project
                     foreach (RectangleSelection i in pieces)
                     {
                         i.Update();
+                    }
+
+                    for (int i = 0; i < enemies.Count; i++)
+                    {
+                        enemies[i].Update(gameTime);
+
+                        if (enemies[i].position == enemies[i].Path.points[enemies[i].Path.points.Count - 1])
+                        {
+                            enemies.Remove(enemies[i]);
+                        }
                     }
 
                     if (Main.CurrentMouse.RightButton.Pressed)
@@ -282,6 +294,19 @@ namespace Tower_Defense_Project
 
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.D3) && !anythingSelected) pieces.Add(new RectangleSelection(10, 10, 40, 40));
 
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D) && !anythingSelected)
+            {
+                List<Vector2> l = new List<Vector2>();
+                foreach (Tower o in towers)
+                {
+                    l.Add(o.Center);
+                }
+                Path p = new Path(l);
+                p.Build(false);
+
+                enemies.Add(new Enemy(this, p));
+            }
+
             try
             {
                 if ((xSelected || ySelected || xSelectedRect || ySelectedRect || widthSelected || heightSelected))
@@ -342,7 +367,16 @@ namespace Tower_Defense_Project
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        private void DrawLine(SpriteBatch spriteBatch, Vector2 begin, Vector2 end, int width = 1)
+        {
+            RectangleF r = new RectangleF(begin.X, begin.Y, (end - begin).Length() + width, width);
+            Vector2 v = Vector2.Normalize(begin - end);
+            float angle = (float)Math.Acos(Vector2.Dot(v, -Vector2.UnitX));
+            if (begin.Y > end.Y) angle = MathUtil.TwoPi - angle;
+            spriteBatch.Draw(tex, r, null, Color.Black, angle, Vector2.Zero, SpriteEffects.None, 0);
+        }
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             switch (form)
             {
@@ -366,14 +400,20 @@ namespace Tower_Defense_Project
                     try { if (fin) spriteBatch.Draw(build.Texture, build.Collision, Color.White); }
                     catch { }
 
-                    foreach (Tower i in towers)
+                    for (int i = 0; i < towers.Count; i++)
                     {
-                        i.Draw(spriteBatch);
+                        if (i < towers.Count - 1) DrawLine(spriteBatch, towers[i].Center, towers[i + 1].Center);
+                        towers[i].Draw(spriteBatch);
                     }
 
                     foreach (RectangleSelection i in pieces)
                     {
                         i.Draw(spriteBatch);
+                    }
+
+                    foreach (Enemy i in enemies)
+                    {
+                        i.Draw(gameTime, spriteBatch);
                     }
                     break;
 

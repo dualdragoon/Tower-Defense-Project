@@ -20,10 +20,12 @@ namespace Tower_Defense_Project
     {
         private Animation moveAnimation;
         private AnimationPlayer sprite;
+        private Designer designer;
         public float stagePos;
         private float speed = 0, seconds = 0;
         private int stageIndex, frameWidth, health;
         private Level level;
+        private Path path;
         private string spriteSet;
         private uint worth;
         public Vector2 position;
@@ -33,10 +35,20 @@ namespace Tower_Defense_Project
             get { return level; }
         }
 
+        public Designer Designer
+        {
+            get { return designer; }
+        }
+
         public int Health
         {
             get { return health; }
             set { health = value; }
+        }
+
+        public Path Path
+        {
+            get { return path; }
         }
 
         public uint Worth
@@ -50,6 +62,7 @@ namespace Tower_Defense_Project
         public Enemy(Level level, EnemyType type)
         {
             this.level = level;
+            path = this.level.Path;
 
             spriteSet = Level.EnemyStats[(int)type][0];
             frameWidth = int.Parse(Level.EnemyStats[(int)type][1]);
@@ -57,6 +70,19 @@ namespace Tower_Defense_Project
             seconds = float.Parse(Level.EnemyStats[(int)type][3]);
             health = int.Parse(Level.EnemyStats[(int)type][4]);
             worth = uint.Parse(Level.EnemyStats[(int)type][5]);
+
+            LoadContent();
+        }
+
+        public Enemy(Designer designer, Path path)
+        {
+            this.designer = designer;
+            this.path = path;
+
+            spriteSet = "Brute";
+            frameWidth = 30;
+            speed = .5f;
+            seconds = 1;
 
             LoadContent();
         }
@@ -73,20 +99,20 @@ namespace Tower_Defense_Project
 
         public void Update(GameTime gameTime)
         {
-            if (stageIndex != Level.Path.points.Count - 1)
+            if (stageIndex != path.points.Count - 1)
             {
                 stagePos += speed * seconds;
-                while (stagePos > Level.Path.lengths[stageIndex])
+                while (stagePos > path.lengths[stageIndex])
                 {
-                    stagePos -= Level.Path.lengths[stageIndex];
+                    stagePos -= path.lengths[stageIndex];
                     stageIndex++;
-                    if (stageIndex == Level.Path.points.Count - 1)
+                    if (stageIndex == path.points.Count - 1)
                     {
-                        position = Level.Path.points[stageIndex];
+                        position = path.points[stageIndex];
                         return;
                     }
                 }
-                position = Level.Path.points[stageIndex] + Level.Path.directions[stageIndex] * stagePos;
+                position = path.points[stageIndex] + path.directions[stageIndex] * stagePos;
             }
         }
 
