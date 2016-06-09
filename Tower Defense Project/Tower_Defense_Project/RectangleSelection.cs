@@ -6,6 +6,7 @@ using Duality.Interaction;
 using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
+using SharpDX.Toolkit.Input;
 
 namespace Tower_Defense_Project
 {
@@ -17,7 +18,7 @@ namespace Tower_Defense_Project
         private Texture2D unpressed, pressed, tex, back;
 
         #region Properties
-        private Vector2 Point1
+        public Vector2 Point1
         {
             get { return point1.Center; }
             set
@@ -28,7 +29,7 @@ namespace Tower_Defense_Project
             }
         }
 
-        private Vector2 Point2
+        public Vector2 Point2
         {
             get { return point2.Center; }
             set
@@ -39,7 +40,7 @@ namespace Tower_Defense_Project
             }
         }
 
-        private Vector2 Point3
+        public Vector2 Point3
         {
             get { return point3.Center; }
             set
@@ -50,7 +51,7 @@ namespace Tower_Defense_Project
             }
         }
 
-        private Vector2 Point4
+        public Vector2 Point4
         {
             get { return point4.Center; }
             set
@@ -86,10 +87,10 @@ namespace Tower_Defense_Project
             tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
             back = Main.GameContent.Load<Texture2D>(@"Textures/Transparent Pixel");
 
-            point1 = new Button(new Vector2(x, y), 16, 0, Main.CurrentMouse, unpressed, pressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            point2 = new Button(new Vector2(x + width, y), 16, 1, Main.CurrentMouse, unpressed, pressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            point3 = new Button(new Vector2(x, y + height), 16, 2, Main.CurrentMouse, unpressed, pressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
-            point4 = new Button(new Vector2(x + width, y + height), 16, 3, Main.CurrentMouse, unpressed, pressed, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            point1 = new Button(new Vector2(x, y), 16, 0, Main.CurrentMouse, unpressed, pressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            point2 = new Button(new Vector2(x + width, y), 16, 1, Main.CurrentMouse, unpressed, pressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            point3 = new Button(new Vector2(x, y + height), 16, 2, Main.CurrentMouse, unpressed, pressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            point4 = new Button(new Vector2(x + width, y + height), 16, 3, Main.CurrentMouse, unpressed, pressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
         }
 
         public void Update()
@@ -99,10 +100,44 @@ namespace Tower_Defense_Project
             point3.Update(Main.CurrentMouse);
             point4.Update(Main.CurrentMouse);
 
-            if (point1.Grabbed) Point1 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
-            else if (point2.Grabbed) Point2 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
-            else if (point3.Grabbed) Point3 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
-            else if (point4.Grabbed) Point4 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+            if (isSelected || Main.CurrentKeyboard.IsKeyDown(Keys.Control))
+            {
+                if (point1.LeftHeld)
+                {
+                    Point1 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+                    point2.Clickable = false;
+                    point3.Clickable = false;
+                    point4.Clickable = false;
+                }
+                else if (point2.LeftHeld)
+                {
+                    Point2 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+                    point1.Clickable = false;
+                    point3.Clickable = false;
+                    point4.Clickable = false;
+                }
+                else if (point3.LeftHeld)
+                {
+                    Point3 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+                    point1.Clickable = false;
+                    point2.Clickable = false;
+                    point4.Clickable = false;
+                }
+                else if (point4.LeftHeld)
+                {
+                    Point4 = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+                    point1.Clickable = false;
+                    point2.Clickable = false;
+                    point3.Clickable = false;
+                }
+                else
+                {
+                    point1.Clickable = true;
+                    point2.Clickable = true;
+                    point3.Clickable = true;
+                    point4.Clickable = true;
+                } 
+            }
 
             if (Main.CurrentMouse.RightButton.Pressed)
             {

@@ -24,6 +24,11 @@ namespace Tower_Defense_Project
             
         }
 
+        public Path(List<Vector2> points)
+        {
+            this.points = points;
+        }
+
         private void SinglePath()
         {
             for (int i = 0; i < pathSet.Count - 2; i++)

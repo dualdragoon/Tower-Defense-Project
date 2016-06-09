@@ -22,6 +22,7 @@ namespace Tower_Defense_Project
         public static bool TryConvertKeyboardInput(KeyboardState keyboard, out char? key)
         {
             List<Keys> keys = new List<Keys>();
+            Keys i;
             keyboard.GetDownKeys(keys);
             bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
 

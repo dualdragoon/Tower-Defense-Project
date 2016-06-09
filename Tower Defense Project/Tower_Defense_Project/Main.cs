@@ -285,7 +285,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case GameState.LevelDesigner:
-                    designer.Draw(spriteBatch);
+                    designer.Draw(gameTime, spriteBatch);
                     break;
 
                 default:

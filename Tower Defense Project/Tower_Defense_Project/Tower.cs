@@ -62,6 +62,11 @@ namespace Tower_Defense_Project
             }
         }
 
+        public Vector2 Center
+        {
+            get { return range.Center; }
+        }
+
         public Tower(Level level, TowerType type, MouseState mouse)
         {
             this.level = level;
