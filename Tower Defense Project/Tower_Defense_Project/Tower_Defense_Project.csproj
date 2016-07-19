@@ -117,7 +117,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Curve.cs" />
+    <Compile Include="DesignCurve.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="ExperimentalPath.cs" />
     <Compile Include="Level.cs" />
@@ -160,6 +160,7 @@
     <ToolkitTexture Include="Content\Textures\Point Pressed.png" />
     <ToolkitTexture Include="Content\Textures\Point.png" />
     <ToolkitTexture Include="Content\Textures\Transparent Pixel.png" />
+    <ToolkitTexture Include="Content\Textures\help.png" />
     <Content Include="Content\Textures\Trach Can work in progress.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />

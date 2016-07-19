@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using SharpDX;
 using SharpDX.Toolkit.Graphics;
+using Duality;
 using Duality.Interaction;
 
 namespace Tower_Defense_Project
 {
     class ExperimentalPath
     {
-        private List<Button> controls = new List<Button>();
-        private List<Curve> curves = new List<Curve>();
+        private List<DesignCurve> curves = new List<DesignCurve>();
         private Texture2D tex, pressed, unPressed;
 
-        public List<Curve> Curves
+        public List<DesignCurve> Curves
         {
             get { return curves; }
             set { curves = value; }
@@ -27,7 +27,7 @@ namespace Tower_Defense_Project
 
         private void LoadContent()
         {
-            tex = Main.GameContent.Load<Texture2D>("Textures/Null");
+            tex = Main.GameContent.Load<Texture2D>("Textures/help");
             pressed = Main.GameContent.Load<Texture2D>("Textures/Point Pressed");
             unPressed = Main.GameContent.Load<Texture2D>("Textures/Point");
         }
@@ -38,32 +38,23 @@ namespace Tower_Defense_Project
             {
                 Vector2 i = curves.Last().End;
                 List<Vector2> points = new List<Vector2>() { i - new Vector2(50, 25), i, i + new Vector2(25, 75), i + new Vector2(100, 75) };
-                curves.Add(new Curve(points));
+                curves.Add(new DesignCurve(points));
             }
-            else curves.Add(new Curve());
-            Curve o = curves.Last();
-            for (int l = 0; l < o.Points.Count; l++)
-            {
-                controls.Add(new Button(o.Points[l], 16, controls.Count + 1, Main.CurrentMouse, unPressed, pressed, true, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight));
-            }
+            else curves.Add(new DesignCurve());
+            DesignCurve o = curves.Last();
         }
 
         public void Update()
         {
-            foreach (Button i in controls)
+            for (int i = 0; i < curves.Count; i++)
             {
-                i.Update(Main.CurrentMouse);
+                curves[i].Update();
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Button i in controls)
-            {
-                spriteBatch.Draw(i.Texture, i.Position, Color.White);
-            }
-
-            foreach (Curve i in curves)
+            foreach (DesignCurve i in curves)
             {
                 i.Draw(spriteBatch, tex);
             }

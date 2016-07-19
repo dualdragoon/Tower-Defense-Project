@@ -20,6 +20,7 @@ namespace Tower_Defense_Project
         private Button build;
         private Color colorX, colorY, colorXRect, colorYRect, colorWidth, colorHeight, colorName;
         private DesignerForm form = DesignerForm.Path;
+        ExperimentalPath test = new ExperimentalPath();
         private Path path = new Path();
         private RectangleF x, y, xRect, yRect, width, height, nameRect;
         public RectangleF storeSection;
@@ -162,6 +163,8 @@ namespace Tower_Defense_Project
                         selectedRectangle = SelectedRectangle();
                     }
 
+                    test.Update();
+
                     if (fin && pieces.Count > 0) build.Update(Main.CurrentMouse);
 
                     Input();
@@ -292,6 +295,8 @@ namespace Tower_Defense_Project
                 }
             }
 
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.P) && !anythingSelected) test.AddCurve();
+
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.D3) && !anythingSelected) pieces.Add(new RectangleSelection(10, 10, 40, 40));
 
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.D) && !anythingSelected)
@@ -415,6 +420,8 @@ namespace Tower_Defense_Project
                     {
                         i.Draw(gameTime, spriteBatch);
                     }
+
+                    test.Draw(spriteBatch);
                     break;
 
                 case DesignerForm.Enemies:
