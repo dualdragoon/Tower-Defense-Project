@@ -21,7 +21,7 @@ namespace Tower_Defense_Project
         public Button temp1, start;
         private bool pause = false, waveRunning = false;
         private float escapeTimer = 0, minEscapeTimer = .05f;
-        private int pointsNum, pathSetNum, waveNum;
+        private int pointsNum, waveNum;
         private Path path;
         public RectangleF storeSection;
         private SpriteFont font;
@@ -109,7 +109,7 @@ namespace Tower_Defense_Project
             tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
             font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
 
-            storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
+            storeSection = new RectangleF(.75f * Main.Scale.X, 0f * Main.Scale.Y, (.25f * Main.Scale.X) + 1, (Main.Scale.Y) + 1);
             waves = new WaveManager(this);
         }
 
@@ -126,25 +126,23 @@ namespace Tower_Defense_Project
             sw.Close();
             read = new StreamReader("temp2.temp");
             pointsNum = int.Parse(read.ReadLine());
-            pathSetNum = int.Parse(read.ReadLine());
             path = new Path();
             for (int i = 0; i < pointsNum; i++)
             {
-                path.points.Add(new Vector2(float.Parse(read.ReadLine()), float.Parse(read.ReadLine())));
-            }
-            for (int i = 0; i < pathSetNum; i++)
-            {
-                path.pathSet.Add(new RectangleF(float.Parse(read.ReadLine()), float.Parse(read.ReadLine()), float.Parse(read.ReadLine()), float.Parse(read.ReadLine())));
+                path.AddCurve((new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
+                    (new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
+                    (new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
+                    (new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)));
             }
             read.Close();
             File.Delete("temp2.temp");
-            path.Build(true);
+            path.Build();
             currency = 1000;
 
-            temp1 = new Button(new Vector2(610, 10), 180, 80, 1, Main.CurrentMouse, tempButton1, tempButton2, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            temp1 = new Button(new Vector2(.7625f * Main.Scale.X, (10f / 480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1875f * Main.Scale.Y), 1, Main.CurrentMouse, tempButton1, tempButton2, true, Main.Scale.X, Main.Scale.Y);
             temp1.LeftClicked += ButtonHandling;
 
-            start = new Button(new Vector2(610, 380), 180, 90, 2, Main.CurrentMouse, startWave, startWavePressed, false, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            start = new Button(new Vector2(.7625f * Main.Scale.X, (380f / 480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1875f * Main.Scale.Y), 2, Main.CurrentMouse, startWave, startWavePressed, true, Main.Scale.X, Main.Scale.Y);
             start.LeftClicked += ButtonHandling;
         }
 
@@ -179,7 +177,7 @@ namespace Tower_Defense_Project
                     {
                         enemy.Update(gameTime);
 
-                        if (enemy.position == path.points[path.points.Count - 1])
+                        if (enemy.position == path.Points[path.Points.Count - 1])
                         {
                             enemies.Remove(enemy);
                         }
@@ -259,14 +257,31 @@ namespace Tower_Defense_Project
 
         private void Input()
         {
-            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500)
+            bool temp = (towers.Count > 0);
+
+            if (!temp)
             {
-                towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
-                currency -= towers[towers.Count - 1].Cost;
+                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500)
+                {
+                    towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
+                    currency -= towers[towers.Count - 1].Cost;
+                }
+                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2))
+                {
+                    towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
+                }
             }
-            else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2))
+            else
             {
-                towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
+                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500 && towers[towers.Count - 1].isPlaced)
+                {
+                    towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
+                    currency -= towers[towers.Count - 1].Cost;
+                }
+                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && towers[towers.Count - 1].isPlaced)
+                {
+                    towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
+                }
             }
         }
 
@@ -286,10 +301,7 @@ namespace Tower_Defense_Project
             { }
             #endregion
 
-            foreach (RectangleF i in Path.pathSet)
-            {
-                spriteBatch.Draw(tex, i, Color.Green);
-            }
+            path.Draw(spriteBatch);
 
             foreach (Enemy enemy in enemies)
             {

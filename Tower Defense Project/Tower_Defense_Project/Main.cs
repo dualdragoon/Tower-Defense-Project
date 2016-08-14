@@ -21,7 +21,7 @@ namespace Tower_Defense_Project
     {
         bool keyPressed, keyDidSomething;
         Designer designer;
-        GameState currentState = GameState.LevelDesigner;
+        GameState currentState;
         int offset;
         Level level;
         List<Texture2D> bloodDrops = new List<Texture2D>();
@@ -40,6 +40,14 @@ namespace Tower_Defense_Project
         static Texture2D currentCursor, emptyCursor, selectedCursor;
 
         #region Properties
+        /// <summary>
+        /// Vector containing screen sizes for scaling.
+        /// </summary>
+        public static Vector2 Scale
+        {
+            get { return new Vector2(Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight); }
+        }
+
         public static bool IsCustomMouseVisible
         {
             get { return isCustomMouseVisible; }
@@ -107,8 +115,8 @@ namespace Tower_Defense_Project
             mouseManager = new MouseManager(this);
             keyboardManager = new KeyboardManager(this);
             content = Content;
-            //graphics.PreferredBackBufferHeight = 480;
-            //graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1366;
             /*graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1440;
             graphics.IsFullScreen = true;
@@ -152,7 +160,7 @@ namespace Tower_Defense_Project
 
             bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
-            CurrentState = GameState.LevelDesigner;
+            CurrentState = GameState.Play;
         }
 
         /// <summary>

@@ -119,7 +119,7 @@
   <ItemGroup>
     <Compile Include="DesignCurve.cs" />
     <Compile Include="Enemy.cs" />
-    <Compile Include="ExperimentalPath.cs" />
+    <Compile Include="DesignPath.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Designer.cs" />
     <Compile Include="Particle.cs" />
@@ -149,12 +149,6 @@
     <ToolkitTexture Include="Content\Textures\Cursors\Particles\Drop1.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\Particles\Drop2.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\Particles\Pulse.png" />
-    <ToolkitTexture Include="Content\Towers\Point.png" />
-    <ToolkitTexture Include="Content\Towers\Start.png" />
-    <ToolkitTexture Include="Content\Towers\Stop.png" />
-    <ToolkitTexture Include="Content\Towers\Start Range.png" />
-    <ToolkitTexture Include="Content\Towers\Point Range.png" />
-    <ToolkitTexture Include="Content\Towers\Stop Range.png" />
     <ToolkitTexture Include="Content\Buttons\Build Path Pressed.png" />
     <ToolkitTexture Include="Content\Buttons\Build Path.png" />
     <ToolkitTexture Include="Content\Textures\Point Pressed.png" />
@@ -182,9 +176,7 @@
     <ToolkitTexture Include="Content\Textures\Cursors\YL Cursor.png" />
     <ToolkitTexture Include="Content\Textures\Null.png" />
     <ToolkitTexture Include="Content\Textures\SQUARE.png" />
-    <ToolkitTexture Include="Content\Towers\Large Range.png" />
-    <ToolkitTexture Include="Content\Towers\RL Range.png" />
-    <ToolkitTexture Include="Content\Towers\GL Range.png" />
+    <ToolkitTexture Include="Content\Towers\Range.png" />
     <ToolkitTexture Include="Content\Towers\GL.png" />
     <ToolkitTexture Include="Content\Towers\RL.png" />
     <ToolkitTexture Include="Content\Towers\BLL.png" />

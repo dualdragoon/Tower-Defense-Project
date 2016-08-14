@@ -21,11 +21,14 @@ namespace Tower_Defense_Project
         int stageIndex;
         float stagePos, speed = 0, seconds = 0;
         public Enemy target;
-        Path path;
         ProjectileType type;
         Texture2D tex;
         Tower origin;
         Vector2 position;
+
+        private float[] lengths;
+        private Vector2[] directions;
+        private List<Vector2> Points = new List<Vector2>();
 
         public Level Level
         {
@@ -56,10 +59,7 @@ namespace Tower_Defense_Project
             this.type = type;
             this.origin = origin;
 
-            path = new Path();
-            path.points.Add(position);
-            path.points.Add(target.position);
-            path.Build(false);
+            Build();
 
             switch (type)
             {
@@ -109,27 +109,41 @@ namespace Tower_Defense_Project
             }
         }
 
+        private void Build()
+        {
+            Points.Clear();
+
+            Points.Add(position);
+            Points.Add(target.position);
+
+            lengths = new float[Points.Count - 1];
+            directions = new Vector2[Points.Count - 1];
+            for (int i = 0; i < Points.Count - 1; i++)
+            {
+                directions[i] = Points[i + 1] - Points[i];
+                lengths[i] = directions[i].Length();
+                directions[i].Normalize();
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
-            path.Clear();
-            path.points.Add(position);
-            path.points.Add(target.position);
-            path.Build(false);
+            Build();
 
-            if (stageIndex != path.points.Count - 1)
+            if (stageIndex != Points.Count - 1)
             {
                 stagePos += speed * seconds;
-                while (stagePos > path.lengths[stageIndex])
+                while (stagePos > lengths[stageIndex])
                 {
-                    stagePos -= path.lengths[stageIndex];
+                    stagePos -= lengths[stageIndex];
                     stageIndex++;
-                    if (stageIndex == path.points.Count - 1)
+                    if (stageIndex == Points.Count - 1)
                     {
-                        position = path.points[stageIndex];
+                        position = Points[stageIndex];
                         return;
                     }
                 }
-                position = path.points[stageIndex] + path.directions[stageIndex] * stagePos;
+                position = Points[stageIndex] + directions[stageIndex] * stagePos;
             }
         }
 

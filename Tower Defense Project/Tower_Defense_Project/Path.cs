@@ -5,67 +5,63 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using SharpDX;
-using SharpDX.Serialization;
+using SharpDX.Toolkit.Graphics;
 using Duality;
 
 namespace Tower_Defense_Project
 {
-    [Serializable]
-    class Path : IDataSerializable
+    class Path
     {
-        public List<Vector2> points = new List<Vector2>();
         public float[] lengths;
+        private Texture2D tex;
         public Vector2[] directions;
 
-        public List<RectangleF> pathSet = new List<RectangleF>();
+        private List<Curve> curves = new List<Curve>();
+        private List<Vector2> points = new List<Vector2>();
+
+        public List<Curve> Curves
+        {
+            get { return curves; }
+            set { curves = value; }
+        }
+
+        public List<Vector2> Points
+        {
+            get { return points; }
+            set { points = value; }
+        }
 
         public Path()
         {
-            
+            LoadContent();
         }
 
-        public Path(List<Vector2> points)
+        private void LoadContent()
         {
-            this.points = points;
+            tex = Main.GameContent.Load<Texture2D>("Textures/help");
         }
 
-        private void SinglePath()
+        public void AddCurve(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
         {
-            for (int i = 0; i < pathSet.Count - 2; i++)
+            List<Vector2> points = new List<Vector2>() { p1, p2, p3, p4 };
+            Curves.Add(new Curve(points));
+        }
+
+        public void Build()
+        {
+            Points.Clear();
+
+            foreach (Curve i in Curves)
             {
-                try
-                {
-                    if (!pathSet[i].Intersects(pathSet[i + 1]))
-                        throw new PathException("PathException: Path is not connected.");
-                }
-                catch (PathException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    ErrorHandler.RecordError(3, 103, "Solution: replace levels file with newest version.", ex.Message);
-                }
-            }
-        }
-
-        public void Build(bool fromFile)
-        {
-            if (fromFile)
-            {
-                for (int i = 0; i < points.Count; i++)
-                {
-                    points[i] = new Vector2(Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight) * points[i];
-                }
-
-                for (int i = 0; i < pathSet.Count; i++)
-                {
-                    pathSet[i] = new RectangleF(Main.Graphics.PreferredBackBufferWidth * pathSet[i].X, Main.Graphics.PreferredBackBufferHeight * pathSet[i].Y, Main.Graphics.PreferredBackBufferWidth * pathSet[i].Width, Main.Graphics.PreferredBackBufferHeight * pathSet[i].Height);
-                } 
+                i.Build();
+                Points.AddRange(i.Reference);
             }
 
-            lengths = new float[points.Count - 1];
-            directions = new Vector2[points.Count - 1];
-            for (int i = 0; i < points.Count - 1; i++)
+            lengths = new float[Points.Count - 1];
+            directions = new Vector2[Points.Count - 1];
+            for (int i = 0; i < Points.Count - 1; i++)
             {
-                directions[i] = points[i + 1] - points[i];
+                directions[i] = Points[i + 1] - Points[i];
                 lengths[i] = directions[i].Length();
                 directions[i].Normalize();
             }
@@ -73,8 +69,8 @@ namespace Tower_Defense_Project
 
         public void Clear()
         {
-            points.Clear();
-            pathSet.Clear();
+            Curves.Clear();
+            Points.Clear();
         }
 
         public bool Intersects(RectangleF rect)
@@ -82,11 +78,27 @@ namespace Tower_Defense_Project
             try
             {
                 bool intersects = false;
-                foreach (RectangleF pathRectangle in pathSet)
+                foreach (Vector2 i in Points)
                 {
                     if (!intersects)
                     {
-                        intersects = rect.Left < pathRectangle.Right && pathRectangle.Left < rect.Right && rect.Top < pathRectangle.Bottom && pathRectangle.Top < rect.Bottom;
+                        intersects = rect.Contains(i);
+                    }
+                }
+                return intersects;
+            }
+            catch { return false; }
+        }
+        public bool Intersects(Ellipse ellipse)
+        {
+            try
+            {
+                bool intersects = false;
+                foreach (Vector2 i in Points)
+                {
+                    if (!intersects)
+                    {
+                        intersects = ellipse.Contains(i);
                     }
                 }
                 return intersects;
@@ -94,27 +106,35 @@ namespace Tower_Defense_Project
             catch { return false; }
         }
 
-        public void Serialize(BinarySerializer serializer)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            foreach (Curve i in Curves)
+            {
+                i.Draw(spriteBatch, tex);
+            }
         }
     }
 
     class PathException : Exception
     {
         public PathException()
-            : base() { }
+            : base()
+        { }
 
         public PathException(string message)
-            : base(message) { }
+            : base(message)
+        { }
 
         public PathException(string format, params object[] args)
-            : base(string.Format(format, args)) { }
+            : base(string.Format(format, args))
+        { }
 
         public PathException(string message, Exception innerException)
-            : base(message, innerException) { }
+            : base(message, innerException)
+        { }
 
         public PathException(string format, Exception innerException, params object[] args)
-            : base(string.Format(format, args), innerException) { }
+            : base(string.Format(format, args), innerException)
+        { }
     }
 }

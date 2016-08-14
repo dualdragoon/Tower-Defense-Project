@@ -99,20 +99,20 @@ namespace Tower_Defense_Project
 
         public void Update(GameTime gameTime)
         {
-            if (stageIndex != path.points.Count - 1)
+            if (stageIndex != path.Points.Count - 1)
             {
                 stagePos += speed * seconds;
                 while (stagePos > path.lengths[stageIndex])
                 {
                     stagePos -= path.lengths[stageIndex];
                     stageIndex++;
-                    if (stageIndex == path.points.Count - 1)
+                    if (stageIndex == path.Points.Count - 1)
                     {
-                        position = path.points[stageIndex];
+                        position = path.Points[stageIndex];
                         return;
                     }
                 }
-                position = path.points[stageIndex] + path.directions[stageIndex] * stagePos;
+                position = path.Points[stageIndex] + path.directions[stageIndex] * stagePos;
             }
         }
 
@@ -120,7 +120,7 @@ namespace Tower_Defense_Project
         {
             sprite.PlayAnimation(moveAnimation);
 
-            sprite.Draw(gameTime, spriteBatch, position + new Vector2(0, 5), SpriteEffects.None);
+            sprite.Draw(gameTime, spriteBatch, new RectangleF(position.X, position.Y + 5, (int)((frameWidth / 800f) * Main.Scale.X), (int)((moveAnimation.Texture.Height / 480f) * Main.Scale.Y)), SpriteEffects.None);
         }
     }
 }

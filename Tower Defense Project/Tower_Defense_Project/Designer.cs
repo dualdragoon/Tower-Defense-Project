@@ -16,39 +16,25 @@ namespace Tower_Defense_Project
 
     class Designer
     {
-        private bool startPlaced, fin, xSelected, ySelected, xSelectedRect, ySelectedRect, widthSelected, heightSelected, nameSelected, anythingSelected;
+        private bool fin, x1Selected, y1Selected, x2Selected, y2Selected, x3Selected, y3Selected, x4Selected, y4Selected, nameSelected, anythingSelected;
         private Button build;
-        private Color colorX, colorY, colorXRect, colorYRect, colorWidth, colorHeight, colorName;
+        private Color color1X, color1Y, color2X, color2Y, color3X, color3Y, color4X, color4Y, colorName;
         private DesignerForm form = DesignerForm.Path;
-        ExperimentalPath test = new ExperimentalPath();
-        private Path path = new Path();
-        private RectangleF x, y, xRect, yRect, width, height, nameRect;
+        DesignPath test = new DesignPath();
+        private RectangleF x1, y1, x2, y2, x3, y3, x4, y4, nameRect;
         public RectangleF storeSection;
-        private RectangleSelection selectedRectangle;
         private SpriteFont font;
-        private string selectedLocationX, selectedLocationY, rectangleX, rectangleY, rectangleWidth, rectangleHeight, name;
+        private string location1X, location1Y, location2X, location2Y, location3X, location3Y, location4X, location4Y, name;
         private Texture2D tex, buildUnpressed, buildPressed;
-        private Tower selected;
-        private Vector2 mousePos, textLocation = new Vector2(690, 8);
-        //SharpDX.Direct2D1.
+        private Vector2 mousePos, textLocation = new Vector2(.8625f * Main.Scale.X, (8f / 480f) * Main.Scale.Y);
 
         Random p = new Random();
-
-        public List<Tower> towers = new List<Tower>();
-        private List<RectangleSelection> pieces = new List<RectangleSelection>();
+        
         private List<Enemy> enemies = new List<Enemy>();
 
-        private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
-
-        public static Dictionary<int, string[]> TowerStats
+        public DesignPath Path
         {
-            get { return towerStats; }
-            set { towerStats = value; }
-        }
-
-        public Path Path
-        {
-            get { return path; }
+            get { return test; }
         }
 
         private string Name
@@ -60,9 +46,9 @@ namespace Tower_Defense_Project
                 try { backspaced = (value == name.Remove(name.Length - 1)); }
                 catch { }
                 name = value;
-                if (name.Length <= 1) textLocation.X = 690;
-                else if (!backspaced) textLocation.X -= 8.5f;
-                else textLocation.X += 8.5f;
+                if (name.Length <= 1) textLocation.X = .8625f * Main.Scale.X;
+                else if (!backspaced) textLocation.X -= .010625f * Main.Scale.X;
+                else textLocation.X += .010625f * Main.Scale.X;
             }
         }
 
@@ -70,102 +56,76 @@ namespace Tower_Defense_Project
 
         public void LoadContent()
         {
-            string[] s = new string[] { "Start", "32", "100" };
-            towerStats.Add(0, s);
-
-            s = new string[] { "Point", "32", "100" };
-            towerStats.Add(1, s);
-
-            s = new string[] { "Stop", "32", "100" };
-            towerStats.Add(2, s);
-
-            colorX = Color.LightGray;
-            colorY = Color.LightGray;
-            colorXRect = Color.LightGray;
-            colorYRect = Color.LightGray;
-            colorWidth = Color.LightGray;
-            colorHeight = Color.LightGray;
+            color1X = Color.LightGray;
+            color1Y = Color.LightGray;
+            color2X = Color.LightGray;
+            color2Y = Color.LightGray;
+            color3X = Color.LightGray;
+            color3Y = Color.LightGray;
+            color4X = Color.LightGray;
+            color4Y = Color.LightGray;
             tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
             font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
 
-            selected = Selected();
-
             buildUnpressed = Main.GameContent.Load<Texture2D>(@"Buttons/Build Path");
             buildPressed = Main.GameContent.Load<Texture2D>(@"Buttons/Build Path Pressed");
-            build = new Button(new Vector2(610, 380), 180, 90, 2, Main.CurrentMouse, buildUnpressed, buildPressed, true, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            build = new Button(new Vector2(.7625f * Main.Scale.X, 380), (int)(.225f * Main.Scale.X), 90, 2, Main.CurrentMouse, buildUnpressed, buildPressed, true, Main.Scale.X, Main.Scale.Y);
             build.LeftClicked += Build;
 
-            storeSection = new RectangleF(.75f * Main.Graphics.PreferredBackBufferWidth, 0f * Main.Graphics.PreferredBackBufferHeight, (.25f * Main.Graphics.PreferredBackBufferWidth) + 1, (Main.Graphics.PreferredBackBufferHeight) + 1);
-            x = new RectangleF(610, 300, 75, 30);
-            y = new RectangleF(715, 300, 75, 30);
-            xRect = new RectangleF(610, 50, 75, 30);
-            yRect = new RectangleF(715, 50, 75, 30);
-            width = new RectangleF(610, 100, 75, 30);
-            height = new RectangleF(715, 100, 75, 30);
-            nameRect = new RectangleF(610, 10, 180, 30);
+            storeSection = new RectangleF(.75f * Main.Scale.X, 0f, (.25f * Main.Scale.X) + 1, (Main.Scale.Y) + 1);
+            x1 = new RectangleF(.7625f * Main.Scale.X, .625f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            y1 = new RectangleF(.89375f * Main.Scale.X, .625f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            x2 = new RectangleF(.7625f * Main.Scale.X, (260f / 480f) * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            y2 = new RectangleF(.89375f * Main.Scale.X, (260f / 480f) * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            x3 = new RectangleF(.7625f * Main.Scale.X, (220f / 480f) * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            y3 = new RectangleF(.89375f * Main.Scale.X, (220f / 480f) * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            x4 = new RectangleF(.7625f * Main.Scale.X, .375f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            y4 = new RectangleF(.89375f * Main.Scale.X, .375f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            nameRect = new RectangleF(.7625f * Main.Scale.X, (10f / 480f) * Main.Scale.Y, .225f * Main.Scale.X, .0625f * Main.Scale.Y);
 
-            selectedLocationX = "0";
-            selectedLocationY = "0";
-            rectangleX = "0";
-            rectangleY = "0";
-            rectangleWidth = "0";
-            rectangleHeight = "0";
+            location1X = "0";
+            location1Y = "0";
+            location2X = "0";
+            location2Y = "0";
+            location3X = "0";
+            location3Y = "0";
+            location4X = "0";
+            location4Y = "0";
             name = "";
         }
 
         public void Update(GameTime gameTime)
         {
             Main.CurrentMouse = Main.Mouse.GetState();
-            mousePos = new Vector2(Main.CurrentMouse.X * Main.Graphics.PreferredBackBufferWidth, Main.CurrentMouse.Y * Main.Graphics.PreferredBackBufferHeight);
+            mousePos = new Vector2(Main.CurrentMouse.X * Main.Scale.X, Main.CurrentMouse.Y * Main.Scale.Y);
 
             switch (form)
             {
                 case DesignerForm.Path:
-                    if (!startPlaced)
-                    {
-                        try { startPlaced = towers[0].isPlaced; }
-                        catch { }
-                    }
-
-                    colorX = (xSelected && towers.Contains(selected)) ? Color.Aqua : Color.LightGray;
-                    colorY = (ySelected && towers.Contains(selected)) ? Color.Aqua : Color.LightGray;
-
-                    colorXRect = (xSelectedRect && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
-                    colorYRect = (ySelectedRect && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
-                    colorWidth = (widthSelected && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
-                    colorHeight = (heightSelected && pieces.Contains(selectedRectangle)) ? Color.Aqua : Color.LightGray;
+                    color1X = (x1Selected) ? Color.Aqua : Color.LightGray;
+                    color1Y = (y1Selected) ? Color.Aqua : Color.LightGray;
+                    color2X = (x2Selected) ? Color.Aqua : Color.LightGray;
+                    color2Y = (y2Selected) ? Color.Aqua : Color.LightGray;
+                    color3X = (x3Selected) ? Color.Aqua : Color.LightGray;
+                    color3Y = (y3Selected) ? Color.Aqua : Color.LightGray;
+                    color4X = (x4Selected) ? Color.Aqua : Color.LightGray;
+                    color4Y = (y4Selected) ? Color.Aqua : Color.LightGray;
 
                     colorName = (nameSelected) ? Color.Aqua : Color.LightGray;
-
-                    foreach (Tower i in towers)
-                    {
-                        i.UpdateDesigner(gameTime, Main.CurrentMouse);
-                    }
-
-                    foreach (RectangleSelection i in pieces)
-                    {
-                        i.Update();
-                    }
 
                     for (int i = 0; i < enemies.Count; i++)
                     {
                         enemies[i].Update(gameTime);
 
-                        if (enemies[i].position == enemies[i].Path.points[enemies[i].Path.points.Count - 1])
+                        if (enemies[i].position == enemies[i].Path.Points[enemies[i].Path.Points.Count - 1])
                         {
                             enemies.Remove(enemies[i]);
                         }
                     }
 
-                    if (Main.CurrentMouse.RightButton.Pressed)
-                    {
-                        selected = Selected();
-                        selectedRectangle = SelectedRectangle();
-                    }
-
                     test.Update();
 
-                    if (fin && pieces.Count > 0) build.Update(Main.CurrentMouse);
+                    if (fin) build.Update(Main.CurrentMouse);
 
                     Input();
                     break;
@@ -180,36 +140,18 @@ namespace Tower_Defense_Project
 
         private void Build(object sender, EventArgs e)
         {
-            path = new Path();
-
-            foreach (Tower i in towers)
-            {
-                path.points.Add(new Vector2(i.Center.X / Main.Graphics.PreferredBackBufferWidth, i.Center.Y / Main.Graphics.PreferredBackBufferHeight));
-            }
-
-            foreach (RectangleSelection i in pieces)
-            {
-                path.pathSet.Add(new RectangleF(i.SelectedRectangle.X / Main.Graphics.PreferredBackBufferWidth, i.SelectedRectangle.Y / Main.Graphics.PreferredBackBufferHeight, i.SelectedRectangle.Width / Main.Graphics.PreferredBackBufferWidth, i.SelectedRectangle.Height / Main.Graphics.PreferredBackBufferHeight));
-            }
-
             StreamWriter temp = new StreamWriter("temp1.temp");
             StreamWriter write = new StreamWriter(string.Format("{0}.path", name));
 
-            temp.WriteLine(path.points.Count);
-            temp.WriteLine(path.pathSet.Count);
+            temp.WriteLine(test.Curves.Count);
 
-            for (int i = 0; i < path.points.Count; i++)
+            for (int i = 0; i < test.Curves.Count; i++)
             {
-                temp.WriteLine(path.points[i].X);
-                temp.WriteLine(path.points[i].Y);
-            }
-
-            for (int i = 0; i < path.pathSet.Count; i++)
-            {
-                temp.WriteLine(path.pathSet[i].X);
-                temp.WriteLine(path.pathSet[i].Y);
-                temp.WriteLine(path.pathSet[i].Width);
-                temp.WriteLine(path.pathSet[i].Height);
+                for (int l = 0; l < test.Curves[i].Points.Count; l++)
+                {
+                    temp.WriteLine(test.Curves[i].Points[l].X / Main.Scale.X);
+                    temp.WriteLine(test.Curves[i].Points[l].Y / Main.Scale.Y);
+                }
             }
 
             temp.Close();
@@ -221,115 +163,44 @@ namespace Tower_Defense_Project
             read.Close();
             File.Delete("temp1.temp");
 
-            towers.Clear();
-            pieces.Clear();
+            test.Clear();
+
             fin = false;
-        }
-
-        private Tower Selected()
-        {
-            Tower t;
-            foreach (Tower i in towers)
-            {
-                if (i.isSelected)
-                {
-                    if (i != selected) selectedLocationX = i.Position.X.ToString(); selectedLocationY = i.Position.Y.ToString();
-                    return i;
-                }
-            }
-            t = new Tower(this, TowerType.Start, Main.CurrentMouse);
-            t.isPlaced = true;
-            t.Position = Vector2.Zero;
-            selectedLocationX = "0";
-            selectedLocationY = "0";
-            xSelected = false;
-            ySelected = false;
-            return t;
-        }
-
-        private RectangleSelection SelectedRectangle()
-        {
-            RectangleSelection t;
-            foreach (RectangleSelection i in pieces)
-            {
-                if (i.isSelected)
-                {
-                    if (i != selectedRectangle)
-                    {
-                        rectangleX = i.SelectedRectangle.X.ToString();
-                        rectangleY = i.SelectedRectangle.Y.ToString();
-                        rectangleWidth = i.SelectedRectangle.Width.ToString();
-                        rectangleHeight = i.SelectedRectangle.Height.ToString();
-                    }
-                    return i;
-                }
-            }
-            t = new RectangleSelection(0, 0, 0, 0);
-            rectangleX = "0";
-            rectangleY = "0";
-            rectangleWidth = "0";
-            rectangleHeight = "0";
-            xSelectedRect = false;
-            ySelectedRect = false;
-            widthSelected = false;
-            heightSelected = false;
-            return t;
         }
 
         private void Input()
         {
-            if (!fin)
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.P) && !anythingSelected)
             {
-                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && !startPlaced && !anythingSelected)
-                {
-                    towers.Add(new Tower(this, TowerType.Start, Main.CurrentMouse));
-                }
-                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && startPlaced && towers[towers.Count - 1].isPlaced && !anythingSelected)
-                {
-                    towers.Add(new Tower(this, TowerType.Point, Main.CurrentMouse));
-                }
-                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && startPlaced && towers[towers.Count - 1].isPlaced && !anythingSelected)
-                {
-                    towers.Add(new Tower(this, TowerType.Stop, Main.CurrentMouse));
-                    fin = true;
-                }
+                test.AddCurve();
+                fin = true;
             }
-
-            if (Main.CurrentKeyboard.IsKeyPressed(Keys.P) && !anythingSelected) test.AddCurve();
-
-            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D3) && !anythingSelected) pieces.Add(new RectangleSelection(10, 10, 40, 40));
 
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.D) && !anythingSelected)
             {
-                List<Vector2> l = new List<Vector2>();
-                foreach (Tower o in towers)
-                {
-                    l.Add(o.Center);
-                }
-                Path p = new Path(l);
-                p.Build(false);
+                test.Build();
 
-                enemies.Add(new Enemy(this, p));
+                enemies.Add(new Enemy(this, test));
             }
 
             try
             {
-                if ((xSelected || ySelected || xSelectedRect || ySelectedRect || widthSelected || heightSelected))
+                if ((x1Selected || y1Selected || x2Selected || y2Selected || x3Selected || y3Selected || x4Selected || y4Selected))
                 {
                     char? c;
                     InputParser.TryConvertNumberInput(Main.CurrentKeyboard, out c);
-                    if (xSelected) StringInput(ref selectedLocationX, c);
-                    else if (ySelected) StringInput(ref selectedLocationY, c);
-                    else if (xSelectedRect) StringInput(ref rectangleX, c);
-                    else if (ySelectedRect) StringInput(ref rectangleY, c);
-                    else if (widthSelected) StringInput(ref rectangleWidth, c);
-                    else if (heightSelected) StringInput(ref rectangleHeight, c);
+                    if (x1Selected) StringInput(ref location1X, c);
+                    else if (y1Selected) StringInput(ref location1Y, c);
+                    else if (x2Selected) StringInput(ref location2X, c);
+                    else if (y2Selected) StringInput(ref location2Y, c);
+                    else if (x3Selected) StringInput(ref location3X, c);
+                    else if (y3Selected) StringInput(ref location3Y, c);
+                    else if (x4Selected) StringInput(ref location4X, c);
+                    else if (y4Selected) StringInput(ref location4Y, c);
 
                     if (Main.CurrentKeyboard.IsKeyPressed(Keys.Enter))
                     {
-                        selected.Position = new Vector2(float.Parse(selectedLocationX), float.Parse(selectedLocationY));
-                        selectedRectangle.Point1 = new Vector2(float.Parse(rectangleX), float.Parse(rectangleY));
-                        selectedRectangle.Point4 = new Vector2(float.Parse(rectangleX) + float.Parse(rectangleWidth), float.Parse(rectangleY) + float.Parse(rectangleHeight));
+                        
                     }
                 }
                 else if (nameSelected)
@@ -344,15 +215,17 @@ namespace Tower_Defense_Project
 
             if (Main.CurrentMouse.LeftButton.Pressed)
             {
-                xSelected = x.Contains(mousePos);
-                ySelected = y.Contains(mousePos);
-                xSelectedRect = xRect.Contains(mousePos);
-                ySelectedRect = yRect.Contains(mousePos);
-                widthSelected = width.Contains(mousePos);
-                heightSelected = height.Contains(mousePos);
+                x1Selected = x1.Contains(mousePos);
+                y1Selected = y1.Contains(mousePos);
+                x2Selected = x2.Contains(mousePos);
+                y2Selected = y2.Contains(mousePos);
+                x3Selected = x3.Contains(mousePos);
+                y3Selected = y3.Contains(mousePos);
+                x4Selected = x4.Contains(mousePos);
+                y4Selected = y4.Contains(mousePos);
                 nameSelected = nameRect.Contains(mousePos);
             }
-            anythingSelected = xSelected || ySelected || xSelectedRect || ySelectedRect || widthSelected || heightSelected || nameSelected;
+            anythingSelected = x1Selected || y1Selected || x2Selected || y2Selected || x3Selected || y3Selected || x4Selected || y4Selected || nameSelected;
         }
 
         private void StringInput(ref string source, char? c)
@@ -372,49 +245,33 @@ namespace Tower_Defense_Project
             }
         }
 
-        private void DrawLine(SpriteBatch spriteBatch, Vector2 begin, Vector2 end, int width = 1)
-        {
-            RectangleF r = new RectangleF(begin.X, begin.Y, (end - begin).Length() + width, width);
-            Vector2 v = Vector2.Normalize(begin - end);
-            float angle = (float)Math.Acos(Vector2.Dot(v, -Vector2.UnitX));
-            if (begin.Y > end.Y) angle = MathUtil.TwoPi - angle;
-            spriteBatch.Draw(tex, r, null, Color.Black, angle, Vector2.Zero, SpriteEffects.None, 0);
-        }
-
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             switch (form)
             {
                 case DesignerForm.Path:
                     spriteBatch.Draw(tex, storeSection, Color.Black);
-                    spriteBatch.Draw(tex, x, colorX);
-                    spriteBatch.Draw(tex, y, colorY);
-                    spriteBatch.Draw(tex, xRect, colorXRect);
-                    spriteBatch.Draw(tex, yRect, colorYRect);
-                    spriteBatch.Draw(tex, width, colorWidth);
-                    spriteBatch.Draw(tex, height, colorHeight);
+                    spriteBatch.Draw(tex, x1, color1X);
+                    spriteBatch.Draw(tex, y1, color1Y);
+                    spriteBatch.Draw(tex, x2, color2X);
+                    spriteBatch.Draw(tex, y2, color2Y);
+                    spriteBatch.Draw(tex, x3, color3X);
+                    spriteBatch.Draw(tex, y3, color3Y);
+                    spriteBatch.Draw(tex, x4, color4X);
+                    spriteBatch.Draw(tex, y4, color4Y);
                     spriteBatch.Draw(tex, nameRect, colorName);
-                    spriteBatch.DrawString(font, selectedLocationX, new Vector2(615, 298), Color.Black);
-                    spriteBatch.DrawString(font, selectedLocationY, new Vector2(720, 298), Color.Black);
-                    spriteBatch.DrawString(font, rectangleX, new Vector2(615, 48), Color.Black);
-                    spriteBatch.DrawString(font, rectangleY, new Vector2(720, 48), Color.Black);
-                    spriteBatch.DrawString(font, rectangleWidth, new Vector2(615, 98), Color.Black);
-                    spriteBatch.DrawString(font, rectangleHeight, new Vector2(720, 98), Color.Black);
+                    spriteBatch.DrawString(font, location1X, new Vector2(.76875f * Main.Scale.X, (298f / 480f) * Main.Scale.Y), Color.Black);
+                    spriteBatch.DrawString(font, location1Y, new Vector2(.9f * Main.Scale.X, (298f / 480f) * Main.Scale.Y), Color.Black);
+                    spriteBatch.DrawString(font, location2X, new Vector2(.76875f * Main.Scale.X, .5375f * Main.Scale.Y), Color.Black);
+                    spriteBatch.DrawString(font, location2Y, new Vector2(.9f * Main.Scale.X, .5375f * Main.Scale.Y), Color.Black);
+                    spriteBatch.DrawString(font, location3X, new Vector2(.76875f * Main.Scale.X, (218f / 480f) * Main.Scale.Y), Color.Black);
+                    spriteBatch.DrawString(font, location3Y, new Vector2(.9f * Main.Scale.X, (218f / 480f) * Main.Scale.Y), Color.Black);
+                    spriteBatch.DrawString(font, location4X, new Vector2(.76875f * Main.Scale.X, (178f / 480f) * Main.Scale.Y), Color.Black);
+                    spriteBatch.DrawString(font, location4Y, new Vector2(.9f * Main.Scale.X, (178f / 480f) * Main.Scale.Y), Color.Black);
                     spriteBatch.DrawString(font, name, textLocation, Color.Black);
 
                     try { if (fin) spriteBatch.Draw(build.Texture, build.Collision, Color.White); }
                     catch { }
-
-                    for (int i = 0; i < towers.Count; i++)
-                    {
-                        if (i < towers.Count - 1) DrawLine(spriteBatch, towers[i].Center, towers[i + 1].Center);
-                        towers[i].Draw(spriteBatch);
-                    }
-
-                    foreach (RectangleSelection i in pieces)
-                    {
-                        i.Draw(spriteBatch);
-                    }
 
                     foreach (Enemy i in enemies)
                     {
@@ -425,7 +282,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case DesignerForm.Enemies:
-                    spriteBatch.Draw(tex, new RectangleF(0, 0, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight), Color.Black);
+                    spriteBatch.Draw(tex, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.Black);
                     break;
 
                 default:

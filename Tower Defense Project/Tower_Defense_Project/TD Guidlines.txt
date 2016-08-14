@@ -36,3 +36,8 @@ Planets:
 Side-Side-Side Idea:
 
 	Rather than a linear story, have it be open ended with you being sort of a mercenary leader that takes on randomly generated tasks themed toward the environment.
+
+
+Story:
+	
+	You are in the only super solar system in the galaxy(it has an incredible amount of planets) and you are among many people attempting to solve the mystery of what holds this system together.
