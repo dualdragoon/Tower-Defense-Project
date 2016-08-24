@@ -160,7 +160,7 @@ namespace Tower_Defense_Project
 
             bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
-            CurrentState = GameState.Play;
+            CurrentState = GameState.LevelDesigner;
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace Tower_Defense_Project
             }
 
             generator.Draw(spriteBatch);
-            spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * graphics.GraphicsDevice.Viewport.Width) - offset, (CurrentMouse.Y * graphics.GraphicsDevice.Viewport.Height) - offset), Color.White);
+            spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * Scale.X) - offset, (CurrentMouse.Y * Scale.Y) - offset), Color.White);
 
             spriteBatch.End();
 

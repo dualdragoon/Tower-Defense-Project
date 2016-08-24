@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using SharpDX;
 using SharpDX.Toolkit.Graphics;
 using Duality;
@@ -89,6 +85,7 @@ namespace Tower_Defense_Project
             }
             catch { return false; }
         }
+
         public bool Intersects(Ellipse ellipse)
         {
             try

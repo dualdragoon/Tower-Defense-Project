@@ -29,11 +29,11 @@ namespace Tower_Defense_Project
                 switch (type)
                 {
                     case EngineType.Dripping:
-                        location = new Vector2((value.X * 800) + random.Next(13), (value.Y * 480) + 13);
+                        location = new Vector2((value.X * Main.Scale.X) + random.Next(13), (value.Y * Main.Scale.Y) + 13);
                         break;
 
                     case EngineType.Pulsing:
-                        location = new Vector2((value.X * 800) - 2, (value.Y * 480) - 2);
+                        location = new Vector2((value.X * Main.Scale.X) - 2, (value.Y * Main.Scale.Y) - 2);
                         break;
 
                     default: break;
