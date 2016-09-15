@@ -19,7 +19,6 @@ namespace Tower_Defense_Project
     /// </summary>
     public class Main : Game
     {
-        bool keyPressed, keyDidSomething;
         Designer designer;
         GameState currentState;
         int offset;
@@ -144,16 +143,16 @@ namespace Tower_Defense_Project
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            emptyCursor = Content.Load<Texture2D>(@"Textures/Null");
+            emptyCursor = Content.Load<Texture2D>("Textures/Null");
 
-            cursors[0] = Content.Load<Texture2D>(@"Textures/Cursors/BLL Cursor");
-            cursors[1] = Content.Load<Texture2D>(@"Textures/Cursors/BL Cursor");
-            cursors[2] = Content.Load<Texture2D>(@"Textures/Cursors/GL Cursor");
-            cursors[3] = Content.Load<Texture2D>(@"Textures/Cursors/IT Cursor");
-            cursors[4] = Content.Load<Texture2D>(@"Textures/Cursors/OL Cursor");
-            cursors[5] = Content.Load<Texture2D>(@"Textures/Cursors/RL Cursor");
-            cursors[6] = Content.Load<Texture2D>(@"Textures/Cursors/SS Cursor");
-            cursors[7] = Content.Load<Texture2D>(@"Textures/Cursors/YL Cursor");
+            cursors[0] = Content.Load<Texture2D>("Textures/Cursors/BLL Cursor");
+            cursors[1] = Content.Load<Texture2D>("Textures/Cursors/BL Cursor");
+            cursors[2] = Content.Load<Texture2D>("Textures/Cursors/GL Cursor");
+            cursors[3] = Content.Load<Texture2D>("Textures/Cursors/IT Cursor");
+            cursors[4] = Content.Load<Texture2D>("Textures/Cursors/OL Cursor");
+            cursors[5] = Content.Load<Texture2D>("Textures/Cursors/RL Cursor");
+            cursors[6] = Content.Load<Texture2D>("Textures/Cursors/SS Cursor");
+            cursors[7] = Content.Load<Texture2D>("Textures/Cursors/YL Cursor");
 
             bloodDrops.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Drop1"));
             bloodDrops.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Drop2"));

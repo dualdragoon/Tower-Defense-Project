@@ -26,9 +26,7 @@ namespace Tower_Defense_Project
         private SpriteFont font;
         private string location1X, location1Y, location2X, location2Y, location3X, location3Y, location4X, location4Y, name;
         private Texture2D tex, buildUnpressed, buildPressed;
-        private Vector2 mousePos, textLocation = new Vector2(.8625f * Main.Scale.X, (8f / 480f) * Main.Scale.Y);
-
-        Random p = new Random();
+        private Vector2 mousePos, textLocation = new Vector2(.88f * Main.Scale.X, (14f / 480f) * Main.Scale.Y);
         
         private List<Enemy> enemies = new List<Enemy>();
 
@@ -46,9 +44,9 @@ namespace Tower_Defense_Project
                 try { backspaced = (value == name.Remove(name.Length - 1)); }
                 catch { }
                 name = value;
-                if (name.Length <= 1) textLocation.X = .8625f * Main.Scale.X;
+                /*if (name.Length <= 1) textLocation.X = .8625f * Main.Scale.X;
                 else if (!backspaced) textLocation.X -= .010625f * Main.Scale.X;
-                else textLocation.X += .010625f * Main.Scale.X;
+                else textLocation.X += .010625f * Main.Scale.X;*/
             }
         }
 
@@ -173,6 +171,7 @@ namespace Tower_Defense_Project
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.P) && !anythingSelected)
             {
                 test.AddCurve();
+                test.Selected = test.Curves.Count - 1;
                 fin = true;
             }
 
@@ -268,7 +267,7 @@ namespace Tower_Defense_Project
                     spriteBatch.DrawString(font, location3Y, new Vector2(.9f * Main.Scale.X, (218f / 480f) * Main.Scale.Y), Color.Black);
                     spriteBatch.DrawString(font, location4X, new Vector2(.76875f * Main.Scale.X, (178f / 480f) * Main.Scale.Y), Color.Black);
                     spriteBatch.DrawString(font, location4Y, new Vector2(.9f * Main.Scale.X, (178f / 480f) * Main.Scale.Y), Color.Black);
-                    spriteBatch.DrawString(font, name, textLocation, Color.Black);
+                    spriteBatch.DrawString(font, name, new Vector2(textLocation.X - (font.MeasureString(name).X / 2), textLocation.Y), Color.Black);
 
                     try { if (fin) spriteBatch.Draw(build.Texture, build.Collision, Color.White); }
                     catch { }

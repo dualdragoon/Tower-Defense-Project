@@ -138,9 +138,6 @@
     <None Include="Content\Enemies\Stats\Enemy Data.emd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Levels\Level1.enm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <ToolkitTexture Include="Content\Buttons\Start Wave Pressed.png" />
     <ToolkitTexture Include="Content\Buttons\Start Wave.png" />
     <None Include="Content\Towers\Stats\Tower Data.twd">
@@ -155,6 +152,7 @@
     <ToolkitTexture Include="Content\Textures\Point.png" />
     <ToolkitTexture Include="Content\Textures\Transparent Pixel.png" />
     <ToolkitTexture Include="Content\Textures\help.png" />
+    <ToolkitTexture Include="Content\Levels\Level1.jpg" />
     <Content Include="Content\Textures\Trach Can work in progress.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />

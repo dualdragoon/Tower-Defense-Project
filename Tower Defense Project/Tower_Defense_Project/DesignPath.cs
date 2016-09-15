@@ -12,12 +12,29 @@ namespace Tower_Defense_Project
     class DesignPath : Path
     {
         private List<DesignCurve> curves = new List<DesignCurve>();
+        private int selected;
         private Texture2D tex, pressed, unPressed;
 
         public new List<DesignCurve> Curves
         {
             get { return curves; }
             set { curves = value; }
+        }
+
+        public int Selected
+        {
+            get { return selected; }
+            set
+            {
+                selected = value;
+                foreach (DesignCurve i in Curves)
+                {
+                    i.Selected = false;
+                    i.SemiSelected = false;
+                }
+                Curves[selected].Selected = true;
+                if (selected != 0) Curves[selected - 1].SemiSelected = true;
+            }
         }
 
         public DesignPath()
