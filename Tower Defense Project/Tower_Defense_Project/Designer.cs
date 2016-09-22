@@ -17,7 +17,7 @@ namespace Tower_Defense_Project
     class Designer
     {
         private bool fin, x1Selected, y1Selected, x2Selected, y2Selected, x3Selected, y3Selected, x4Selected, y4Selected, nameSelected, anythingSelected;
-        private Button build;
+        private Button build, previous, next;
         private Color color1X, color1Y, color2X, color2Y, color3X, color3Y, color4X, color4Y, colorName;
         private DesignerForm form = DesignerForm.Path;
         DesignPath test = new DesignPath();
@@ -25,7 +25,7 @@ namespace Tower_Defense_Project
         public RectangleF storeSection;
         private SpriteFont font;
         private string location1X, location1Y, location2X, location2Y, location3X, location3Y, location4X, location4Y, name;
-        private Texture2D tex, buildUnpressed, buildPressed;
+        private Texture2D tex, buildUnpressed, buildPressed, previousNormal, previousHovered, nextNormal, nextHovered;
         private Vector2 mousePos, textLocation = new Vector2(.88f * Main.Scale.X, (14f / 480f) * Main.Scale.Y);
         
         private List<Enemy> enemies = new List<Enemy>();
@@ -62,13 +62,23 @@ namespace Tower_Defense_Project
             color3Y = Color.LightGray;
             color4X = Color.LightGray;
             color4Y = Color.LightGray;
-            tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
-            font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
+            tex = Main.GameContent.Load<Texture2D>("Textures/SQUARE");
+            font = Main.GameContent.Load<SpriteFont>("Fonts/Font");
 
-            buildUnpressed = Main.GameContent.Load<Texture2D>(@"Buttons/Build Path");
-            buildPressed = Main.GameContent.Load<Texture2D>(@"Buttons/Build Path Pressed");
-            build = new Button(new Vector2(.7625f * Main.Scale.X, (380f /480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), 90, 2, Main.CurrentMouse, buildUnpressed, buildPressed, true, Main.Scale.X, Main.Scale.Y);
+            buildUnpressed = Main.GameContent.Load<Texture2D>("Buttons/Build Path");
+            buildPressed = Main.GameContent.Load<Texture2D>("Buttons/Build Path Pressed");
+            build = new Button(new Vector2(.7625f * Main.Scale.X, (420f /480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1125f * Main.Scale.Y), 2, Main.CurrentMouse, buildUnpressed, buildPressed, true, Main.Scale.X, Main.Scale.Y);
             build.LeftClicked += Build;
+
+            previousNormal = Main.GameContent.Load<Texture2D>("Buttons/Previous Normal");
+            previousHovered = Main.GameContent.Load<Texture2D>("Buttons/Previous Hovered");
+            previous = new Button(new Vector2(.7625f * Main.Scale.X, .71f * Main.Scale.Y), (int)((106f / 1440f) * Main.Scale.X), (int)((122f / 900f) * Main.Scale.Y), 3, Main.CurrentMouse, previousNormal, previousHovered, true, Main.Scale.X, Main.Scale.Y);
+            previous.LeftClicked += PreviousCurve;
+
+            nextNormal = Main.GameContent.Load<Texture2D>("Buttons/Next Normal");
+            nextHovered = Main.GameContent.Load<Texture2D>("Buttons/Next Hovered");
+            next = new Button(new Vector2(.9155f * Main.Scale.X, .71f * Main.Scale.Y), (int)((106f / 1440f) * Main.Scale.X), (int)((122f / 900f) * Main.Scale.Y), 4, Main.CurrentMouse, nextNormal, nextHovered, true, Main.Scale.X, Main.Scale.Y);
+            next.LeftClicked += NextCurve;
 
             storeSection = new RectangleF(.75f * Main.Scale.X, 0f, (.25f * Main.Scale.X) + 1, (Main.Scale.Y) + 1);
             x1 = new RectangleF(.7625f * Main.Scale.X, .625f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
@@ -123,7 +133,12 @@ namespace Tower_Defense_Project
 
                     test.Update();
 
-                    if (fin) build.Update(Main.CurrentMouse);
+                    if (fin)
+                    {
+                        build.Update(Main.CurrentMouse);
+                        previous.Update(Main.CurrentMouse);
+                        next.Update(Main.CurrentMouse);
+                    }
 
                     Input();
                     break;
@@ -134,6 +149,16 @@ namespace Tower_Defense_Project
                 default:
                     break;
             }
+        }
+
+        private void PreviousCurve(object sender, EventArgs e)
+        {
+            Path.Selected = (Path.Selected != 0) ? Path.Selected - 1 : Path.Curves.Count - 1;
+        }
+
+        private void NextCurve(object sender, EventArgs e)
+        {
+            Path.Selected = (Path.Selected != Path.Curves.Count - 1) ? Path.Selected + 1 : 0;
         }
 
         private void Build(object sender, EventArgs e)
@@ -269,7 +294,15 @@ namespace Tower_Defense_Project
                     spriteBatch.DrawString(font, location4Y, new Vector2(.9f * Main.Scale.X, (178f / 480f) * Main.Scale.Y), Color.Black);
                     spriteBatch.DrawString(font, name, new Vector2(textLocation.X - (font.MeasureString(name).X / 2), textLocation.Y), Color.Black);
 
-                    try { if (fin) spriteBatch.Draw(build.Texture, build.Collision, Color.White); }
+                    try
+                    {
+                        if (fin)
+                        {
+                            spriteBatch.Draw(build.Texture, build.Collision, Color.White);
+                            spriteBatch.Draw(previous.Texture, previous.Collision, Color.White);
+                            spriteBatch.Draw(next.Texture, next.Collision, Color.White);
+                        }
+                    }
                     catch { }
 
                     foreach (Enemy i in enemies)

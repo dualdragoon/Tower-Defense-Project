@@ -153,6 +153,10 @@
     <ToolkitTexture Include="Content\Textures\Transparent Pixel.png" />
     <ToolkitTexture Include="Content\Textures\help.png" />
     <ToolkitTexture Include="Content\Levels\Level1.jpg" />
+    <ToolkitTexture Include="Content\Buttons\Next Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Next Normal.png" />
+    <ToolkitTexture Include="Content\Buttons\Previous Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Previous Normal.png" />
     <Content Include="Content\Textures\Trach Can work in progress.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
