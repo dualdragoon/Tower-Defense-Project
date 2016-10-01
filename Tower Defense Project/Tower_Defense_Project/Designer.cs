@@ -200,6 +200,9 @@ namespace Tower_Defense_Project
                 fin = true;
             }
 
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.Left)) test.Selected = (test.Selected != 0) ? test.Selected - 1 : test.Curves.Count - 1;
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.Right)) test.Selected = (test.Selected != test.Curves.Count - 1) ? test.Selected + 1 : 0;
+
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.D) && !anythingSelected)
             {
                 test.Build();

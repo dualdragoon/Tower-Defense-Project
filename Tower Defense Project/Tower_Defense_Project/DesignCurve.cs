@@ -12,7 +12,7 @@ namespace Tower_Defense_Project
 {
     class DesignCurve : Curve
     {
-        bool isSelected, isSemiSelected;
+        bool isSelected, isSecondSelected, isFirstSelected;
         Button point1, point2, point3, point4;
         Texture2D pressed, unpressed;
 
@@ -23,10 +23,16 @@ namespace Tower_Defense_Project
             set { isSelected = value; }
         }
 
-        public bool SemiSelected
+        public bool SecondSelected
         {
-            get { return isSemiSelected; }
-            set { isSemiSelected = value; }
+            get { return isSecondSelected; }
+            set { isSecondSelected = value; }
+        }
+
+        public bool FirstSelected
+        {
+            get { return isFirstSelected; }
+            set { isFirstSelected = value; }
         }
 
         Vector2 Button1
@@ -96,12 +102,15 @@ namespace Tower_Defense_Project
             if (Selected)
             {
                 point1.Update(Main.CurrentMouse);
-                point2.Update(Main.CurrentMouse);
                 point4.Update(Main.CurrentMouse);
             }
-            if (Selected || SemiSelected)
+            if (Selected || SecondSelected)
             {
                 point3.Update(Main.CurrentMouse); 
+            }
+            if (Selected || FirstSelected)
+            {
+                point2.Update(Main.CurrentMouse);
             }
 
             if (point1.LeftHeld && Selected)
@@ -111,14 +120,14 @@ namespace Tower_Defense_Project
                 point3.Clickable = false;
                 point4.Clickable = false;
             }
-            else if (point2.LeftHeld && Selected)
+            else if (point2.LeftHeld && (Selected || FirstSelected))
             {
                 Button2 = new Vector2(Main.CurrentMouse.X * Main.Scale.X, Main.CurrentMouse.Y * Main.Scale.Y);
                 point1.Clickable = false;
                 point3.Clickable = false;
                 point4.Clickable = false;
             }
-            else if (point3.LeftHeld && (Selected || SemiSelected))
+            else if (point3.LeftHeld && (Selected || SecondSelected))
             {
                 Button3 = new Vector2(Main.CurrentMouse.X * Main.Scale.X, Main.CurrentMouse.Y * Main.Scale.Y);
                 point1.Clickable = false;
@@ -148,12 +157,15 @@ namespace Tower_Defense_Project
             if (Selected)
             {
                 spriteBatch.Draw(point1.Texture, point1.Position, Color.White);
-                spriteBatch.Draw(point2.Texture, point2.Position, Color.White);
                 spriteBatch.Draw(point4.Texture, point4.Position, Color.White);
             }
-            if (Selected || SemiSelected)
+            if (Selected || SecondSelected)
             {
                 spriteBatch.Draw(point3.Texture, point3.Position, Color.White); 
+            }
+            if (Selected || FirstSelected)
+            {
+                spriteBatch.Draw(point2.Texture, point2.Position, Color.White);
             }
         }
     }

@@ -30,10 +30,12 @@ namespace Tower_Defense_Project
                 foreach (DesignCurve i in Curves)
                 {
                     i.Selected = false;
-                    i.SemiSelected = false;
+                    i.SecondSelected = false;
+                    i.FirstSelected = false;
                 }
                 Curves[selected].Selected = true;
-                if (selected != 0) Curves[selected - 1].SemiSelected = true;
+                if (selected != 0) Curves[selected - 1].SecondSelected = true;
+                if (selected != Curves.Count - 1) Curves[selected + 1].FirstSelected = true;
             }
         }
 

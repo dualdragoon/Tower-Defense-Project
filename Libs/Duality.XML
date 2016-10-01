@@ -1,0 +1,321 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Duality</name>
+    </assembly>
+    <members>
+        <member name="T:Duality.Graphics.Animation">
+            <summary>
+            Represents an animated texture.
+            </summary>
+            <remarks>
+            Currently, this class assumes that each frame of animation is
+            as wide as each animation is tall. The number of frames in the
+            animation are inferred from this.
+            </remarks>
+        </member>
+        <member name="P:Duality.Graphics.Animation.Texture">
+            <summary>
+            All frames in the animation arranged horizontally.
+            </summary>
+        </member>
+        <member name="P:Duality.Graphics.Animation.FrameTime">
+            <summary>
+            Duration of time to show each frame.
+            </summary>
+        </member>
+        <member name="P:Duality.Graphics.Animation.IsLooping">
+            <summary>
+            When the end of the animation is reached, should it
+            continue playing from the beginning?
+            </summary>
+        </member>
+        <member name="P:Duality.Graphics.Animation.FrameCount">
+            <summary>
+            Gets the number of frames in the animation.
+            </summary>
+        </member>
+        <member name="P:Duality.Graphics.Animation.FrameWidth">
+            <summary>
+            Gets the width of a frame in the animation.
+            </summary>
+        </member>
+        <member name="P:Duality.Graphics.Animation.FrameHeight">
+            <summary>
+            Gets the height of a frame in the animation.
+            </summary>
+        </member>
+        <member name="M:Duality.Graphics.Animation.#ctor(SharpDX.Toolkit.Graphics.Texture2D,System.Single,System.Boolean,System.Int32)">
+            <summary>
+            Constructs a new animation.
+            </summary>        
+        </member>
+        <member name="T:Duality.Graphics.AnimationPlayer">
+            <summary>
+            Controls playback of an Animation.
+            </summary>
+        </member>
+        <member name="P:Duality.Graphics.AnimationPlayer.Animation">
+            <summary>
+            Gets the animation which is currently playing.
+            </summary>
+        </member>
+        <member name="P:Duality.Graphics.AnimationPlayer.FrameIndex">
+            <summary>
+            Gets the index of the current frame in the animation.
+            </summary>
+        </member>
+        <member name="F:Duality.Graphics.AnimationPlayer.time">
+            <summary>
+            The amount of time in seconds that the current frame has been shown for.
+            </summary>
+        </member>
+        <member name="P:Duality.Graphics.AnimationPlayer.Origin">
+            <summary>
+            Gets a texture origin at the bottom center of each frame.
+            </summary>
+        </member>
+        <member name="M:Duality.Graphics.AnimationPlayer.PlayAnimation(Duality.Graphics.Animation)">
+            <summary>
+            Begins or continues playback of an animation.
+            </summary>
+        </member>
+        <member name="M:Duality.Graphics.AnimationPlayer.Draw(SharpDX.Toolkit.GameTime,SharpDX.Toolkit.Graphics.SpriteBatch,SharpDX.Vector2,SharpDX.Toolkit.Graphics.SpriteEffects)">
+            <summary>
+            Advances the time position and draws the current frame of the animation.
+            </summary>
+        </member>
+        <member name="M:Duality.Graphics.AnimationPlayer.Draw(SharpDX.Toolkit.GameTime,SharpDX.Toolkit.Graphics.SpriteBatch,SharpDX.Vector2,System.Single,SharpDX.Toolkit.Graphics.SpriteEffects)">
+            <summary>
+            Advances the time position and draws the current frame of the animation.
+            </summary>
+        </member>
+        <member name="M:Duality.Graphics.AnimationPlayer.Draw(SharpDX.Toolkit.GameTime,SharpDX.Toolkit.Graphics.SpriteBatch,SharpDX.Rectangle,SharpDX.Toolkit.Graphics.SpriteEffects)">
+            <summary>
+            Advances the time position and draws the current frame of the animation.
+            </summary>
+        </member>
+        <member name="M:Duality.Graphics.AnimationPlayer.Draw(SharpDX.Toolkit.GameTime,SharpDX.Toolkit.Graphics.SpriteBatch,SharpDX.RectangleF,SharpDX.Toolkit.Graphics.SpriteEffects)">
+            <summary>
+            Advances the time position and draws the current frame of the animation.
+            </summary>
+        </member>
+        <member name="T:Duality.Circle">
+            <summary>
+            Represents a 2D circle.
+            </summary>
+        </member>
+        <member name="P:Duality.Circle.Center">
+            <summary>
+            Center position of the circle.
+            </summary>
+        </member>
+        <member name="M:Duality.Circle.#ctor(SharpDX.Vector2,System.Single)">
+            <summary>
+            Constructs a new circle.
+            </summary>
+            <param name="position">Center of circle.</param>
+            <param name="diameter">Diameter of circle.</param>
+        </member>
+        <member name="M:Duality.Circle.Intersects(SharpDX.RectangleF)">
+            <summary>
+            Determines if a circle intersects a rectangle.
+            </summary>
+            <returns>True if the circle and rectangle overlap. False otherwise.</returns>
+        </member>
+        <member name="T:Duality.Ellipse">
+            <summary>
+            Represents a 2D ellipse.
+            </summary>
+        </member>
+        <member name="P:Duality.Ellipse.Center">
+            <summary>
+            Center position of the ellipse.
+            </summary>
+        </member>
+        <member name="M:Duality.Ellipse.#ctor(System.Single,System.Single,SharpDX.Vector2)">
+            <summary>
+            Constructs a new ellipse.
+            </summary>
+            <param name="width">Width at thickest part of ellipse.</param>
+            <param name="height">Height at tallest part of ellipse.</param>
+            <param name="center">Center of ellipse.</param>
+        </member>
+        <member name="F:Duality.EmailForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Duality.EmailForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Duality.EmailForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Duality.ErrorHandler">
+            <summary>
+            Handles crashes/errors.
+            </summary>
+        </member>
+        <member name="M:Duality.ErrorHandler.RecordError(System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Records a new Error.
+            </summary>
+            <param name="errorLevel">How severe of a problem is occurring.</param>
+            <param name="errorCode">Specific identification number, usually 101-199.</param>
+            <param name="helpfulInfo">What may have caused the error, possible info on how to fix.</param>
+            <param name="errorDetails">Exception object in catch.</param>
+        </member>
+        <member name="M:Duality.ErrorHandler.Initialize">
+            <summary>
+            On-Start handler initialization.
+            </summary>
+        </member>
+        <member name="M:Duality.ErrorHandler.CreateNewRecord(System.String)">
+            <summary>
+            Creates a new Error Record log if a matching one does not exist.
+            </summary>
+            <param name="filename">Name of the Error Record.</param>
+        </member>
+        <member name="M:Duality.ErrorHandler.CheckFileForComputerID(System.String)">
+            <summary>
+            Checks for matching Error Record.
+            </summary>
+            <param name="filename">Name of the Error Record.</param>
+            <returns>True if they're equal, False if they're not.</returns>
+        </member>
+        <member name="M:Duality.ErrorHandler.GatherSystemInfo">
+            <summary>
+            Gathers info for the Error Record.
+            </summary>
+        </member>
+        <member name="F:Duality.Interaction.Button.collision">
+            <summary>
+            Backing store for Collision.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.Collision">
+            <summary>
+            Rectangle structure.
+            </summary>
+        </member>
+        <member name="F:Duality.Interaction.Button.circle">
+            <summary>
+            Backing store for Circle.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.Circle">
+            <summary>
+            Circle structure.
+            </summary>
+        </member>
+        <member name="F:Duality.Interaction.Button.ellipse">
+            <summary>
+            Backing store for Ellipse.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.Ellipse">
+            <summary>
+            Ellipse structure.
+            </summary>
+        </member>
+        <member name="F:Duality.Interaction.Button.button1">
+            <summary>
+            Backing Stores for textures.
+            </summary>
+        </member>
+        <member name="F:Duality.Interaction.Button.button2">
+            <summary>
+            Backing Stores for textures.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.UnpressedButton">
+            <summary>
+            Set Unpressed Button Texture.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.HoveredButton">
+            <summary>
+            Set Hovered Button Texture.
+            </summary>
+        </member>
+        <member name="F:Duality.Interaction.Button.center">
+            <summary>
+            Backing Store for Center of circle.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.Center">
+            <summary>
+            Center of circle.
+            </summary>
+        </member>
+        <member name="M:Duality.Interaction.Button.#ctor(SharpDX.Vector2,System.Int32,System.Int32,System.Int32,SharpDX.Toolkit.Input.MouseState,SharpDX.Toolkit.Graphics.Texture2D,SharpDX.Toolkit.Graphics.Texture2D,System.Boolean,System.Single,System.Single)">
+            <summary>
+            Creates a new button for the menu.
+            </summary>
+            <param name="position">Position of top left corner.</param>
+            <param name="width">Width of button in pixels.</param>
+            <param name="height">Height of button in pixels.</param>
+            <param name="buttonNum">Number button uses to identify.</param>
+            <param name="mouse">Mouse state for detection.</param>
+            <param name="buttonNorm">Ordinary button state.</param>
+            <param name="buttonHov">Hovered button state.</param>
+        </member>
+        <member name="M:Duality.Interaction.Button.#ctor(SharpDX.Vector2,System.Single,System.Int32,SharpDX.Toolkit.Input.MouseState,SharpDX.Toolkit.Graphics.Texture2D,SharpDX.Toolkit.Graphics.Texture2D,System.Boolean,System.Single,System.Single)">
+            <summary>
+            Creates a new circular button for the menu.
+            </summary>
+            <param name="centerPosition">The center position of the circle.</param>
+            <param name="circleDiameter">Diameter of the circle.</param>
+            <param name="buttonNum">Number button uses to identify.</param>
+            <param name="mouse">Mouse state for detection.</param>
+            <param name="buttonNorm">Ordinary button state.</param>
+            <param name="buttonHov">Hovered button state.</param>
+            <param name="windowWidth">Width of window.</param>
+            <param name="windowHeight">Height of window.</param>
+        </member>
+        <member name="M:Duality.Interaction.Button.#ctor(SharpDX.Vector2,System.Int32,SharpDX.Toolkit.Input.MouseState,SharpDX.Toolkit.Graphics.Texture2D,SharpDX.Toolkit.Graphics.Texture2D,System.Boolean,System.Single,System.Single)">
+            <summary>
+            Creates a new elliptical button for the menu.
+            </summary>
+            <param name="centerPosition">The center position of the ellipse.</param>
+            <param name="buttonNum">Number button uses to identify.</param>
+            <param name="mouse">Mouse state for detection.</param>
+            <param name="buttonNorm">Ordinary button state.</param>
+            <param name="buttonHov">Hovered button state.</param>
+            <param name="windowWidth">Width of window.</param>
+            <param name="windowHeight">Height of window.</param>
+        </member>
+        <member name="T:Duality.Records.ScoreBoard">
+            <summary>
+            Holds high scores and names.
+            </summary>
+        </member>
+        <member name="M:Duality.Records.ScoreBoard.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Holds high score records.
+            </summary>
+            <param name="fileName">Name of file to be saved to minus the extension.</param>
+            <param name="rootElement">Name of Root level Xml Element.</param>
+            <param name="length">Number of entries long the score board is.</param>
+        </member>
+        <member name="M:Duality.Records.ScoreBoard.retrieveScores">
+            <summary>
+            Retrieves and decrypts high score records.
+            </summary>
+        </member>
+        <member name="M:Duality.Records.ScoreBoard.recordScore(System.Int32,System.String)">
+            <summary>
+            Encrypts and records high score records.
+            </summary>
+            <param name="score">New score to compare.</param>
+            <param name="name">Name of player.</param>
+        </member>
+    </members>
+</doc>
