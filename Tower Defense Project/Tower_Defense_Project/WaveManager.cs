@@ -45,7 +45,7 @@ namespace Tower_Defense_Project
                 waves.Enqueue(new Queue<EnemyType>());
                 foreach (XmlNode i in t.ChildNodes)
                 {
-                    waves.ElementAt(waves.Count-1).Enqueue((EnemyType)int.Parse(i.InnerText));
+                    waves.ElementAt(waves.Count - 1).Enqueue((EnemyType)int.Parse(i.InnerText));
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace Tower_Defense_Project
         public void UpdateWave(GameTime gameTime)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
+
             if (timer > minTimer)
             {
                 if (waves.Peek().Count > 0)

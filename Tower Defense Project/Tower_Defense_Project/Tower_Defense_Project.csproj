@@ -133,6 +133,7 @@
     <Compile Include="RectangleSelection.cs" />
     <Compile Include="Tower.cs" />
     <Compile Include="WaveManager.cs" />
+    <Compile Include="WaveBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Enemies\Stats\Enemy Data.emd">
@@ -140,6 +141,9 @@
     </None>
     <ToolkitTexture Include="Content\Buttons\Start Wave Pressed.png" />
     <ToolkitTexture Include="Content\Buttons\Start Wave.png" />
+    <None Include="Content\Levels\Level1.enm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Towers\Stats\Tower Data.twd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -157,6 +161,16 @@
     <ToolkitTexture Include="Content\Buttons\Next Normal.png" />
     <ToolkitTexture Include="Content\Buttons\Previous Hovered.png" />
     <ToolkitTexture Include="Content\Buttons\Previous Normal.png" />
+    <ToolkitTexture Include="Content\Buttons\Add Enemy Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Add Enemy Normal.png" />
+    <ToolkitTexture Include="Content\Buttons\Add Wave Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Add Wave Normal.png" />
+    <ToolkitTexture Include="Content\Buttons\Remove Enemy Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Remove Enemy Normal.png" />
+    <ToolkitTexture Include="Content\Buttons\Remove Wave Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Remove Wave Normal.png" />
+    <ToolkitTexture Include="Content\Buttons\Back Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Back Normal.png" />
     <Content Include="Content\Textures\Trach Can work in progress.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />

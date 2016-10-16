@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Duality.Encrypting;
 using Duality.Interaction;
 using SharpDX;
@@ -16,41 +14,46 @@ namespace Tower_Defense_Project
 
     class Designer
     {
-        private bool fin, x1Selected, y1Selected, x2Selected, y2Selected, x3Selected, y3Selected, x4Selected, y4Selected, nameSelected, anythingSelected;
-        private Button build, previous, next;
-        private Color color1X, color1Y, color2X, color2Y, color3X, color3Y, color4X, color4Y, colorName;
-        private DesignerForm form = DesignerForm.Path;
-        DesignPath test = new DesignPath();
-        private RectangleF x1, y1, x2, y2, x3, y3, x4, y4, nameRect;
         public RectangleF storeSection;
-        private SpriteFont font;
-        private string location1X, location1Y, location2X, location2Y, location3X, location3Y, location4X, location4Y, name;
-        private Texture2D tex, buildUnpressed, buildPressed, previousNormal, previousHovered, nextNormal, nextHovered;
-        private Vector2 mousePos, textLocation = new Vector2(.88f * Main.Scale.X, (14f / 480f) * Main.Scale.Y);
-        
-        private List<Enemy> enemies = new List<Enemy>();
+        bool fin, x1Selected, y1Selected, x2Selected, y2Selected, x3Selected, y3Selected, x4Selected, y4Selected, nameSelected, anythingSelected;
+        string location1X, location1Y, location2X, location2Y, location3X, location3Y, location4X, location4Y, name;
+        Button build, previous, next;
+        Color color1X, color1Y, color2X, color2Y, color3X, color3Y, color4X, color4Y, colorName;
+        DesignerForm form = DesignerForm.Path;
+        DesignPath path = new DesignPath();
+        RectangleF x1, y1, x2, y2, x3, y3, x4, y4, nameRect;
+        SpriteFont font;
+        Texture2D tex, buildUnpressed, buildPressed, previousNormal, previousHovered, nextNormal, nextHovered;
+        Vector2 mousePos, textLocation = new Vector2(.88f * Main.Scale.X, (14f / 480f) * Main.Scale.Y);
+        WaveBuilder waveBuilder;
+
+        List<Enemy> enemies = new List<Enemy>();
+
+        public DesignerForm Form
+        {
+            get { return form; }
+            set
+            {
+                if (value == DesignerForm.Enemies && waveBuilder == null)
+                {
+                    waveBuilder = new WaveBuilder(this);
+                    waveBuilder.LoadContent();
+                }
+                else if (value == DesignerForm.Path) fin = true;
+                form = value;
+            }
+        }
 
         public DesignPath Path
         {
-            get { return test; }
+            get { return path; }
         }
 
         private string Name
         {
             get { return name; }
-            set
-            {
-                bool backspaced = false;
-                try { backspaced = (value == name.Remove(name.Length - 1)); }
-                catch { }
-                name = value;
-                /*if (name.Length <= 1) textLocation.X = .8625f * Main.Scale.X;
-                else if (!backspaced) textLocation.X -= .010625f * Main.Scale.X;
-                else textLocation.X += .010625f * Main.Scale.X;*/
-            }
+            set { name = value; }
         }
-
-        public Designer() { }
 
         public void LoadContent()
         {
@@ -67,7 +70,7 @@ namespace Tower_Defense_Project
 
             buildUnpressed = Main.GameContent.Load<Texture2D>("Buttons/Build Path");
             buildPressed = Main.GameContent.Load<Texture2D>("Buttons/Build Path Pressed");
-            build = new Button(new Vector2(.7625f * Main.Scale.X, (420f /480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1125f * Main.Scale.Y), 2, Main.CurrentMouse, buildUnpressed, buildPressed, true, Main.Scale.X, Main.Scale.Y);
+            build = new Button(new Vector2(.7625f * Main.Scale.X, (420f / 480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1125f * Main.Scale.Y), 2, Main.CurrentMouse, buildUnpressed, buildPressed, true, Main.Scale.X, Main.Scale.Y);
             build.LeftClicked += Build;
 
             previousNormal = Main.GameContent.Load<Texture2D>("Buttons/Previous Normal");
@@ -131,7 +134,7 @@ namespace Tower_Defense_Project
                         }
                     }
 
-                    test.Update();
+                    path.Update();
 
                     if (fin)
                     {
@@ -144,6 +147,7 @@ namespace Tower_Defense_Project
                     break;
 
                 case DesignerForm.Enemies:
+                    waveBuilder.Update(gameTime);
                     break;
 
                 default:
@@ -166,14 +170,14 @@ namespace Tower_Defense_Project
             StreamWriter temp = new StreamWriter("temp1.temp");
             StreamWriter write = new StreamWriter(string.Format("{0}.path", name));
 
-            temp.WriteLine(test.Curves.Count);
+            temp.WriteLine(path.Curves.Count);
 
-            for (int i = 0; i < test.Curves.Count; i++)
+            for (int i = 0; i < path.Curves.Count; i++)
             {
-                for (int l = 0; l < test.Curves[i].Points.Count; l++)
+                for (int l = 0; l < path.Curves[i].Points.Count; l++)
                 {
-                    temp.WriteLine(test.Curves[i].Points[l].X / Main.Scale.X);
-                    temp.WriteLine(test.Curves[i].Points[l].Y / Main.Scale.Y);
+                    temp.WriteLine(path.Curves[i].Points[l].X / Main.Scale.X);
+                    temp.WriteLine(path.Curves[i].Points[l].Y / Main.Scale.Y);
                 }
             }
 
@@ -186,7 +190,7 @@ namespace Tower_Defense_Project
             read.Close();
             File.Delete("temp1.temp");
 
-            test.Clear();
+            path.Clear();
 
             fin = false;
         }
@@ -195,20 +199,21 @@ namespace Tower_Defense_Project
         {
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.P) && !anythingSelected)
             {
-                test.AddCurve();
-                test.Selected = test.Curves.Count - 1;
+                path.AddCurve();
+                path.Selected = path.Curves.Count - 1;
                 fin = true;
             }
 
-            if (Main.CurrentKeyboard.IsKeyPressed(Keys.Left)) test.Selected = (test.Selected != 0) ? test.Selected - 1 : test.Curves.Count - 1;
-            if (Main.CurrentKeyboard.IsKeyPressed(Keys.Right)) test.Selected = (test.Selected != test.Curves.Count - 1) ? test.Selected + 1 : 0;
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.Left)) PreviousCurve(this, EventArgs.Empty);
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.Right)) NextCurve(this, EventArgs.Empty);
 
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.D) && !anythingSelected)
             {
-                test.Build();
-
-                enemies.Add(new Enemy(this, test));
+                path.Build();
+                enemies.Add(new Enemy(this, path));
             }
+
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.E) && !anythingSelected) Form = DesignerForm.Enemies;
 
             try
             {
@@ -227,7 +232,7 @@ namespace Tower_Defense_Project
 
                     if (Main.CurrentKeyboard.IsKeyPressed(Keys.Enter))
                     {
-                        
+
                     }
                 }
                 else if (nameSelected)
@@ -257,19 +262,8 @@ namespace Tower_Defense_Project
 
         private void StringInput(ref string source, char? c)
         {
-            if (source != name)
-            {
-                if (c == '\b') source = source.Remove(source.Length - 1);
-                else source += c;
-            }
-            else
-            {
-                if (c == '\b') Name = Name.Remove(Name.Length - 1);
-                else if (c != null)
-                {
-                    Name += c;
-                }
-            }
+            if (c == '\b') source = source.Remove(source.Length - 1);
+            else source += c;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -313,11 +307,11 @@ namespace Tower_Defense_Project
                         i.Draw(gameTime, spriteBatch);
                     }
 
-                    test.Draw(spriteBatch);
+                    path.Draw(spriteBatch);
                     break;
 
                 case DesignerForm.Enemies:
-                    spriteBatch.Draw(tex, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.Black);
+                    waveBuilder.Draw(gameTime, spriteBatch);
                     break;
 
                 default:
