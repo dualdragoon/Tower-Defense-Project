@@ -116,9 +116,9 @@ namespace Tower_Defense_Project
             content = Content;
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1366;
-            /*graphics.PreferredBackBufferHeight = 900;
-            graphics.PreferredBackBufferWidth = 1440;
-            graphics.IsFullScreen = true;
+            //graphics.PreferredBackBufferHeight = 900;
+            //graphics.PreferredBackBufferWidth = 1440;
+            /*graphics.IsFullScreen = true;
             IsMouseVisible = true;*/
         }
 

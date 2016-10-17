@@ -171,7 +171,15 @@
     <ToolkitTexture Include="Content\Buttons\Remove Wave Normal.png" />
     <ToolkitTexture Include="Content\Buttons\Back Hovered.png" />
     <ToolkitTexture Include="Content\Buttons\Back Normal.png" />
+    <ToolkitTexture Include="Content\Textures\Wave Designer View Back.png" />
+    <ToolkitTexture Include="Content\Buttons\Scroll Down Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Scroll Down Normal.png" />
+    <ToolkitTexture Include="Content\Buttons\Scroll Up Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Scroll Up Normal.png" />
+    <ToolkitTexture Include="Content\Buttons\Scroll Hovered.png" />
+    <ToolkitTexture Include="Content\Buttons\Scroll Normal.png" />
     <Content Include="Content\Textures\Trach Can work in progress.png" />
+    <ToolkitTexture Include="Content\Textures\Wave Designer Background.png" />
     <Content Include="TD Guidlines.txt" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 1.png" />
     <ToolkitTexture Include="Content\Buttons\Temp Button 2.png" />

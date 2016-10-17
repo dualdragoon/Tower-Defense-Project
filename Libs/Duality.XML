@@ -255,7 +255,7 @@
             Center of circle.
             </summary>
         </member>
-        <member name="M:Duality.Interaction.Button.#ctor(SharpDX.Vector2,System.Int32,System.Int32,System.Int32,SharpDX.Toolkit.Input.MouseState,SharpDX.Toolkit.Graphics.Texture2D,SharpDX.Toolkit.Graphics.Texture2D,System.Boolean,System.Single,System.Single)">
+        <member name="M:Duality.Interaction.Button.#ctor(SharpDX.Vector2,System.Single,System.Single,System.Int32,SharpDX.Toolkit.Input.MouseState,SharpDX.Toolkit.Graphics.Texture2D,SharpDX.Toolkit.Graphics.Texture2D,System.Boolean,System.Single,System.Single)">
             <summary>
             Creates a new button for the menu.
             </summary>
@@ -266,6 +266,9 @@
             <param name="mouse">Mouse state for detection.</param>
             <param name="buttonNorm">Ordinary button state.</param>
             <param name="buttonHov">Hovered button state.</param>
+            <param name="clickable">Whether button is clickable or not.</param>
+            <param name="windowWidth">Width of viewport for scaling.</param>
+            <param name="windowHeight">Height of viewport for scaling.</param>
         </member>
         <member name="M:Duality.Interaction.Button.#ctor(SharpDX.Vector2,System.Single,System.Int32,SharpDX.Toolkit.Input.MouseState,SharpDX.Toolkit.Graphics.Texture2D,SharpDX.Toolkit.Graphics.Texture2D,System.Boolean,System.Single,System.Single)">
             <summary>
@@ -277,8 +280,9 @@
             <param name="mouse">Mouse state for detection.</param>
             <param name="buttonNorm">Ordinary button state.</param>
             <param name="buttonHov">Hovered button state.</param>
-            <param name="windowWidth">Width of window.</param>
-            <param name="windowHeight">Height of window.</param>
+            <param name="clickable">Whether button is clickable or not.</param>
+            <param name="windowWidth">Width of viewport for scaling.</param>
+            <param name="windowHeight">Height of viewport for scaling.</param>
         </member>
         <member name="M:Duality.Interaction.Button.#ctor(SharpDX.Vector2,System.Int32,SharpDX.Toolkit.Input.MouseState,SharpDX.Toolkit.Graphics.Texture2D,SharpDX.Toolkit.Graphics.Texture2D,System.Boolean,System.Single,System.Single)">
             <summary>
@@ -289,8 +293,9 @@
             <param name="mouse">Mouse state for detection.</param>
             <param name="buttonNorm">Ordinary button state.</param>
             <param name="buttonHov">Hovered button state.</param>
-            <param name="windowWidth">Width of window.</param>
-            <param name="windowHeight">Height of window.</param>
+            <param name="clickable">Whether button is clickable or not.</param>
+            <param name="windowWidth">Width of viewport for scaling.</param>
+            <param name="windowHeight">Height of viewport for scaling.</param>
         </member>
         <member name="T:Duality.Records.ScoreBoard">
             <summary>
