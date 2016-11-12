@@ -105,9 +105,29 @@
             Represents a 2D circle.
             </summary>
         </member>
+        <member name="F:Duality.Circle.Diameter">
+            <summary>
+            Diameter of this circle.
+            </summary>
+        </member>
         <member name="P:Duality.Circle.Center">
             <summary>
-            Center position of the circle.
+            Center position of this circle.
+            </summary>
+        </member>
+        <member name="P:Duality.Circle.Location">
+            <summary>
+            Top-Left location of this circle.
+            </summary>
+        </member>
+        <member name="P:Duality.Circle.Empty">
+            <summary>
+            Empty circle.
+            </summary>
+        </member>
+        <member name="P:Duality.Circle.IsEmpty">
+            <summary>
+            Tells whether this circle is empty or not.
             </summary>
         </member>
         <member name="M:Duality.Circle.#ctor(SharpDX.Vector2,System.Single)">
@@ -117,11 +137,87 @@
             <param name="position">Center of circle.</param>
             <param name="diameter">Diameter of circle.</param>
         </member>
+        <member name="M:Duality.Circle.Offset(SharpDX.Vector2)">
+            <summary>
+            Moves this circle.
+            </summary>
+            <param name="amount">Vector2 with x and y values to move this circle by.</param>
+        </member>
+        <member name="M:Duality.Circle.Inflate(System.Single)">
+            <summary>
+            Increases this circle's size from the center.
+            </summary>
+            <param name="amount">Value to increase the size of this circle by.</param>
+        </member>
+        <member name="M:Duality.Circle.Contains(System.Single,System.Single)">
+            <summary>
+            Determines whether this circle contains a specified point.
+            </summary>
+            <param name="x">X value of point to check.</param>
+            <param name="y">Y value of point to check.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Duality.Circle.Contains(SharpDX.Vector2)">
+            <summary>
+            Determines whether this circle contains a specified point.
+            </summary>
+            <param name="value">Vector2 point to check.</param>
+            <returns></returns>
+        </member>
         <member name="M:Duality.Circle.Intersects(SharpDX.RectangleF)">
             <summary>
-            Determines if a circle intersects a rectangle.
+            Determines whether this circle intersects a rectangle.
             </summary>
-            <returns>True if the circle and rectangle overlap. False otherwise.</returns>
+            <param name="value">Rectangle to check intersection.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Duality.Curve">
+            <summary>
+            Define a vector curve using Catmull Rom interpolation.
+            </summary>
+        </member>
+        <member name="P:Duality.Curve.Points">
+            <summary>
+            Set of four points used to define curve.
+            </summary>
+        </member>
+        <member name="P:Duality.Curve.Start">
+            <summary>
+            Start point of curve.
+            </summary>
+        </member>
+        <member name="P:Duality.Curve.End">
+            <summary>
+            End point of curve.
+            </summary>
+        </member>
+        <member name="P:Duality.Curve.Reference">
+            <summary>
+            Reference set of interpolated points.
+            </summary>
+        </member>
+        <member name="M:Duality.Curve.#ctor">
+            <summary>
+            Constructs a curve using four preset points.
+            </summary>
+        </member>
+        <member name="M:Duality.Curve.#ctor(System.Collections.Generic.List{SharpDX.Vector2})">
+            <summary>
+            Constructs a curve using provided set of four points.
+            </summary>
+            <param name="points">Set of points to use.</param>
+        </member>
+        <member name="M:Duality.Curve.Build">
+            <summary>
+            Builds reference list of interpolated points. Explicitely for behind the scenes work.
+            </summary>
+        </member>
+        <member name="M:Duality.Curve.Draw(SharpDX.Toolkit.Graphics.SpriteBatch,SharpDX.Toolkit.Graphics.Texture2D)">
+            <summary>
+            Draws this curve with provided texture at each interpolated point.
+            </summary>
+            <param name="spriteBatch">Spritebatch used for drawing.</param>
+            <param name="tex">Texture to draw.</param>
         </member>
         <member name="T:Duality.Ellipse">
             <summary>
@@ -133,6 +229,26 @@
             Center position of the ellipse.
             </summary>
         </member>
+        <member name="P:Duality.Ellipse.Location">
+            <summary>
+            Top-Left location of this ellipse.
+            </summary>
+        </member>
+        <member name="P:Duality.Ellipse.RectangleF">
+            <summary>
+            Best-fit rectangle of this ellipse.
+            </summary>
+        </member>
+        <member name="P:Duality.Ellipse.Empty">
+            <summary>
+            Empty ellipse.
+            </summary>
+        </member>
+        <member name="P:Duality.Ellipse.IsEmpty">
+            <summary>
+            Tells whether this ellipse is empty or not.
+            </summary>
+        </member>
         <member name="M:Duality.Ellipse.#ctor(System.Single,System.Single,SharpDX.Vector2)">
             <summary>
             Constructs a new ellipse.
@@ -140,6 +256,41 @@
             <param name="width">Width at thickest part of ellipse.</param>
             <param name="height">Height at tallest part of ellipse.</param>
             <param name="center">Center of ellipse.</param>
+        </member>
+        <member name="M:Duality.Ellipse.Offset(SharpDX.Vector2)">
+            <summary>
+            Moves this ellipse.
+            </summary>
+            <param name="amount">Vector2 with x and y values to move this ellipse by.</param>
+        </member>
+        <member name="M:Duality.Ellipse.Contains(System.Single,System.Single)">
+            <summary>
+            Determines whether this ellipse contains a specified point.
+            </summary>
+            <param name="x">X value of point to check.</param>
+            <param name="y">Y value of point to check.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Duality.Ellipse.Contains(SharpDX.Vector2)">
+            <summary>
+            Determines whether this ellipse contains a specified point.
+            </summary>
+            <param name="value">Vector2 point to check.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Duality.Ellipse.Intersects(SharpDX.RectangleF)">
+            <summary>
+            Determines whether this ellipse intersects a rectangle.
+            </summary>
+            <param name="value">Rectangle to check intersection.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Duality.EmailForm.#ctor(System.Boolean,System.String)">
+            <summary>
+            Constructs email form.
+            </summary>
+            <param name="internetUp">If internet is functional or not.</param>
+            <param name="errorDetails">Details of error that was thrown.</param>
         </member>
         <member name="F:Duality.EmailForm.components">
             <summary>
@@ -193,6 +344,56 @@
         <member name="M:Duality.ErrorHandler.GatherSystemInfo">
             <summary>
             Gathers info for the Error Record.
+            </summary>
+        </member>
+        <member name="T:Duality.Interaction.ButtonType">
+            <summary>
+            Defines the geometric type of a button.
+            </summary>
+        </member>
+        <member name="T:Duality.Interaction.Button">
+            <summary>
+            Define a Button for user interaction.
+            </summary>
+        </member>
+        <member name="E:Duality.Interaction.Button.LeftClicked">
+            <summary>
+            Event raised when button is left clicked.
+            </summary>
+        </member>
+        <member name="E:Duality.Interaction.Button.RightClicked">
+            <summary>
+            Event raised when button is right clicked.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.Position">
+            <summary>
+            Position of button used for drawing.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.LeftHeld">
+            <summary>
+            Flag raised when left clicked and held.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.RightHeld">
+            <summary>
+            Flag raised when right clicked and held.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.Clickable">
+            <summary>
+            Whether button is clickable or not.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.Texture">
+            <summary>
+            Currently active texture used for drawing.
+            </summary>
+        </member>
+        <member name="P:Duality.Interaction.Button.ButtonNum">
+            <summary>
+            Identification number used to differentiate between otherwise identical buttons.
             </summary>
         </member>
         <member name="F:Duality.Interaction.Button.collision">
@@ -297,9 +498,30 @@
             <param name="windowWidth">Width of viewport for scaling.</param>
             <param name="windowHeight">Height of viewport for scaling.</param>
         </member>
+        <member name="M:Duality.Interaction.Button.Update(SharpDX.Toolkit.Input.MouseState)">
+            <summary>
+            Updates button to check for clicks.
+            </summary>
+            <param name="mouse"></param>
+        </member>
         <member name="T:Duality.Records.ScoreBoard">
             <summary>
             Holds high scores and names.
+            </summary>
+        </member>
+        <member name="P:Duality.Records.ScoreBoard.HighScores">
+            <summary>
+            Recorded highscores.
+            </summary>
+        </member>
+        <member name="P:Duality.Records.ScoreBoard.TopNames">
+            <summary>
+            Names related to scores.
+            </summary>
+        </member>
+        <member name="P:Duality.Records.ScoreBoard.TopScore">
+            <summary>
+            Top recorded score.
             </summary>
         </member>
         <member name="M:Duality.Records.ScoreBoard.#ctor(System.String,System.String,System.Int32)">
@@ -321,6 +543,77 @@
             </summary>
             <param name="score">New score to compare.</param>
             <param name="name">Name of player.</param>
+        </member>
+        <member name="T:Duality.Records.Serialization">
+            <summary>
+            Serializes objects. Deprecated.
+            </summary>
+        </member>
+        <member name="M:Duality.Records.Serialization.DeserializeFromString``1(System.String)">
+            <summary>
+            Loads object from a serialized string.
+            </summary>
+            <typeparam name="TData">Object type to return.</typeparam>
+            <param name="settings">Serialized string.</param>
+            <returns>Desearialized object.</returns>
+        </member>
+        <member name="M:Duality.Records.Serialization.SerializeToString``1(``0)">
+            <summary>
+            Serializes an object to a string.
+            </summary>
+            <typeparam name="TData">Object type to serialize.</typeparam>
+            <param name="settings">Object to serialize.</param>
+            <returns>Serialized string.</returns>
+        </member>
+        <member name="F:Duality.ScrollingWindow.position">
+            <summary>
+            Value between 0 and 1.
+            </summary>
+        </member>
+        <member name="P:Duality.ScrollingWindow.Position">
+            <summary>
+            Position of scroll bar between 0 and 1.
+            </summary>
+        </member>
+        <member name="M:Duality.ScrollingWindow.#ctor(System.Collections.Generic.List{System.String},SharpDX.Toolkit.Graphics.Texture2D[],SharpDX.Vector2[],SharpDX.RectangleF,SharpDX.Vector2,SharpDX.Toolkit.Graphics.SpriteFont,SharpDX.Toolkit.Input.MouseState)">
+            <summary>
+            Creates a scrollable window.
+            </summary>
+            <param name="strings">List of strings to be displayed in window.</param>
+            <param name="textures">Split up. 2 per piece. In order: up arrow, scroll bar, down arrow.</param>
+            <param name="sizes">Sizes of each piece. In order: up arrow, scroll bar, down arrow.</param>
+            <param name="size">Rectangle used for size and position of window.</param>
+            <param name="windowScale">Vector2 with width and height of gamescreen.</param>
+            <param name="font">Font to use for strings.</param>
+            <param name="mouse">Mouse state for checking the buttons.</param>
+        </member>
+        <member name="M:Duality.ScrollingWindow.Update(SharpDX.Toolkit.Input.MouseState)">
+            <summary>
+            Updates window to check for movement.
+            </summary>
+            <param name="mouse"></param>
+        </member>
+        <member name="M:Duality.ScrollingWindow.Draw(SharpDX.Toolkit.Graphics.SpriteBatch)">
+            <summary>
+            Draws the window.
+            </summary>
+            <param name="spriteBatch">Spritebatch used for drawing.</param>
+        </member>
+        <member name="M:Duality.Encrypting.StringCipher.Encrypt(System.String,System.String)">
+            <summary>
+            Encrypts a string.
+            </summary>
+            <param name="plainText">String to encrypt.</param>
+            <param name="passPhrase">Key for encryption.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Duality.Encrypting.StringCipher.Decrypt(System.String,System.String)">
+            <summary>
+            Decrypts an encrypted string.
+            </summary>
+            <param name="cipherText">Encrypted string.</param>
+            <param name="passPhrase">Key for decryption.</param>
+            <returns></returns>
         </member>
     </members>
 </doc>

@@ -167,6 +167,7 @@ namespace Tower_Defense_Project
 
             spriteBatch.DrawString(font, string.Format(numOfWaves, waves.Count), new Vector2(300, 200), Color.Gold);
             spriteBatch.DrawString(font, string.Format(numOfEnemies, totalEnemies), new Vector2(300, 250), Color.Gold);
+            spriteBatch.DrawString(font, string.Format("Selected Wave: {0}", selectedWave + 1), new Vector2(756, 70), Color.Gold);
             spriteBatch.DrawString(font, "Waves", new Vector2((375f / 1366f) * Main.Scale.X, (205f / 256f) * Main.Scale.Y), Color.Gold);
             spriteBatch.DrawString(font, "Enemies", new Vector2((375f / 1366f) * Main.Scale.X, (59f / 64f) * Main.Scale.Y), Color.Gold);
         }

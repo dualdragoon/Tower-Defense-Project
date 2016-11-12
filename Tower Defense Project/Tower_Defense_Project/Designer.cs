@@ -207,7 +207,7 @@ namespace Tower_Defense_Project
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.Left)) PreviousCurve(this, EventArgs.Empty);
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.Right)) NextCurve(this, EventArgs.Empty);
 
-            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D) && !anythingSelected)
+            if (Main.CurrentKeyboard.IsKeyPressed(Keys.D) && !anythingSelected && path.Curves.Count != 0)
             {
                 path.Build();
                 enemies.Add(new Enemy(this, path));
