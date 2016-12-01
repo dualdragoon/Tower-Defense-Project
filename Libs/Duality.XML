@@ -565,6 +565,11 @@
             <param name="settings">Object to serialize.</param>
             <returns>Serialized string.</returns>
         </member>
+        <member name="T:Duality.ScrollingWindow">
+            <summary>
+            Define a Scrolling Window for text display.
+            </summary>
+        </member>
         <member name="F:Duality.ScrollingWindow.position">
             <summary>
             Value between 0 and 1.
@@ -573,6 +578,11 @@
         <member name="P:Duality.ScrollingWindow.Position">
             <summary>
             Position of scroll bar between 0 and 1.
+            </summary>
+        </member>
+        <member name="P:Duality.ScrollingWindow.Strings">
+            <summary>
+            Strings to be shown.
             </summary>
         </member>
         <member name="M:Duality.ScrollingWindow.#ctor(System.Collections.Generic.List{System.String},SharpDX.Toolkit.Graphics.Texture2D[],SharpDX.Vector2[],SharpDX.RectangleF,SharpDX.Vector2,SharpDX.Toolkit.Graphics.SpriteFont,SharpDX.Toolkit.Input.MouseState)">

@@ -37,7 +37,6 @@ namespace Tower_Defense_Project
                 if (value == DesignerForm.Enemies && waveBuilder == null)
                 {
                     waveBuilder = new WaveBuilder(this);
-                    waveBuilder.LoadContent();
                 }
                 else if (value == DesignerForm.Path) fin = true;
                 form = value;

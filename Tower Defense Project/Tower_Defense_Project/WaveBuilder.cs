@@ -5,6 +5,7 @@ using System.Text;
 using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
+using Duality;
 using Duality.Interaction;
 
 namespace Tower_Defense_Project
@@ -20,10 +21,13 @@ namespace Tower_Defense_Project
         Designer designer;
         List<List<EnemyType>> waves = new List<List<EnemyType>>();
         RectangleF typeRect, viewRect;
+        ScrollingWindow window;
         SpriteFont font;
         Texture2D addWaveNormal, addWaveHovered, addEnemyNormal, addEnemyHovered,
             removeWaveNormal, removeWaveHovered, removeEnemyNormal, removeEnemyHovered, backNormal, backHovered, tex, viewBack, background;
+        Texture2D[] scrollBar = new Texture2D[6];
         Vector2 enemyTypeLocation, mousePos;
+        Vector2[] scrollBarSizes = new Vector2[3];
 
         public List<List<EnemyType>> Waves
         {
@@ -33,10 +37,11 @@ namespace Tower_Defense_Project
         public WaveBuilder(Designer designer)
         {
             this.designer = designer;
+            LoadContent();
             AddWave(this, EventArgs.Empty);
         }
 
-        public void LoadContent()
+        private void LoadContent()
         {
             typeColor = Color.LightGray;
             tex = Main.GameContent.Load<Texture2D>("Textures/SQUARE");
@@ -73,6 +78,29 @@ namespace Tower_Defense_Project
 
             viewBack = Main.GameContent.Load<Texture2D>("Textures/Wave Designer View Back");
             viewRect = new RectangleF(756, 98, 570, 630);
+
+            scrollBar[0] = Main.GameContent.Load<Texture2D>("Buttons/Scroll Up Normal");
+            scrollBar[1] = Main.GameContent.Load<Texture2D>("Buttons/Scroll Up Hovered");
+            scrollBar[2] = Main.GameContent.Load<Texture2D>("Buttons/Scroll Normal");
+            scrollBar[3] = Main.GameContent.Load<Texture2D>("Buttons/Scroll Hovered");
+            scrollBar[4] = Main.GameContent.Load<Texture2D>("Buttons/Scroll Down Normal");
+            scrollBar[5] = Main.GameContent.Load<Texture2D>("Buttons/Scroll Down Hovered");
+
+            scrollBarSizes[0] = new Vector2((5f / 288f) * Main.Scale.X, (1f / 30f) * Main.Scale.Y);
+            scrollBarSizes[1] = new Vector2((5f / 288f) * Main.Scale.X, (1f / 30f) * Main.Scale.Y);
+            scrollBarSizes[2] = new Vector2((5f / 288f) * Main.Scale.X, (1f / 30f) * Main.Scale.Y);
+
+            window = new ScrollingWindow(new List<string>(), scrollBar, scrollBarSizes, new RectangleF(756, 98, 570, 630), Main.Scale, font, Main.CurrentMouse);
+        }
+
+        private List<string> StringsFromTypes(List<EnemyType> enemies)
+        {
+            List<string> t = new List<string>();
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                t.Add(((int)enemies[i]).ToString());
+            }
+            return t;
         }
 
         public void Back(object sender, EventArgs e)
@@ -85,6 +113,7 @@ namespace Tower_Defense_Project
             waves.Add(new List<EnemyType>());
             selectedWave = waves.Count - 1;
             selectedEnemy = null;
+            window.Strings = StringsFromTypes(waves[(int)selectedWave]);
         }
 
         public void AddEnemy(object sender, EventArgs e)
@@ -92,7 +121,8 @@ namespace Tower_Defense_Project
             if (waves.Count != 0)
             {
                 waves[(int)selectedWave].Add((EnemyType)int.Parse(enemyType));
-                selectedEnemy = waves[(int)selectedWave].Count - 1; 
+                selectedEnemy = waves[(int)selectedWave].Count - 1;
+                window.Strings = StringsFromTypes(waves[(int)selectedWave]);
             }
         }
 
@@ -101,7 +131,9 @@ namespace Tower_Defense_Project
             if (waves.Count != 0)
             {
                 waves.Remove(waves[(int)selectedWave]);
-                if (selectedWave == waves.Count) selectedWave--; 
+                if (selectedWave + 1 == waves.Count) selectedWave--;
+                selectedEnemy = waves[(int)selectedWave].Count - 1;
+                window.Strings = StringsFromTypes(waves[(int)selectedWave]);
             }
         }
 
@@ -109,17 +141,17 @@ namespace Tower_Defense_Project
         {
             if (waves.Count != 0)
             {
-                if (waves[(int)selectedWave].Count != 0)
+                if (waves[(int)selectedWave].Count != 0 && selectedEnemy != null)
                 {
                     waves[(int)selectedWave].Remove(waves[(int)selectedWave][(int)selectedEnemy]);
-                    if (selectedEnemy == waves[(int)selectedWave].Count) selectedEnemy--;
+                    if (selectedEnemy + 1 == waves[(int)selectedWave].Count) selectedEnemy--;
+                    window.Strings = StringsFromTypes(waves[(int)selectedWave]);
                 } 
             }
         }
 
         public void Update(GameTime gameTime)
         {
-            Main.CurrentMouse = Main.Mouse.GetState();
             mousePos = new Vector2(Main.CurrentMouse.X * Main.Scale.X, Main.CurrentMouse.Y * Main.Scale.Y);
 
             typeColor = (enemyTypeSelected) ? Color.Aqua : Color.LightGray;
@@ -129,6 +161,8 @@ namespace Tower_Defense_Project
             removeWave.Update(Main.CurrentMouse);
             removeEnemy.Update(Main.CurrentMouse);
             back.Update(Main.CurrentMouse);
+
+            window.Update(Main.CurrentMouse);
 
             if (Main.CurrentMouse.LeftButton.Pressed) enemyTypeSelected = typeRect.Contains(mousePos);
 
@@ -155,6 +189,7 @@ namespace Tower_Defense_Project
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(viewBack, viewRect, Color.White);
+            window.Draw(spriteBatch);
             spriteBatch.Draw(background, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
 
             spriteBatch.Draw(addWave.Texture, addWave.Collision, Color.White);
