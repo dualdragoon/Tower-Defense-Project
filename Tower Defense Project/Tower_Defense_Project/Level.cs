@@ -72,7 +72,7 @@ namespace Tower_Defense_Project
 
         }
 
-        private void LoadContent(int levelIndex)
+        private void LoadContent(string levelName)
         {
             doc = new XmlDocument();
             doc.Load("Content/Towers/Stats/Tower Data.twd");
@@ -101,7 +101,7 @@ namespace Tower_Defense_Project
                 enemyStats.Add(101 + i, stats);
             }
 
-            background = Main.GameContent.Load<Texture2D>(@"Levels/Level" + levelIndex);
+            background = Main.GameContent.Load<Texture2D>(@"Levels/" + levelName);
             tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");
             tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");
             startWave = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave");
@@ -113,14 +113,14 @@ namespace Tower_Defense_Project
             waves = new WaveManager(this);
         }
 
-        public void LoadLevel(int levelIndex)
+        public void LoadLevel(string levelName)
         {
-            LoadContent(levelIndex);
+            LoadContent(levelName);
 
-            waves.LoadEnemies(string.Format("Level{0}", levelIndex));
+            waves.LoadEnemies(string.Format("{0}", levelName));
             waves.WaveFinished += WaveEnd;
 
-            tempFile = new StreamReader(@"Content/Levels/Level" + levelIndex + ".path");
+            tempFile = new StreamReader(@"Content/Levels/" + levelName + ".path");
             sw = new StreamWriter("temp2.temp");
             sw.Write(StringCipher.Decrypt(tempFile.ReadLine(), "temp2"));
             sw.Close();

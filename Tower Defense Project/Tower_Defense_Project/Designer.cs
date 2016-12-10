@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using Duality.Encrypting;
 using Duality.Interaction;
 using SharpDX;
@@ -67,18 +68,18 @@ namespace Tower_Defense_Project
             tex = Main.GameContent.Load<Texture2D>("Textures/SQUARE");
             font = Main.GameContent.Load<SpriteFont>("Fonts/Font");
 
-            buildUnpressed = Main.GameContent.Load<Texture2D>("Buttons/Build Path");
-            buildPressed = Main.GameContent.Load<Texture2D>("Buttons/Build Path Pressed");
+            buildUnpressed = Main.GameContent.Load<Texture2D>("Buttons/Designer/Build Path");
+            buildPressed = Main.GameContent.Load<Texture2D>("Buttons/Designer/Build Path Pressed");
             build = new Button(new Vector2(.7625f * Main.Scale.X, (420f / 480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1125f * Main.Scale.Y), 2, Main.CurrentMouse, buildUnpressed, buildPressed, true, Main.Scale.X, Main.Scale.Y);
             build.LeftClicked += Build;
 
-            previousNormal = Main.GameContent.Load<Texture2D>("Buttons/Previous Normal");
-            previousHovered = Main.GameContent.Load<Texture2D>("Buttons/Previous Hovered");
+            previousNormal = Main.GameContent.Load<Texture2D>("Buttons/Designer/Previous Normal");
+            previousHovered = Main.GameContent.Load<Texture2D>("Buttons/Designer/Previous Hovered");
             previous = new Button(new Vector2(.7625f * Main.Scale.X, .71f * Main.Scale.Y), (int)((106f / 1440f) * Main.Scale.X), (int)((122f / 900f) * Main.Scale.Y), 3, Main.CurrentMouse, previousNormal, previousHovered, true, Main.Scale.X, Main.Scale.Y);
             previous.LeftClicked += PreviousCurve;
 
-            nextNormal = Main.GameContent.Load<Texture2D>("Buttons/Next Normal");
-            nextHovered = Main.GameContent.Load<Texture2D>("Buttons/Next Hovered");
+            nextNormal = Main.GameContent.Load<Texture2D>("Buttons/Designer/Next Normal");
+            nextHovered = Main.GameContent.Load<Texture2D>("Buttons/Designer/Next Hovered");
             next = new Button(new Vector2(.9155f * Main.Scale.X, .71f * Main.Scale.Y), (int)((106f / 1440f) * Main.Scale.X), (int)((122f / 900f) * Main.Scale.Y), 4, Main.CurrentMouse, nextNormal, nextHovered, true, Main.Scale.X, Main.Scale.Y);
             next.LeftClicked += NextCurve;
 
@@ -190,6 +191,26 @@ namespace Tower_Defense_Project
             File.Delete("temp1.temp");
 
             path.Clear();
+
+            XmlDocument xml = new XmlDocument();
+            XmlNode rootNode = xml.CreateElement("Enemies");
+            xml.AppendChild(rootNode);
+
+            for (int i = 0; i < waveBuilder.Waves.Count; i++)
+            {
+                XmlNode userNode = xml.CreateElement(string.Format("Wave{0}", i + 1));
+                for (int j = 0; j < waveBuilder.Waves[i].Count; j++)
+                {
+                    XmlNode enemyNode = xml.CreateElement("E");
+                    enemyNode.InnerText = (int)waveBuilder.Waves[i][j] + "";
+                    userNode.AppendChild(enemyNode);
+                    rootNode.AppendChild(userNode);
+                }
+            }
+            xml.Save(string.Format("{0}.enm", name));
+            //write = new StreamWriter(string.Format("{0}.enm", name));
+
+            waveBuilder.Clear();
 
             fin = false;
         }

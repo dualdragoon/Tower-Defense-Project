@@ -25,8 +25,10 @@ namespace Tower_Defense_Project
         Level level;
         List<Texture2D> bloodDrops = new List<Texture2D>();
         List<Texture2D> bluePulse = new List<Texture2D>();
+        Menu menu;
         ParticleEngine generator = new ParticleEngine();
         SpriteBatch spriteBatch;
+        string levelName = "Level1";
         Texture2D[] cursors = new Texture2D[8];
         static bool isCustomMouseVisible = true;
         static ContentManager content;
@@ -39,14 +41,6 @@ namespace Tower_Defense_Project
         static Texture2D currentCursor, emptyCursor, selectedCursor;
 
         #region Properties
-        /// <summary>
-        /// Vector containing screen sizes for scaling.
-        /// </summary>
-        public static Vector2 Scale
-        {
-            get { return new Vector2(Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight); }
-        }
-
         public static bool IsCustomMouseVisible
         {
             get { return isCustomMouseVisible; }
@@ -62,16 +56,6 @@ namespace Tower_Defense_Project
         {
             get { return cursorType; }
             set { cursorType = value; }
-        }
-
-        public GameState CurrentState
-        {
-            get { return currentState; }
-            set 
-            { 
-                currentState = value;
-                StateChanged();
-            }
         }
 
         public static GraphicsDeviceManager Graphics
@@ -104,6 +88,30 @@ namespace Tower_Defense_Project
         {
             get { return selectedCursor; }
             set { selectedCursor = value; }
+        }
+
+        /// <summary>
+        /// Vector containing screen sizes for scaling.
+        /// </summary>
+        public static Vector2 Scale
+        {
+            get { return new Vector2(Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight); }
+        }
+
+        public GameState CurrentState
+        {
+            get { return currentState; }
+            set 
+            { 
+                currentState = value;
+                StateChanged();
+            }
+        }
+
+        public string LevelName
+        {
+            get { return levelName; }
+            set { levelName = value; }
         }
         #endregion
 
@@ -159,7 +167,7 @@ namespace Tower_Defense_Project
 
             bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
-            CurrentState = GameState.LevelDesigner;
+            CurrentState = GameState.Menu;
         }
 
         /// <summary>
@@ -211,6 +219,7 @@ namespace Tower_Defense_Project
             switch (CurrentState)
             {
                 case GameState.Menu:
+                    menu.Update(gameTime);
                     break;
 
                 case GameState.Play:
@@ -254,10 +263,12 @@ namespace Tower_Defense_Project
             {
                 case GameState.Play:
                     level = new Level();
-                    level.LoadLevel(1);
+                    level.LoadLevel(LevelName);
                     break;
 
                 case GameState.Menu:
+                    if (menu == null) { menu = new Menu(this); }
+                    else menu.LoadMenu(menu.LastMenu);
                     break;
 
                 case GameState.LevelDesigner:
@@ -285,6 +296,7 @@ namespace Tower_Defense_Project
             switch (CurrentState)
             {
                 case GameState.Menu:
+                    menu.Draw(gameTime, spriteBatch);
                     break;
 
                 case GameState.Play:

@@ -1,0 +1,27 @@
+<Menu>
+	<BackgroundTexture>Background</BackgroundTexture>
+	<Texture>
+		<TextureName>Texture 1</TextureName>
+		<Position>
+			<X>30</X>
+			<Y>50</Y>
+		</Position>
+	</Texture>
+	<Button>
+		<ButtonType>0</ButtonType>
+		<NormalTexture>Button 1</NormalTexture>
+		<HoveredTexture>Button 1 Hovered</HoveredTexture>
+		<Position>
+			<X>200</X>
+			<Y>200</Y>
+		</Position>
+		<Size>
+			<Width>50</Width>
+			<Height>75</Height>
+		</Size>
+		<Result>
+			<ResultType>0</ResultType>
+			<ResultName>Menu 2</ResultName>
+		</Result>
+	</Button>
+</Menu>
