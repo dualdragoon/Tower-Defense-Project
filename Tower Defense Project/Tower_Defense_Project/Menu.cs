@@ -17,8 +17,9 @@ namespace Tower_Defense_Project
     class Menu
     {
         Main baseMain;
+        string lastMenu = "Main Menu";
         Texture2D background;
-        string lastMenu = "Menu";
+        Vector2 intendedResolution;
 
         List<Button> buttons = new List<Button>();
         List<int> buttonResults = new List<int>();
@@ -34,7 +35,7 @@ namespace Tower_Defense_Project
         public Menu(Main main)
         {
             baseMain = main;
-            LoadMenu("Menu");
+            LoadMenu("Main Menu");
         }
 
         public void LoadMenu(string menuName)
@@ -47,7 +48,12 @@ namespace Tower_Defense_Project
 
                 foreach (XmlNode i in node)
                 {
-                    if (i.Name == "BackgroundTexture") background = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + i.InnerText + ".png");
+                    if (i.Name == "IntendedResolution")
+                    {
+                        XmlNode x = i.SelectSingleNode("X"), y = i.SelectSingleNode("Y");
+                        intendedResolution = new Vector2(float.Parse(x.InnerText), float.Parse(y.InnerText));
+                    }
+                    else if (i.Name == "BackgroundTexture") background = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + i.InnerText + ".png");
                     else if (i.Name == "Texture")
                     {
                         foreach (XmlNode l in i)
@@ -56,7 +62,7 @@ namespace Tower_Defense_Project
                             else if (l.Name == "Position")
                             {
                                 XmlNode x = l.SelectSingleNode("X"), y = l.SelectSingleNode("Y");
-                                textureLocations.Add(new Vector2(float.Parse(x.InnerText), float.Parse(y.InnerText)));
+                                textureLocations.Add(new Vector2((float.Parse(x.InnerText) / intendedResolution.X) * Main.Scale.X, (float.Parse(y.InnerText) / intendedResolution.Y) * Main.Scale.Y));
                             }
                         }
                     }
@@ -101,8 +107,8 @@ namespace Tower_Defense_Project
                                 if (l.Name == "Size")
                                 {
                                     XmlNode width = l.SelectSingleNode("Width"), height = l.SelectSingleNode("Height");
-                                    w = float.Parse(width.InnerText);
-                                    h = float.Parse(height.InnerText);
+                                    w = (float.Parse(width.InnerText) / intendedResolution.X) * Main.Scale.X;
+                                    h = (float.Parse(height.InnerText) / intendedResolution.Y) * Main.Scale.Y;
                                 }
                             }
                             else if (b == ButtonType.Circle)
@@ -110,9 +116,10 @@ namespace Tower_Defense_Project
                                 if (l.Name == "Diameter") diameter = float.Parse(l.InnerText);
                             }
                         }
-                        if (b == ButtonType.Rectangle) buttons.Add(new Button(pos, (int)w, (int)h, buttons.Count, Main.CurrentMouse, normal, hovered, true, 800, 480));
-                        else if (b == ButtonType.Circle) buttons.Add(new Button(pos, diameter, buttons.Count, Main.CurrentMouse, normal, hovered, true, 800, 480));
-                        else if (b == ButtonType.Ellipse) buttons.Add(new Button(pos, buttons.Count, Main.CurrentMouse, normal, hovered, true, 800, 480));
+                        pos = new Vector2((pos.X / intendedResolution.X) * Main.Scale.X, (pos.Y / intendedResolution.Y) * Main.Scale.Y);
+                        if (b == ButtonType.Rectangle) buttons.Add(new Button(pos, (int)w, (int)h, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
+                        else if (b == ButtonType.Circle) buttons.Add(new Button(pos, diameter, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
+                        else if (b == ButtonType.Ellipse) buttons.Add(new Button(pos, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
                     }
                 }
 
@@ -199,11 +206,14 @@ namespace Tower_Defense_Project
 
             for (int i = 0; i < textures.Count; i++)
             {
-                spriteBatch.Draw(textures[i], textureLocations[i], Color.White);
+                Vector2 textureSize = new Vector2((textures[i].Width / intendedResolution.X) * Main.Scale.X, (textures[i].Height / intendedResolution.Y) * Main.Scale.Y),
+                    textureLocation = textureLocations[i];
+                spriteBatch.Draw(textures[i], new RectangleF(textureLocation.X, textureLocation.Y, textureSize.X, textureSize.Y), Color.White);
             }
 
             foreach (Button i in buttons)
             {
+                RectangleF buttonRect = new RectangleF();
                 spriteBatch.Draw(i.Texture, i.Position, Color.White);
             }
         }

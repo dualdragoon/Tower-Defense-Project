@@ -157,7 +157,6 @@
     <ToolkitTexture Include="Content\Textures\Point.png" />
     <ToolkitTexture Include="Content\Textures\Transparent Pixel.png" />
     <ToolkitTexture Include="Content\Textures\help.png" />
-    <ToolkitTexture Include="Content\Levels\Level1.jpg" />
     <ToolkitTexture Include="Content\Buttons\Designer\Next Hovered.png" />
     <ToolkitTexture Include="Content\Buttons\Designer\Next Normal.png" />
     <ToolkitTexture Include="Content\Buttons\Designer\Previous Hovered.png" />
@@ -183,7 +182,19 @@
     <ToolkitTexture Include="Content\Buttons\Wave Builder\Next Wave Normal.png" />
     <ToolkitTexture Include="Content\Buttons\Wave Builder\Previous Wave Hovered.png" />
     <ToolkitTexture Include="Content\Buttons\Wave Builder\Previous Wave Normal.png" />
-    <None Include="Content\Menus\Menu.xml">
+    <None Include="Content\Menus\Main Menu.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Menus\Main Menu\Test Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Menus\Main Menu\Test Button Hovered.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Menus\Main Menu\Test Button Normal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Menus\Main Menu\Test Title.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Content\Textures\Trach Can work in progress.png" />

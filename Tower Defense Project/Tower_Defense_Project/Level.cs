@@ -75,7 +75,7 @@ namespace Tower_Defense_Project
         private void LoadContent(string levelName)
         {
             doc = new XmlDocument();
-            doc.Load("Content/Towers/Stats/Tower Data.twd");
+            doc.Load(@"Content/Towers/Stats/Tower Data.twd");
             node = doc.SelectSingleNode("/Towers");
 
             for (int i = 0; i < node.ChildNodes.Count; i++)
@@ -88,7 +88,7 @@ namespace Tower_Defense_Project
                 towerStats.Add(101 + i, stats);
             }
 
-            doc.Load("Content/Enemies/Stats/Enemy Data.emd");
+            doc.Load(@"Content/Enemies/Stats/Enemy Data.emd");
             node = doc.SelectSingleNode("/Enemies");
 
             for (int i = 0; i < node.ChildNodes.Count; i++)
@@ -117,7 +117,7 @@ namespace Tower_Defense_Project
         {
             LoadContent(levelName);
 
-            waves.LoadEnemies(string.Format("{0}", levelName));
+            waves.LoadEnemies(levelName);
             waves.WaveFinished += WaveEnd;
 
             tempFile = new StreamReader(@"Content/Levels/" + levelName + ".path");
@@ -287,7 +287,7 @@ namespace Tower_Defense_Project
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(background, new RectangleF(0, 0, Main.Graphics.GraphicsDevice.Viewport.Width, Main.Graphics.GraphicsDevice.Viewport.Height), Color.White);
+            spriteBatch.Draw(background, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
 
             spriteBatch.Draw(tex, storeSection, Color.Black);
 
