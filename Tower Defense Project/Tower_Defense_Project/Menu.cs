@@ -22,8 +22,11 @@ namespace Tower_Defense_Project
         Vector2 intendedResolution;
 
         List<Button> buttons = new List<Button>();
-        List<int> buttonResults = new List<int>();
-        List<string> buttonDestinations = new List<string>();
+        List<ButtonType> buttonTypes = new List<ButtonType>();
+        List<int> buttonLeftResults = new List<int>();
+        List<int> buttonRightResults = new List<int>();
+        List<string> buttonLeftDestinations = new List<string>();
+        List<string> buttonRightDestinations = new List<string>();
         List<Texture2D> textures = new List<Texture2D>();
         List<Vector2> textureLocations = new List<Vector2>();
 
@@ -45,15 +48,13 @@ namespace Tower_Defense_Project
                 XmlDocument read = new XmlDocument();
                 read.Load("Content/Menus/" + menuName + ".xml");
                 XmlNode node = read.SelectSingleNode("/Menu");
+                XmlNode res = node.SelectSingleNode("IntendedResolution");
+                XmlNode resX = res.SelectSingleNode("X"), resY = res.SelectSingleNode("Y");
+                intendedResolution = new Vector2(float.Parse(resX.InnerText), float.Parse(resY.InnerText));
 
                 foreach (XmlNode i in node)
                 {
-                    if (i.Name == "IntendedResolution")
-                    {
-                        XmlNode x = i.SelectSingleNode("X"), y = i.SelectSingleNode("Y");
-                        intendedResolution = new Vector2(float.Parse(x.InnerText), float.Parse(y.InnerText));
-                    }
-                    else if (i.Name == "BackgroundTexture") background = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + i.InnerText + ".png");
+                    if (i.Name == "BackgroundTexture") background = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + i.InnerText + ".png");
                     else if (i.Name == "Texture")
                     {
                         foreach (XmlNode l in i)
@@ -72,12 +73,13 @@ namespace Tower_Defense_Project
                         Texture2D normal = Main.GameContent.Load<Texture2D>("Textures/help"), hovered = Main.GameContent.Load<Texture2D>("Textures/help");
                         Vector2 pos = Vector2.Zero;
                         float w = 0, h = 0, diameter = 0;
-                        int resultType = 0;
+                        int leftResultType = 0, rightResultType = 0;
                         foreach (XmlNode l in i)
                         {
                             if (l.Name == "ButtonType")
                             {
                                 b = (ButtonType)int.Parse(l.InnerText);
+                                buttonTypes.Add(b);
                             }
                             else if (l.Name == "NormalTexture") normal = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + l.InnerText + ".png");
                             else if (l.Name == "HoveredTexture") hovered = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + l.InnerText + ".png");
@@ -86,21 +88,19 @@ namespace Tower_Defense_Project
                                 XmlNode x = l.SelectSingleNode("X"), y = l.SelectSingleNode("Y");
                                 pos = new Vector2(float.Parse(x.InnerText), float.Parse(y.InnerText));
                             }
-                            else if (l.Name == "Result")
+                            else if (l.Name == "LeftClickResult")
                             {
-                                foreach (XmlNode j in l)
-                                {
-                                    if (j.Name == "ResultType")
-                                    {
-                                        resultType = int.Parse(j.InnerText);
-                                        buttonResults.Add(resultType);
-                                    }
-                                    else if (j.Name == "ResultName")
-                                    {
-                                        if (resultType == 0) buttonDestinations.Add(j.InnerText);
-                                        else if (resultType == 1) buttonDestinations.Add(j.InnerText);
-                                    }
-                                }
+                                XmlNode type = l.SelectSingleNode("ResultType"), name = l.SelectSingleNode("ResultName");
+                                leftResultType = int.Parse(type.InnerText);
+                                buttonLeftResults.Add(leftResultType);
+                                buttonLeftDestinations.Add(name.InnerText);
+                            }
+                            else if (l.Name == "RightClickResult")
+                            {
+                                XmlNode type = l.SelectSingleNode("ResultType"), name = l.SelectSingleNode("ResultName");
+                                rightResultType = int.Parse(type.InnerText);
+                                buttonRightResults.Add(rightResultType);
+                                buttonRightDestinations.Add(name.InnerText);
                             }
                             else if (b == ButtonType.Rectangle)
                             {
@@ -125,29 +125,33 @@ namespace Tower_Defense_Project
 
                 foreach (Button i in buttons)
                 {
-                    if (buttonResults[i.ButtonNum] == 0)
+                    #region LeftClickResults
+                    if (buttonLeftResults[i.ButtonNum] == 0)
                     {
                         i.LeftClicked += (object sender, EventArgs e) =>
                         {
-                            string name = buttonDestinations[((Button)sender).ButtonNum];
+                            string name = buttonLeftDestinations[((Button)sender).ButtonNum];
                             background = Main.GameContent.Load<Texture2D>("Textures/help");
                             Clear();
                             lastMenu = menuName;
                             LoadMenu(name);
                         };
                     }
-                    else if (buttonResults[i.ButtonNum] == 1)
+                    else if (buttonLeftResults[i.ButtonNum] == 1)
                     {
                         i.LeftClicked += (object sender, EventArgs e) =>
                         {
-                            string name = buttonDestinations[((Button)sender).ButtonNum];
-                            Clear();
-                            lastMenu = menuName;
-                            baseMain.LevelName = name;
-                            baseMain.CurrentState = GameState.Play;
+                            string name = buttonLeftDestinations[((Button)sender).ButtonNum];
+                            if (name != "null")
+                            {
+                                Clear();
+                                lastMenu = menuName;
+                                baseMain.LevelName = name;
+                                baseMain.CurrentState = GameState.Play;
+                            }
                         };
                     }
-                    else if (buttonResults[i.ButtonNum] == 2)
+                    else if (buttonLeftResults[i.ButtonNum] == 2)
                     {
                         i.LeftClicked += (object sender, EventArgs e) =>
                         {
@@ -156,6 +160,44 @@ namespace Tower_Defense_Project
                             baseMain.CurrentState = GameState.LevelDesigner;
                         };
                     }
+                    #endregion
+
+                    #region RightClickResults
+                    if (buttonRightResults[i.ButtonNum] == 0)
+                    {
+                        i.RightClicked += (object sender, EventArgs e) =>
+                        {
+                            string name = buttonRightDestinations[((Button)sender).ButtonNum];
+                            background = Main.GameContent.Load<Texture2D>("Textures/help");
+                            Clear();
+                            lastMenu = menuName;
+                            LoadMenu(name);
+                        };
+                    }
+                    else if (buttonRightResults[i.ButtonNum] == 1)
+                    {
+                        i.RightClicked += (object sender, EventArgs e) =>
+                        {
+                            string name = buttonRightDestinations[((Button)sender).ButtonNum];
+                            if (name != "null")
+                            {
+                                Clear();
+                                lastMenu = menuName;
+                                baseMain.LevelName = name;
+                                baseMain.CurrentState = GameState.Play;
+                            }
+                        };
+                    }
+                    else if (buttonRightResults[i.ButtonNum] == 2)
+                    {
+                        i.RightClicked += (object sender, EventArgs e) =>
+                        {
+                            Clear();
+                            lastMenu = menuName;
+                            baseMain.CurrentState = GameState.LevelDesigner;
+                        };
+                    }
+                    #endregion
                 }
             }
             catch (AssetNotFoundException e)
@@ -172,10 +214,13 @@ namespace Tower_Defense_Project
         private void Clear()
         {
             buttons.Clear();
-            buttonDestinations.Clear();
+            buttonTypes.Clear();
+            buttonLeftDestinations.Clear();
+            buttonLeftResults.Clear();
+            buttonRightDestinations.Clear();
+            buttonRightResults.Clear();
             textures.Clear();
             textureLocations.Clear();
-            buttonResults.Clear();
         }
 
         public void Update(GameTime gameTime)
@@ -187,17 +232,6 @@ namespace Tower_Defense_Project
                 foreach (Button i in buttons) i.Update(Main.CurrentMouse);
             }
             catch { }
-
-            /*if (Main.CurrentKeyboard.IsKeyPressed(Keys.Enter))
-            {
-                background = Main.GameContent.Load<Texture2D>("Textures/help");
-                buttons.Clear();
-                buttonDestinations.Clear();
-                textures.Clear();
-                textureLocations.Clear();
-                buttonResults.Clear();
-                LoadMenu("Menu");
-            }*/
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -213,8 +247,14 @@ namespace Tower_Defense_Project
 
             foreach (Button i in buttons)
             {
-                RectangleF buttonRect = new RectangleF();
-                spriteBatch.Draw(i.Texture, i.Position, Color.White);
+                if (buttonTypes[i.ButtonNum] == ButtonType.Rectangle)
+                {
+                    spriteBatch.Draw(i.Texture, i.Collision, Color.White);
+                }
+                else
+                {
+                    spriteBatch.Draw(i.Texture, i.Position, Color.White);
+                }
             }
         }
     }

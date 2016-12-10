@@ -23,9 +23,13 @@
 			<Width>150</Width>
 			<Height>90</Height>
 		</Size>
-		<Result>
+		<LeftClickResult>
 			<ResultType>2</ResultType>
 			<ResultName>Level1</ResultName>
-		</Result>
+		</LeftClickResult>
+		<RightClickResult>
+			<ResultType>1</ResultType>
+			<ResultName>Level1</ResultName>
+		</RightClickResult>
 	</Button>
 </Menu>
