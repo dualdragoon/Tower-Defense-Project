@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SharpDX;
-using SharpDX.Toolkit;
+﻿using System.Collections.Generic;
 using SharpDX.Toolkit.Input;
 
 namespace Tower_Defense_Project

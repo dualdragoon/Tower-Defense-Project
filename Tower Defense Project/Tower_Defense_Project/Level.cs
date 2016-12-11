@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml;
 using SharpDX;
 using SharpDX.Toolkit;
-using SharpDX.Toolkit.Content;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
-using Duality;
 using Duality.Encrypting;
 using Duality.Interaction;
-using Duality.Records;
-using System.Reflection;
 
 namespace Tower_Defense_Project
 {

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using SharpDX;
-using SharpDX.Toolkit.Input;
 using SharpDX.Toolkit.Graphics;
 using Duality;
 using Duality.Interaction;

@@ -131,7 +131,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="InputParser.cs" />
-    <Compile Include="RectangleSelection.cs" />
     <Compile Include="Tower.cs" />
     <Compile Include="WaveManager.cs" />
     <Compile Include="WaveBuilder.cs" />
@@ -217,7 +216,6 @@
     <ToolkitTexture Include="Content\Textures\Cursors\RL Cursor.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\SS Cursor.png" />
     <ToolkitTexture Include="Content\Textures\Cursors\YL Cursor.png" />
-    <ToolkitTexture Include="Content\Textures\Null.png" />
     <ToolkitTexture Include="Content\Textures\SQUARE.png" />
     <ToolkitTexture Include="Content\Towers\Range.png" />
     <ToolkitTexture Include="Content\Towers\GL.png" />

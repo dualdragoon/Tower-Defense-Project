@@ -1,13 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
-using System.Xml;
-using SharpDX;
-using SharpDX.Serialization;
-using Duality;
-using Duality.Records;
-using Duality.Encrypting;
 
 namespace Tower_Defense_Project
 {

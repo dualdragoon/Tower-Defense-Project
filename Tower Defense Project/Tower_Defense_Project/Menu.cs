@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using Duality;
 using Duality.Interaction;
@@ -10,7 +8,6 @@ using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Content;
 using SharpDX.Toolkit.Graphics;
-using SharpDX.Toolkit.Input;
 
 namespace Tower_Defense_Project
 {
