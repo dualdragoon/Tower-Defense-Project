@@ -187,16 +187,6 @@ namespace Tower_Defense_Project
                     for (int i = 0; i < projectiles.Count; i++)
                     {
                         projectiles[i].Update(gameTime);
-
-                        if (projectiles[i].StageIndex == 1)
-                        {
-                            projectiles[i].target.Health -= projectiles[i].damage;
-                            projectiles.Remove(projectiles[i]);
-                        }
-                        else if (!projectiles[i].Origin.range.Contains(projectiles[i].Position))
-                        {
-                            projectiles.Remove(projectiles[i]);
-                        }
                     }
 
                 }

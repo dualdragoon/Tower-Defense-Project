@@ -120,8 +120,8 @@ namespace Tower_Defense_Project
             mouseManager = new MouseManager(this);
             keyboardManager = new KeyboardManager(this);
             content = Content;
-            graphics.PreferredBackBufferHeight = 768;
-            graphics.PreferredBackBufferWidth = 1366;
+            //graphics.PreferredBackBufferHeight = 768;
+            //graphics.PreferredBackBufferWidth = 1366;
             //graphics.PreferredBackBufferHeight = 900;
             //graphics.PreferredBackBufferWidth = 1440;
             /*graphics.IsFullScreen = true;
@@ -149,7 +149,7 @@ namespace Tower_Defense_Project
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            emptyCursor = Content.Load<Texture2D>("Textures/Null");
+            emptyCursor = Content.Load<Texture2D>("Textures/help");
 
             cursors[0] = Content.Load<Texture2D>("Textures/Cursors/BLL Cursor");
             cursors[1] = Content.Load<Texture2D>("Textures/Cursors/BL Cursor");
