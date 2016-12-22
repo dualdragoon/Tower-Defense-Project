@@ -50,6 +50,7 @@ namespace Tower_Defense_Project
         public uint Currency
         {
             get { return currency; }
+            set { currency = value; }
         }
 
         public Path Path
@@ -174,11 +175,6 @@ namespace Tower_Defense_Project
 
                         if (enemy.position == path.Points[path.Points.Count - 1])
                         {
-                            enemies.Remove(enemy);
-                        }
-                        else if (enemy.Health <= 0)
-                        {
-                            currency += enemy.Worth;
                             enemies.Remove(enemy);
                         }
                     }
