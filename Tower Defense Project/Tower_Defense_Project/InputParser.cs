@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SharpDX.Toolkit.Input;
 
 namespace Tower_Defense_Project
@@ -20,9 +21,16 @@ namespace Tower_Defense_Project
             keyboard.GetDownKeys(keys);
             bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
 
-            if (keys.Count > 0 && keyboard.IsKeyPressed(keys[0]))
+            if ((keys.Count > 0 && keyboard.IsKeyPressed(keys[0])) || (shift && keys.Count > 1))
             {
-                switch (keys[0])
+                Keys pressed;
+                if (keys.Count > 2 && keyboard.IsKeyPressed(keys[2]))
+                {
+                    pressed = (keys[0] == Keys.LeftShift || keys[0] == Keys.RightShift) ? keys[1] : keys[2];
+                }
+                else pressed = keys[0];
+                Console.WriteLine(pressed.ToString());
+                switch (pressed)
                 {
                     //Alphabet keys
                     case Keys.A: if (shift) { key = 'A'; } else { key = 'a'; } return true;
