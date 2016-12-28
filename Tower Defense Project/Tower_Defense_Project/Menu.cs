@@ -11,6 +11,38 @@ using SharpDX.Toolkit.Graphics;
 
 namespace Tower_Defense_Project
 {
+    sealed class MultiValue<T1, T2> : IEquatable<MultiValue<T1, T2>>
+    {
+        public T1 Value1 { get; private set; }
+        public T2 Value2 { get; private set; }
+
+        public MultiValue(T1 v1, T2 v2)
+        {
+            Value1 = v1;
+            Value2 = v2;
+        }
+
+        public bool Equals(MultiValue<T1, T2> other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            return EqualityComparer<T1>.Default.Equals(this.Value1, other.Value1) &&
+                   EqualityComparer<T2>.Default.Equals(this.Value2, other.Value2);
+        }
+
+        public override bool Equals(object o)
+        {
+            return Equals(o as MultiValue<T1, T2>);
+        }
+
+        public override int GetHashCode()
+        {
+            return EqualityComparer<T1>.Default.GetHashCode(Value1) * 37 +
+                   EqualityComparer<T2>.Default.GetHashCode(Value2);
+        }
+    }
     class Menu
     {
         Main baseMain;
@@ -20,10 +52,12 @@ namespace Tower_Defense_Project
 
         List<Button> buttons = new List<Button>();
         List<ButtonType> buttonTypes = new List<ButtonType>();
-        List<int> buttonLeftResults = new List<int>();
-        List<int> buttonRightResults = new List<int>();
-        List<string> buttonLeftDestinations = new List<string>();
-        List<string> buttonRightDestinations = new List<string>();
+        Dictionary<Button, List<MultiValue<int, string>>> buttonLefts = new Dictionary<Button, List<MultiValue<int, string>>>();
+        Dictionary<Button, List<MultiValue<int, string>>> buttonRights = new Dictionary<Button, List<MultiValue<int, string>>>();
+        //List<int> buttonLeftResults = new List<int>();
+        //List<int> buttonRightResults = new List<int>();
+        //List<string> buttonLeftDestinations = new List<string>();
+        //List<string> buttonRightDestinations = new List<string>();
         List<Texture2D> textures = new List<Texture2D>();
         List<Vector2> textureLocations = new List<Vector2>();
 
@@ -66,6 +100,11 @@ namespace Tower_Defense_Project
                     }
                     else if (i.Name == "Button")
                     {
+                        List<int> buttonLeftResults = new List<int>();
+                        List<int> buttonRightResults = new List<int>();
+                        List<string> buttonLeftDestinations = new List<string>();
+                        List<string> buttonRightDestinations = new List<string>();
+
                         ButtonType b = ButtonType.Ellipse;
                         Texture2D normal = Main.GameContent.Load<Texture2D>("Textures/help"), hovered = Main.GameContent.Load<Texture2D>("Textures/help");
                         Vector2 pos = Vector2.Zero;
@@ -117,82 +156,106 @@ namespace Tower_Defense_Project
                         if (b == ButtonType.Rectangle) buttons.Add(new Button(pos, (int)w, (int)h, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
                         else if (b == ButtonType.Circle) buttons.Add(new Button(pos, diameter, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
                         else if (b == ButtonType.Ellipse) buttons.Add(new Button(pos, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
+
+                        List<MultiValue<int, string>> firstValues = new List<MultiValue<int, string>>();
+                        for (int l = 0; l < buttonLeftResults.Count; l++)
+                        {
+                            firstValues.Add(new MultiValue<int, string>(buttonLeftResults[l], buttonLeftDestinations[l]));
+                        }
+                        buttonLefts.Add(buttons[buttons.Count - 1], firstValues);
+
+                        List<MultiValue<int, string>> secondValues = new List<MultiValue<int, string>>();
+                        for (int l = 0; l < buttonRightResults.Count; l++)
+                        {
+                            secondValues.Add(new MultiValue<int, string>(buttonRightResults[l], buttonRightDestinations[l]));
+                        }
+                        buttonRights.Add(buttons[buttons.Count - 1], secondValues);
                     }
                 }
 
                 foreach (Button i in buttons)
                 {
                     #region LeftClickResults
-                    if (buttonLeftResults[i.ButtonNum] == 0)
+                    List<MultiValue<int, string>> leftValues = buttonLefts[i];
+                    for (int l = 0; l < leftValues.Count; l++)
                     {
-                        i.LeftClicked += (object sender, EventArgs e) =>
+                        MultiValue<int, string> value = leftValues[l];
+                        if (value.Value1 == 0)
                         {
-                            string name = buttonLeftDestinations[((Button)sender).ButtonNum];
-                            background = Main.GameContent.Load<Texture2D>("Textures/help");
-                            Clear();
-                            lastMenu = menuName;
-                            LoadMenu(name);
-                        };
-                    }
-                    else if (buttonLeftResults[i.ButtonNum] == 1)
-                    {
-                        i.LeftClicked += (object sender, EventArgs e) =>
+                            i.LeftClicked += (object sender, EventArgs e) =>
+                            {
+                                string name = value.Value2;
+                                background = Main.GameContent.Load<Texture2D>("Textures/help");
+                                Clear();
+                                lastMenu = menuName;
+                                LoadMenu(name);
+                            };
+                        }
+                        else if (value.Value1 == 1)
                         {
-                            string name = buttonLeftDestinations[((Button)sender).ButtonNum];
-                            if (name != "null")
+                            i.LeftClicked += (object sender, EventArgs e) =>
+                            {
+                                string name = value.Value2;
+                                if (name != "null")
+                                {
+                                    Clear();
+                                    lastMenu = menuName;
+                                    baseMain.LevelName = name;
+                                    baseMain.CurrentState = GameState.Play;
+                                }
+                            };
+                        }
+                        else if (value.Value1 == 2)
+                        {
+                            i.LeftClicked += (object sender, EventArgs e) =>
                             {
                                 Clear();
                                 lastMenu = menuName;
-                                baseMain.LevelName = name;
-                                baseMain.CurrentState = GameState.Play;
-                            }
-                        };
-                    }
-                    else if (buttonLeftResults[i.ButtonNum] == 2)
-                    {
-                        i.LeftClicked += (object sender, EventArgs e) =>
-                        {
-                            Clear();
-                            lastMenu = menuName;
-                            baseMain.CurrentState = GameState.LevelDesigner;
-                        };
+                                baseMain.CurrentState = GameState.LevelDesigner;
+                            };
+                        } 
                     }
                     #endregion
 
                     #region RightClickResults
-                    if (buttonRightResults[i.ButtonNum] == 0)
+                    List<MultiValue<int, string>> rightValues = buttonRights[i];
+                    for (int l = 0; l < rightValues.Count; l++)
                     {
-                        i.RightClicked += (object sender, EventArgs e) =>
+                        MultiValue<int, string> value = rightValues[l];
+                        if (value.Value1 == 0)
                         {
-                            string name = buttonRightDestinations[((Button)sender).ButtonNum];
-                            background = Main.GameContent.Load<Texture2D>("Textures/help");
-                            Clear();
-                            lastMenu = menuName;
-                            LoadMenu(name);
-                        };
-                    }
-                    else if (buttonRightResults[i.ButtonNum] == 1)
-                    {
-                        i.RightClicked += (object sender, EventArgs e) =>
+                            i.RightClicked += (object sender, EventArgs e) =>
+                            {
+                                string name = value.Value2;
+                                background = Main.GameContent.Load<Texture2D>("Textures/help");
+                                Clear();
+                                lastMenu = menuName;
+                                LoadMenu(name);
+                            };
+                        }
+                        else if (value.Value1 == 1)
                         {
-                            string name = buttonRightDestinations[((Button)sender).ButtonNum];
-                            if (name != "null")
+                            i.RightClicked += (object sender, EventArgs e) =>
+                            {
+                                string name = value.Value2;
+                                if (name != "null")
+                                {
+                                    Clear();
+                                    lastMenu = menuName;
+                                    baseMain.LevelName = name;
+                                    baseMain.CurrentState = GameState.Play;
+                                }
+                            };
+                        }
+                        else if (value.Value1 == 2)
+                        {
+                            i.RightClicked += (object sender, EventArgs e) =>
                             {
                                 Clear();
                                 lastMenu = menuName;
-                                baseMain.LevelName = name;
-                                baseMain.CurrentState = GameState.Play;
-                            }
-                        };
-                    }
-                    else if (buttonRightResults[i.ButtonNum] == 2)
-                    {
-                        i.RightClicked += (object sender, EventArgs e) =>
-                        {
-                            Clear();
-                            lastMenu = menuName;
-                            baseMain.CurrentState = GameState.LevelDesigner;
-                        };
+                                baseMain.CurrentState = GameState.LevelDesigner;
+                            };
+                        } 
                     }
                     #endregion
                 }
@@ -212,10 +275,8 @@ namespace Tower_Defense_Project
         {
             buttons.Clear();
             buttonTypes.Clear();
-            buttonLeftDestinations.Clear();
-            buttonLeftResults.Clear();
-            buttonRightDestinations.Clear();
-            buttonRightResults.Clear();
+            buttonLefts.Clear();
+            buttonRights.Clear();
             textures.Clear();
             textureLocations.Clear();
         }

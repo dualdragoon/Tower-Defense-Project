@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DesignCurve.cs" />
+    <Compile Include="Dialogue.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="DesignPath.cs" />
     <Compile Include="Level.cs" />
@@ -196,6 +197,7 @@
     <None Include="Content\Menus\Main Menu\Test Title.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\Dialogues\Test Dialogue.xml" />
     <Content Include="Content\Textures\Trach Can work in progress.png" />
     <ToolkitTexture Include="Content\Textures\Wave Designer Background.png" />
     <Content Include="TD Guidlines.txt" />
