@@ -85,6 +85,7 @@
     <Reference Include="IronPython.Wpf">
       <HintPath>..\..\packages\IronPython.2.7.7\lib\Net40\IronPython.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Dynamic">
       <HintPath>..\..\packages\DynamicLanguageRuntime.1.1.2\lib\Net40\Microsoft.Dynamic.dll</HintPath>
     </Reference>
@@ -167,6 +168,9 @@
     <ToolkitTexture Include="Content\Buttons\Start Wave Pressed.png" />
     <ToolkitTexture Include="Content\Buttons\Start Wave.png" />
     <None Include="Content\Levels\Level1.enm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Projectiles\Small.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Towers\Stats\Tower Data.twd">

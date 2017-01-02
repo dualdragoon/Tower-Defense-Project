@@ -8,10 +8,12 @@ using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
 using Duality.Encrypting;
 using Duality.Interaction;
+using Microsoft.Scripting.Hosting;
+using IronPython.Hosting;
 
 namespace Tower_Defense_Project
 {
-    class Level
+    public class Level
     {
         public Button temp1, start;
         private bool pause = false, waveRunning = false;
@@ -28,9 +30,9 @@ namespace Tower_Defense_Project
         XmlDocument doc;
         XmlNode node;
 
-        public List<Enemy> enemies = new List<Enemy>();
-        public List<Tower> towers = new List<Tower>();
-        public List<Projectile> projectiles = new List<Projectile>();
+        internal List<Enemy> enemies = new List<Enemy>();
+        internal List<Tower> towers = new List<Tower>();
+        internal List<Projectile> projectiles = new List<Projectile>();
 
         private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
         private static Dictionary<int, string[]> enemyStats = new Dictionary<int, string[]>();
@@ -53,7 +55,7 @@ namespace Tower_Defense_Project
             set { currency = value; }
         }
 
-        public Path Path
+        internal Path Path
         {
             get { return path; }
         }
@@ -106,7 +108,7 @@ namespace Tower_Defense_Project
             font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
 
             storeSection = new RectangleF(.75f * Main.Scale.X, 0f * Main.Scale.Y, (.25f * Main.Scale.X) + 1, (Main.Scale.Y) + 1);
-            waves = new WaveManager(this);
+			waves = new WaveManager(this);
         }
 
         public void LoadLevel(string levelName)
@@ -139,7 +141,17 @@ namespace Tower_Defense_Project
             temp1.LeftClicked += ButtonHandling;
 
             start = new Button(new Vector2(.7625f * Main.Scale.X, (380f / 480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1875f * Main.Scale.Y), 2, Main.CurrentMouse, startWave, startWavePressed, true, Main.Scale.X, Main.Scale.Y);
-            start.LeftClicked += ButtonHandling;
+			start.LeftClicked += ButtonHandling;
+
+			ScriptEngine engine = Python.CreateEngine();
+			ScriptSource source = engine.CreateScriptSourceFromFile("Content/Projectiles/Small.py");
+			ScriptScope scope = engine.CreateScope();
+			scope.Engine.Runtime.LoadAssembly(typeof(Program).Assembly);
+			source.Execute(scope);
+
+			dynamic Test2 = scope.GetVariable("Projectile");
+			dynamic test = Test2(new Tower(this, TowerType.GL, Main.CurrentMouse), Vector2.Zero, new Enemy(this, EnemyType.Peon), ProjectileType.Small, this);
+			//test2.go();
         }
 
         public void Update(GameTime gameTime)

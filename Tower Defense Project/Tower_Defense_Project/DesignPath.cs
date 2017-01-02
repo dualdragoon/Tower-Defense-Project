@@ -5,13 +5,13 @@ using SharpDX.Toolkit.Graphics;
 
 namespace Tower_Defense_Project
 {
-    class DesignPath : Path
+    public class DesignPath : Path
     {
         private List<DesignCurve> curves = new List<DesignCurve>();
         private int selected;
         private Texture2D tex, pressed, unPressed;
 
-        public new List<DesignCurve> Curves
+        internal new List<DesignCurve> Curves
         {
             get { return curves; }
             set { curves = value; }

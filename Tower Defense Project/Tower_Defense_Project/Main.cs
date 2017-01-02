@@ -5,6 +5,8 @@ using SharpDX.Toolkit.Content;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
 using Duality;
+using Microsoft.Scripting.Hosting;
+using IronPython.Hosting;
 
 namespace Tower_Defense_Project
 {
@@ -165,7 +167,7 @@ namespace Tower_Defense_Project
 
             bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
-            CurrentState = GameState.Menu;
+			CurrentState = GameState.Menu;
         }
 
         /// <summary>

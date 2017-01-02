@@ -8,7 +8,7 @@ using SharpDX.Toolkit.Graphics;
 
 namespace Tower_Defense_Project
 {
-	private class DialogueChoice
+	class DialogueChoice
 	{
 		public string ChoiceType { get; private set; }
 		public string Name { get; private set; }
@@ -30,7 +30,7 @@ namespace Tower_Defense_Project
 		}
 	}
 
-	private class DialogueNode
+	class DialogueNode
 	{
 		public string Name { get; set; }
 		public string Line { get; private set; }

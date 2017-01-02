@@ -7,14 +7,14 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
-    enum TowerType
+    public enum TowerType
     {
         GL = 101,
         RL = 102,
         BLL = 103,
     }
 
-    class Tower
+    public class Tower
     {
         public bool isPlaced = false, isSelected;
         public Ellipse range, tower;

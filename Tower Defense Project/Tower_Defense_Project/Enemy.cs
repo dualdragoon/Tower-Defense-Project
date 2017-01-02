@@ -6,14 +6,14 @@ using Duality.Graphics;
 
 namespace Tower_Defense_Project
 {
-    enum EnemyType
+    public enum EnemyType
     {
         Peon = 101,
         Scout = 102,
         Brute = 103,
     }
 
-    class Enemy
+    public class Enemy
     {
         private Animation moveAnimation;
         private AnimationPlayer sprite;

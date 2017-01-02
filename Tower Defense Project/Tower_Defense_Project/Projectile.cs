@@ -6,14 +6,14 @@ using SharpDX.Toolkit.Graphics;
 
 namespace Tower_Defense_Project
 {
-    enum ProjectileType
+    public enum ProjectileType
     { 
         Small = 101, 
         Medium = 102, 
         Large = 103,
     }
 
-    class Projectile
+    public class Projectile
     {
         public int damage;
         int stageIndex;

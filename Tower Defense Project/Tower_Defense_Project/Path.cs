@@ -6,7 +6,7 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
-    class Path
+    public class Path
     {
         public float[] lengths;
         private Texture2D tex;
