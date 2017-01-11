@@ -262,7 +262,8 @@ namespace Tower_Defense_Project
             switch(currentState)
             {
                 case GameState.Play:
-                    level = new Level();
+					if (level == null) level = new Level();
+					else level.Clear();
                     level.LoadLevel(LevelName);
                     break;
 
