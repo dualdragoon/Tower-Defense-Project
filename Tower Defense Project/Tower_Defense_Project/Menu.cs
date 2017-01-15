@@ -233,7 +233,8 @@ namespace Tower_Defense_Project
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(background, Vector2.Zero, Color.White);
+            RectangleF rect = new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y);
+            spriteBatch.Draw(background, rect, Color.White);
 
             for (int i = 0; i < textures.Count; i++)
             {

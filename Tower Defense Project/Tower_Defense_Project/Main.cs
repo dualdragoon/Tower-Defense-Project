@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Toolkit;
@@ -149,7 +150,7 @@ namespace Tower_Defense_Project
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            emptyCursor = Content.Load<Texture2D>("Textures/Null");
+            emptyCursor = Content.Load<Texture2D>("Textures/help");
 
             cursors[0] = Content.Load<Texture2D>("Textures/Cursors/BLL Cursor");
             cursors[1] = Content.Load<Texture2D>("Textures/Cursors/BL Cursor");

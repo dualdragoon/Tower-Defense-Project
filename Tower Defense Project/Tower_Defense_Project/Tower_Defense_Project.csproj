@@ -184,16 +184,13 @@
     <None Include="Content\Menus\Main Menu.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Menus\Main Menu\Test Background.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Content\Menus\Main Menu\Test Button Hovered.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Menus\Main Menu\Test Button Normal.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Menus\Main Menu\Test Title.png">
+    <None Include="Content\Menus\Main Menu\Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Content\Textures\Trach Can work in progress.png" />

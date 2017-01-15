@@ -3,14 +3,7 @@
 		<X>1366</X>
 		<Y>768</Y>
 	</IntendedResolution>
-	<BackgroundTexture>Test Background</BackgroundTexture>
-	<Texture>
-		<TextureName>Test Title</TextureName>
-		<Position>
-			<X>383</X>
-			<Y>50</Y>
-		</Position>
-	</Texture>
+	<BackgroundTexture>Background</BackgroundTexture>
 	<Button>
 		<ButtonType>0</ButtonType>
 		<NormalTexture>Test Button Normal</NormalTexture>

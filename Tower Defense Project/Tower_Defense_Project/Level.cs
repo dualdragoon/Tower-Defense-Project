@@ -22,7 +22,7 @@ namespace Tower_Defense_Project
         private SpriteFont font;
         private StreamWriter sw;
         private StreamReader tempFile, read;
-        private Texture2D tex, background, tempButton1, tempButton2, startWave, startWavePressed;
+        private Texture2D tex, /*background,*/ tempButton1, tempButton2, startWave, startWavePressed;
         private uint currency;
         private WaveManager waves;
         XmlDocument doc;
@@ -96,7 +96,7 @@ namespace Tower_Defense_Project
                 enemyStats.Add(101 + i, stats);
             }
 
-            background = Main.GameContent.Load<Texture2D>(@"Levels/" + levelName);
+            //background = Main.GameContent.Load<Texture2D>(@"Levels/" + levelName);
             tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");
             tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");
             startWave = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave");
@@ -282,7 +282,7 @@ namespace Tower_Defense_Project
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(background, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
+            //spriteBatch.Draw(background, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
 
             spriteBatch.Draw(tex, storeSection, Color.Black);
 
