@@ -34,7 +34,7 @@ namespace Tower_Defense_Project
         internal List<Enemy> enemies = new List<Enemy>();
         internal List<Tower> towers = new List<Tower>();
         internal List<Projectile> projectiles = new List<Projectile>();
-		internal Dictionary<int, dynamic> projectileTypes = new Dictionary<int, dynamic>();
+        internal Dictionary<int, dynamic> projectileTypes = new Dictionary<int, dynamic>();
 
         private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
         private static Dictionary<int, string[]> enemyStats = new Dictionary<int, string[]>();
@@ -68,22 +68,22 @@ namespace Tower_Defense_Project
         }
 
         public Level()
-		{
-			ScriptEngine engine = Python.CreateEngine();
-			ScriptSource source = engine.CreateScriptSourceFromFile("Content/Projectiles/Small.py");
-			ScriptScope scope = engine.CreateScope();
-			scope.Engine.Runtime.LoadAssembly(typeof(Program).Assembly);
-			try
-			{
-				source.Execute(scope);
-			}
-			catch (Exception e)
-			{
-				ErrorHandler.RecordError(2, 102, "Shrug", e.Message);
-			}
+        {
+            ScriptEngine engine = Python.CreateEngine();
+            ScriptSource source = engine.CreateScriptSourceFromFile("Content/Projectiles/Small.py");
+            ScriptScope scope = engine.CreateScope();
+            scope.Engine.Runtime.LoadAssembly(typeof(Program).Assembly);
+            try
+            {
+                source.Execute(scope);
+            }
+            catch (Exception e)
+            {
+                ErrorHandler.RecordError(2, 102, "Shrug", e.Message);
+            }
 
-			dynamic Test2 = scope.GetVariable("Projectile");
-			dynamic test = Test2(new Tower(this, TowerType.GL, Main.CurrentMouse), Vector2.Zero, new Enemy(this, EnemyType.Peon), ProjectileType.Small, this);
+            dynamic Test2 = scope.GetVariable("Projectile");
+            //dynamic test = Test2(new Tower(this, TowerType.GL, Main.CurrentMouse), Vector2.Zero, new Enemy(this, EnemyType.Peon), ProjectileType.Small, this);
         }
 
         private void LoadContent(string levelName)
@@ -124,7 +124,7 @@ namespace Tower_Defense_Project
             font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
 
             storeSection = new RectangleF(.75f * Main.Scale.X, 0f * Main.Scale.Y, (.25f * Main.Scale.X) + 1, (Main.Scale.Y) + 1);
-			waves = new WaveManager(this);
+            waves = new WaveManager(this);
         }
 
         public void LoadLevel(string levelName)
@@ -157,17 +157,17 @@ namespace Tower_Defense_Project
             temp1.LeftClicked += ButtonHandling;
 
             start = new Button(new Vector2(.7625f * Main.Scale.X, (380f / 480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1875f * Main.Scale.Y), 2, Main.CurrentMouse, startWave, startWavePressed, true, Main.Scale.X, Main.Scale.Y);
-			start.LeftClicked += ButtonHandling;
+            start.LeftClicked += ButtonHandling;
 
-			//test2.go();
+            //test2.go();
         }
 
-		public void Clear()
-		{
-			enemies.Clear();
-			towers.Clear();
-			projectiles.Clear();
-		}
+        public void Clear()
+        {
+            enemies.Clear();
+            towers.Clear();
+            projectiles.Clear();
+        }
 
         public void Update(GameTime gameTime)
         {
@@ -215,7 +215,6 @@ namespace Tower_Defense_Project
                     {
                         projectiles[i].Update(gameTime);
                     }
-
                 }
                 catch
                 {
