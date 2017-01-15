@@ -11,9 +11,9 @@ using SharpDX.Toolkit.Input;
 
 namespace Tower_Defense_Project
 {
-    enum DesignerForm { Path, Enemies }
+    public enum DesignerForm { Path, Enemies }
 
-    class Designer
+    public class Designer
     {
         public RectangleF storeSection;
         bool fin, x1Selected, y1Selected, x2Selected, y2Selected, x3Selected, y3Selected, x4Selected, y4Selected, nameSelected, anythingSelected;

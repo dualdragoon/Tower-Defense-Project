@@ -6,6 +6,8 @@ using SharpDX.Toolkit.Content;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
 using Duality;
+using Microsoft.Scripting.Hosting;
+using IronPython.Hosting;
 
 namespace Tower_Defense_Project
 {
@@ -121,8 +123,8 @@ namespace Tower_Defense_Project
             mouseManager = new MouseManager(this);
             keyboardManager = new KeyboardManager(this);
             content = Content;
-            graphics.PreferredBackBufferHeight = 768;
-            graphics.PreferredBackBufferWidth = 1366;
+            //graphics.PreferredBackBufferHeight = 768;
+            //graphics.PreferredBackBufferWidth = 1366;
             //graphics.PreferredBackBufferHeight = 900;
             //graphics.PreferredBackBufferWidth = 1440;
             /*graphics.IsFullScreen = true;
@@ -166,7 +168,7 @@ namespace Tower_Defense_Project
 
             bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
-            CurrentState = GameState.Menu;
+			CurrentState = GameState.Menu;
         }
 
         /// <summary>
@@ -261,7 +263,8 @@ namespace Tower_Defense_Project
             switch(currentState)
             {
                 case GameState.Play:
-                    level = new Level();
+					if (level == null) level = new Level();
+					else level.Clear();
                     level.LoadLevel(LevelName);
                     break;
 

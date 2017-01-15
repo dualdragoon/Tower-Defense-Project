@@ -1,4 +1,5 @@
-﻿using SharpDX;
+﻿using System;
+using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
 using SharpDX.Toolkit.Input;
@@ -6,14 +7,14 @@ using Duality;
 
 namespace Tower_Defense_Project
 {
-    enum TowerType
+    public enum TowerType
     {
         GL = 101,
         RL = 102,
         BLL = 103,
     }
 
-    class Tower
+    public class Tower
     {
         public bool isPlaced = false, isSelected;
         public Ellipse range, tower;
@@ -27,6 +28,14 @@ namespace Tower_Defense_Project
         private Texture2D texture, rangeTex;
         public TowerType type;
         private uint cost;
+
+        private event EventHandler fired;
+
+        public event EventHandler Fired
+        {
+            add { fired += value; }
+            remove { fired -= value; }
+        }
 
         public Level Level
         {
@@ -71,6 +80,7 @@ namespace Tower_Defense_Project
             tower = new Ellipse((size / 800f) * Main.Scale.X, (size / 480f) * Main.Scale.Y, new Vector2(mouse.X * Main.Scale.X, mouse.Y * Main.Scale.Y));
 
             LoadContent();
+            Fired += OnFire;
         }
 
         private void LoadContent()
@@ -87,7 +97,7 @@ namespace Tower_Defense_Project
                 attackTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (attackTimer > minAttackTimer)
                 {
-                    Fire();
+                    if (fired != null) fired.Invoke(this, EventArgs.Empty);
                 }
 
                 if (mouse.RightButton.Pressed)
@@ -104,7 +114,7 @@ namespace Tower_Defense_Project
             }
         }
 
-        private void Fire()
+        private void OnFire(object sender, EventArgs e)
         {
             attackTimer = 0f;
             for (int i = 0; i < Level.enemies.Count; i++)

@@ -1,18 +1,19 @@
-﻿using SharpDX;
+﻿using System;
+using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
 using Duality.Graphics;
 
 namespace Tower_Defense_Project
 {
-    enum EnemyType
+    public enum EnemyType
     {
         Peon = 101,
         Scout = 102,
         Brute = 103,
     }
 
-    class Enemy
+    public class Enemy
     {
         private Animation moveAnimation;
         private AnimationPlayer sprite;
@@ -25,6 +26,14 @@ namespace Tower_Defense_Project
         private string spriteSet;
         private uint worth;
         public Vector2 position;
+
+        private event EventHandler death;
+
+        public event EventHandler Death
+        {
+            add { death += value; }
+            remove { death -= value; }
+        }
 
         public Level Level
         {
@@ -50,6 +59,18 @@ namespace Tower_Defense_Project
         public uint Worth
         {
             get { return worth; }
+        }
+
+        private void OnDeath()
+        {
+            death += BaseDeath;
+            if (death != null) death.Invoke(this, EventArgs.Empty);
+        }
+
+        private void BaseDeath(object sender, EventArgs e)
+        {
+            level.Currency += Worth;
+            level.enemies.Remove(this);
         }
 
         /// <summary>
@@ -95,6 +116,8 @@ namespace Tower_Defense_Project
 
         public void Update(GameTime gameTime)
         {
+            if (Health <= 0) OnDeath();
+
             if (stageIndex != path.Points.Count - 1)
             {
                 stagePos += speed * seconds;

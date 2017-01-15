@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
 
 namespace Tower_Defense_Project
 {
-    enum ProjectileType
+    public enum ProjectileType
     { 
         Small = 101, 
         Medium = 102, 
         Large = 103,
     }
 
-    class Projectile
+    public class Projectile
     {
         public int damage;
         int stageIndex;
@@ -26,6 +27,14 @@ namespace Tower_Defense_Project
         private float[] lengths;
         private Vector2[] directions;
         private List<Vector2> Points = new List<Vector2>();
+
+        private event EventHandler hit;
+
+        public event EventHandler Hit
+        {
+            add { hit += value; }
+            remove { hit -= value; }
+        }
 
         public Level Level
         {
@@ -82,6 +91,7 @@ namespace Tower_Defense_Project
                     break;
             }
 
+            Hit += OnHit;
             LoadContent();
         }
 
@@ -123,6 +133,12 @@ namespace Tower_Defense_Project
             }
         }
 
+        private void OnHit(object sender, EventArgs e)
+        {
+            target.Health -= damage;
+            Level.projectiles.Remove(this);
+        }
+
         public void Update(GameTime gameTime)
         {
             Build();
@@ -141,6 +157,14 @@ namespace Tower_Defense_Project
                     }
                 }
                 position = Points[stageIndex] + directions[stageIndex] * stagePos;
+            }
+            if (StageIndex == 1)
+            {
+                if (hit != null) hit.Invoke(this, EventArgs.Empty);
+            }
+            else if (!Origin.range.Contains(Position))
+            {
+                Level.projectiles.Remove(this);
             }
         }
 

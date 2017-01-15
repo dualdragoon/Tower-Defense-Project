@@ -136,22 +136,22 @@ namespace Tower_Defense_Project
                 particles.Add(GenerateDrippingParticle());
             }*/
 
-            for (int particle = 0; particle < particles.Count; particle++)
+            for (int i = 0; i < particles.Count; i++)
             {
-                particles[particle].Update();
-                if (particles[particle].TTL <= 0)
+                particles[i].Update();
+                if (particles[i].TTL <= 0)
                 {
-                    particles.RemoveAt(particle);
-                    particle--;
+                    particles.RemoveAt(i);
+                    i--;
                 }
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (int index = 0; index < particles.Count; index++)
+            for (int i = 0; i < particles.Count; i++)
             {
-                particles[index].Draw(spriteBatch);
+                particles[i].Draw(spriteBatch);
             }
         }
     }
