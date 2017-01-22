@@ -8,9 +8,9 @@ namespace Tower_Defense_Project
 {
     public enum ProjectileType
     { 
-        Small = 101, 
-        Medium = 102, 
-        Large = 103,
+        Small = 0, 
+        Medium = 1, 
+        Large = 2,
     }
 
     public class Projectile

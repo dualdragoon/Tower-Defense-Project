@@ -139,7 +139,7 @@ namespace Tower_Defense_Project
                 if (selectedEnemy != null && waves.Count != 0) selectedEnemy = (selectedEnemy != 0) ? waves[(int)selectedWave].Count - 1 : waves[(int)selectedWave].Count;
                 if (waves.Count != 0) window.Strings = StringsFromTypes(waves[(int)selectedWave]);
                 if (waves.Count == 0) selectedWave = -1;
-                else window.Strings = new List<string>();
+                else window.Strings = StringsFromTypes(waves[(int)selectedWave]);
             }
         }
 

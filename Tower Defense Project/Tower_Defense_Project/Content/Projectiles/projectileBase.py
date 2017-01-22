@@ -1,15 +1,11 @@
 ﻿import sys
 import System
 sys.path.append(System.IO.Directory.GetCurrentDirectory() + '\Lib')
-sys.path.append(System.IO.Directory.GetCurrentDirectory() + '\Content\Projectiles')
 import clr
 clr.AddReference(r'Duality.dll')
 clr.AddReference(r'SharpDX.dll')
 clr.AddReference(r'SharpDX.Toolkit.Game.dll')
 clr.AddReference(r'SharpDX.Toolkit.Graphics.dll')
-import projectileBase
-from projectileBase import ProjectileBase
-print clr.References
 from System.Collections.Generic import List
 from Duality import ErrorHandler
 from SharpDX import Vector2, Color
@@ -17,9 +13,7 @@ from SharpDX.Toolkit import GameTime
 from SharpDX.Toolkit.Graphics import Texture2D, SpriteBatch
 from Tower_Defense_Project import Tower, Enemy, Level, Main
 
-idNum = 0
-
-class Projectile(ProjectileBase):
+class ProjectileBase(object):
 	speed = .1
 	seconds = 10.0
 	damage = 1
@@ -38,6 +32,20 @@ class Projectile(ProjectileBase):
 		self.Build()
 		self.LoadContent()
 	
+	def Build(self):
+		self.points.Clear()
+		self.points.Add(self.position)
+		self.points.Add(self.target.position)
+		
+		self.lengths = [None] * (self.points.Count - 1)
+		self.directions = [None] * (self.points.Count - 1)
+		
+		for i in range(0, self.points.Count - 1):
+			self.directions[i] = self.points[i + 1] - self.points[i]
+			self.lengths[i] = self.directions[i].Length()
+			self.directions[i].Normalize()
+		
+	
 	def LoadContent(self):
 		self.tex = Main.GameContent.Load[Texture2D]("Projectiles/Small Projectile")
 	
@@ -52,6 +60,24 @@ class Projectile(ProjectileBase):
 			self.UpdateMovement()
 		except Exception, Argument:
 			ErrorHandler.RecordError(2, 102, "Help", str(Argument))
+		
+	
+	def UpdateMovement(self):
+		if (self.stageIndex != self.points.Count - 1):
+			self.stagePos = self.stagePos + (self.speed * self.seconds)
+			while (self.stagePos > self.lengths[self.stageIndex]):
+				self.stagePos = self.stagePos - self.lengths[self.stageIndex]
+				self.stageIndex = self.stageIndex + 1
+				if (self.stageIndex == self.points.Count - 1):
+					self.position = self.points[self.stageIndex]
+					return
+				
+			self.position = self.points[self.stageIndex] + Vector2(self.directions[self.stageIndex].X * self.stagePos, self.directions[self.stageIndex].Y * self.stagePos)
+			
+		if (self.stageIndex == 1):
+			self.OnHit()
+		if (not self.origin.range.Contains(self.position)):
+			self.level.testProjectiles.Remove(self)
 		
 	
 	def Draw(self, spriteBatch):

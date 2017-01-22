@@ -121,7 +121,15 @@ namespace Tower_Defense_Project
             {
                 if (range.Contains(Level.enemies[i].position))
                 {
-                    Level.projectiles.Add(new Projectile(this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], projectileType, Level));
+                    //Level.projectiles.Add(new Projectile(this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], projectileType, Level));
+                    try
+                    {
+                        Level.testProjectiles.Add(Level.projectileTypes[(int)projectileType](this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], Level));
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorHandler.RecordError(2, 102, ex.Message, ex.StackTrace);
+                    }
                     break;
                 }
             }
@@ -227,7 +235,7 @@ namespace Tower_Defense_Project
 
         private bool CanPlace()
         {
-            try { return !Level.Path.Intersects(tower) && TowerCheck() && !tower.Intersects(Level.storeSection); }
+            try { return !Level.Path.Intersects(tower) && TowerCheck() && !collision.Intersects(Level.storeSection); }
             catch { return false; }
         }
 

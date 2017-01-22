@@ -170,7 +170,7 @@
     <None Include="Content\Levels\Level1.enm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Projectiles\Small.py">
+    <None Include="Content\Projectiles\small.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Towers\Stats\Tower Data.twd">
@@ -223,6 +223,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Content\Dialogues\Test Dialogue.xml" />
+    <None Include="Content\Projectiles\medium.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Projectiles\projectileBase.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Projectiles\__init__.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Content\Textures\Trach Can work in progress.png" />
     <ToolkitTexture Include="Content\Textures\Wave Designer Background.png" />
     <Content Include="Lib\site-packages\README.txt" />
