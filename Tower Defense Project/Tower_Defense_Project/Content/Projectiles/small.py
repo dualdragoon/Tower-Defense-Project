@@ -43,7 +43,7 @@ class Projectile(ProjectileBase):
 	
 	def OnHit(self):
 		self.target.Health -= self.damage
-		self.level.testProjectiles.Remove(self)
+		self.level.projectiles.Remove(self)
 	
 	def Update(self, gameTime):
 		self.Build()

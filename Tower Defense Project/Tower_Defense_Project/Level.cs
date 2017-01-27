@@ -33,8 +33,7 @@ namespace Tower_Defense_Project
 
         internal List<Enemy> enemies = new List<Enemy>();
         internal List<Tower> towers = new List<Tower>();
-        internal List<Projectile> projectiles = new List<Projectile>();
-        public List<dynamic> testProjectiles = new List<dynamic>();
+        public List<dynamic> projectiles = new List<dynamic>();
         internal Dictionary<int, dynamic> projectileTypes = new Dictionary<int, dynamic>();
 
         private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
@@ -183,7 +182,6 @@ namespace Tower_Defense_Project
             enemies.Clear();
             towers.Clear();
             projectiles.Clear();
-            testProjectiles.Clear();
         }
 
         public void Update(GameTime gameTime)
@@ -231,11 +229,6 @@ namespace Tower_Defense_Project
                     for (int i = 0; i < projectiles.Count; i++)
                     {
                         projectiles[i].Update(gameTime);
-                    }
-
-                    for (int i = 0; i < testProjectiles.Count; i++)
-                    {
-                        testProjectiles[i].Update(gameTime);
                     }
                 }
                 catch
@@ -342,12 +335,7 @@ namespace Tower_Defense_Project
                 tower.Draw(spriteBatch);
             }
 
-            foreach (Projectile projectile in projectiles)
-            {
-                projectile.Draw(spriteBatch);
-            }
-
-            foreach (dynamic projectile in testProjectiles)
+            foreach (dynamic projectile in projectiles)
             {
                 projectile.Draw(spriteBatch);
             }

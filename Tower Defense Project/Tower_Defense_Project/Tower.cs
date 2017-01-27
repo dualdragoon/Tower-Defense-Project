@@ -22,7 +22,7 @@ namespace Tower_Defense_Project
         private float attackTimer = 0, minAttackTimer, diameter;
         private int size;
         private Level level;
-        private ProjectileType projectileType;
+        private int projectileType;
         private RectangleF collision;
         private string spriteSet;
         private Texture2D texture, rangeTex;
@@ -72,7 +72,7 @@ namespace Tower_Defense_Project
             size = int.Parse(Level.TowerStats[(int)type][1]);
             diameter = float.Parse(Level.TowerStats[(int)type][2]);
             minAttackTimer = float.Parse(Level.TowerStats[(int)type][3]);
-            projectileType = (ProjectileType)int.Parse(Level.TowerStats[(int)type][4]);
+            projectileType = int.Parse(Level.TowerStats[(int)type][4]);
             cost = uint.Parse(Level.TowerStats[(int)type][5]);
 
             collision = new RectangleF((mouse.X * Main.Scale.X) - ((size / 800f) * Main.Scale.X), (mouse.Y * Main.Scale.Y) - ((size / 480f) * Main.Scale.Y), (size / 800f) * Main.Scale.X, (size / 480f) * Main.Scale.Y);
@@ -124,7 +124,7 @@ namespace Tower_Defense_Project
                     //Level.projectiles.Add(new Projectile(this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], projectileType, Level));
                     try
                     {
-                        Level.testProjectiles.Add(Level.projectileTypes[(int)projectileType](this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], Level));
+                        Level.projectiles.Add(Level.projectileTypes[projectileType](this, collision.Location + new Vector2(collision.Width / 2), Level.enemies[i], Level));
                     }
                     catch (Exception ex)
                     {
