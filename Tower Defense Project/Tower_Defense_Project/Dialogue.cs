@@ -16,13 +16,7 @@ namespace Tower_Defense_Project
 
         private Dialogue ParentDialogue { get; }
 
-        private event EventHandler choiceSelected;
-
-        public event EventHandler ChoiceSelected
-        {
-            add { choiceSelected += value; }
-            remove { choiceSelected -= value; }
-        }
+        public event EventHandler ChoiceSelected;
 
         public DialogueChoice(Dialogue dialogue, string type, string name, string result)
         {
@@ -35,7 +29,7 @@ namespace Tower_Defense_Project
             {
                 ChoiceSelected += (object sender, EventArgs e) =>
                 {
-                    ParentDialogue.LoadNode("Result");
+                    ParentDialogue.LoadNode(Result);
                 };
             }
             else if (type == "Console")
@@ -46,6 +40,8 @@ namespace Tower_Defense_Project
                 };
             }
         }
+
+        public void Invoke() => ChoiceSelected?.Invoke(this, EventArgs.Empty);
     }
 
     class DialogueNode
@@ -68,19 +64,36 @@ namespace Tower_Defense_Project
 
         public DialogueNode(string line, Texture2D portrait, string node, params DialogueChoice[] choices)
         {
+            SpriteFont tempFont = Main.GameContent.Load<SpriteFont>("Fonts/Font");
             Line = line;
             Portrait = portrait;
             Choices = choices.ToList();
             Name = "???";
+            Rectangles = new List<RectangleF>();
 
             if (choices[0].ChoiceType != "Node")
             {
                 DestinationNode = node;
             }
 
-            for (int i = Choices.Count; i > 0; i--)
+            Rectangles.Add(new RectangleF(0, 0, 0, 0));
+
+            for (int i = 0; i < Choices.Count; i++)
             {
-                
+                Rectangles.Add(new RectangleF(Rectangles.Last().X + Rectangles.Last().Width + 10, 430, tempFont.MeasureString(Choices[i].Name).X + 20, 60));
+            }
+
+            Rectangles.RemoveAt(0);
+        }
+
+        public void Update()
+        {
+            for (int i = 0; i < Choices.Count; i++)
+            {
+                if (Rectangles[i].Contains(Main.CurrentMouse.X * Main.Scale.X, Main.CurrentMouse.Y * Main.Scale.Y) && Main.CurrentMouse.LeftButton.Pressed)
+                {
+                    Choices[i].Invoke();
+                }
             }
         }
 
@@ -88,10 +101,21 @@ namespace Tower_Defense_Project
         {
             if (Choices != null) Choices.Clear();
         }
+
+        public void Draw(SpriteBatch spriteBatch, SpriteFont font)
+        {
+            spriteBatch.DrawString(font, Line, new Vector2(10, 480), Color.Black);
+
+            for (int i = 0; i < Rectangles.Count; i++)
+            {
+                spriteBatch.DrawString(font, Choices[i].Name, new Vector2(Rectangles[i].X + 10, Rectangles[i].Y + 10), Color.Black);
+            }
+        }
     }
 
     class Dialogue
     {
+        string currentName;
         private DialogueNode node;
         SpriteFont font;
 
@@ -105,13 +129,20 @@ namespace Tower_Defense_Project
 
         public Dialogue()
         {
+            LoadContent();
+        }
+
+        public void LoadContent()
+        {
             font = Main.GameContent.Load<SpriteFont>("Fonts/Font");
+            Nodes = new Dictionary<string, XmlNode>();
         }
 
         public void LoadDialogue(string dialogueName)
         {
+            currentName = dialogueName;
             XmlDocument doc = new XmlDocument();
-            doc.Load(string.Format("{0}.xml", dialogueName));
+            doc.Load(string.Format("Content/Dialogues/{0}.xml", dialogueName));
             XmlNode root = doc.SelectSingleNode("/Dialogue");
 
             foreach (XmlNode i in root)
@@ -153,7 +184,7 @@ namespace Tower_Defense_Project
 
             line = WrapText(line, Main.Scale.X, 150);
 
-            Texture2D portrait = Main.GameContent.Load<Texture2D>(string.Format("Dialogues/{0}/{1}_{2}", "DialogueTitle", root.Attributes["name"].InnerText, root.Attributes["image"].InnerText));
+            Texture2D portrait = Main.GameContent.Load<Texture2D>(string.Format("Dialogues/{0}/{1}_{2}", currentName, root.Attributes["name"].InnerText, root.Attributes["image"].InnerText));
 
             if (dialogueChoices.Count == 0)
             {
@@ -163,6 +194,15 @@ namespace Tower_Defense_Project
             {
                 Node = new DialogueNode(line, portrait, "", dialogueChoices.ToArray());
             }
+            else
+            {
+                Node = new DialogueNode(line, portrait, "", dialogueChoices.ToArray());
+            }
+        }
+
+        public void Update()
+        {
+            Node.Update();
         }
 
         public string WrapText(string text, float maxLineWidth, float maxLineHeight)
@@ -177,6 +217,7 @@ namespace Tower_Defense_Project
 
             foreach (string word in words)
             {
+                Console.WriteLine(word);
                 Vector2 size = font.MeasureString(word);
 
                 if (lineWidth + size.X < maxLineWidth)
@@ -202,6 +243,11 @@ namespace Tower_Defense_Project
             }
 
             return newText;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            Node.Draw(spriteBatch, font);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Tower_Defense_Project
 {
     public enum CustomCursor { BLL_Cursor, BL_Cursor, GL_Cursor, IT_Cursor, OL_Cursor, RL_Cursor, SS_Cursor, YL_Cursor }
 
-    public enum GameState { Menu, Play, LevelDesigner }
+    public enum GameState { Menu, Play, LevelDesigner, Dialogue }
 
     /// <summary>
     /// This is the main type for your game
@@ -21,6 +21,7 @@ namespace Tower_Defense_Project
     public class Main : Game
     {
         Designer designer;
+        Dialogue dialogue;
         GameState currentState;
         int offset;
         Level level;
@@ -123,8 +124,8 @@ namespace Tower_Defense_Project
             mouseManager = new MouseManager(this);
             keyboardManager = new KeyboardManager(this);
             content = Content;
-            //graphics.PreferredBackBufferHeight = 768;
-            //graphics.PreferredBackBufferWidth = 1366;
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1366;
             //graphics.PreferredBackBufferHeight = 900;
             //graphics.PreferredBackBufferWidth = 1440;
             /*graphics.IsFullScreen = true;
@@ -168,7 +169,7 @@ namespace Tower_Defense_Project
 
             bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
-			CurrentState = GameState.Menu;
+			CurrentState = GameState.Dialogue;
         }
 
         /// <summary>
@@ -231,6 +232,10 @@ namespace Tower_Defense_Project
                     designer.Update(gameTime);
                     break;
 
+                case GameState.Dialogue:
+                    dialogue.Update();
+                    break;
+
                 default:
                     break;
             }
@@ -269,13 +274,18 @@ namespace Tower_Defense_Project
                     break;
 
                 case GameState.Menu:
-                    if (menu == null) { menu = new Menu(this); }
+                    if (menu == null) menu = new Menu(this); 
                     else menu.LoadMenu(menu.LastMenu);
                     break;
 
                 case GameState.LevelDesigner:
                     designer = new Designer();
                     designer.LoadContent();
+                    break;
+
+                case GameState.Dialogue:
+                    if (dialogue == null) dialogue = new Dialogue();
+                    dialogue.LoadDialogue("Test Dialogue");
                     break;
 
                 default:
@@ -307,6 +317,10 @@ namespace Tower_Defense_Project
 
                 case GameState.LevelDesigner:
                     designer.Draw(gameTime, spriteBatch);
+                    break;
+
+                case GameState.Dialogue:
+                    dialogue.Draw(spriteBatch);
                     break;
 
                 default:

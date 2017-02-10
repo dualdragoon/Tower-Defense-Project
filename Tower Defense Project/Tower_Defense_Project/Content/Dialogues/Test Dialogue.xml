@@ -1,8 +1,6 @@
 ﻿<Dialogue>
 	<Character name = "Dualdragoon" image = "Normal" idNum = "Start">
-		<Action type = "Speech">
-			This is a test of the Dialogue System. The whole thing is susceptible to sudden and massive changes.
-		</Action>
+		<Action type = "Speech">This is a test of the Dialogue System. The whole thing is susceptible to sudden and massive changes.</Action>
 		<Action type = "Choice">
 			<Choice name = "Yes" type = "Console">You chose yes.</Choice>
 			<Choice name = "No" type = "Console">You chose no.</Choice>

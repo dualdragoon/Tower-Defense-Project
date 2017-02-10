@@ -40,4 +40,6 @@ Side-Side-Side Idea:
 
 Story:
 	
-	You are in the only super solar system in the galaxy(it has an incredible amount of planets) and you are among many people attempting to solve the mystery of what holds this system together.
+	Exploration, along the lines of coming across some previously unknown and thought to be uninhabited solar system and working your way from the outside inward discovering secrets and learning more about an ancient civilization that previously inhabited the system.
+
+	Your goal is to go and set up mining or harvesting bases across each of the planets in the system. Only being totally unprepared for enemies you would have to start off improvising the tech you have available and can find into weapons.
