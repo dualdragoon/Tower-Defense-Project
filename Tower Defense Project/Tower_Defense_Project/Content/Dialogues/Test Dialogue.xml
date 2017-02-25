@@ -1,5 +1,5 @@
 ﻿<Dialogue>
-	<Character name = "Dualdragoon" image = "Normal" idNum = "Start">
+	<Character name = "Dualdragoon" image = "Normal" idNum = "Start" background = "Dialogue Test Background" side = "Left">
 		<Action type = "Speech">This is a test of the Dialogue System. The whole thing is susceptible to sudden and massive changes.</Action>
 		<Action type = "Choice">
 			<Choice name = "Yes" type = "Console">You chose yes.</Choice>

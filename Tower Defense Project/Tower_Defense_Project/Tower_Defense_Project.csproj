@@ -234,6 +234,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <ToolkitTexture Include="Content\Dialogues\Test Dialogue\Dualdragoon_Normal.jpg" />
+    <ToolkitTexture Include="Content\Dialogues\Dialogue Test Background.png" />
+    <ToolkitTexture Include="Content\Dialogues\Dialogue Text Backdrop.png" />
     <Content Include="Content\Textures\Trach Can work in progress.png" />
     <ToolkitTexture Include="Content\Textures\Wave Designer Background.png" />
     <Content Include="Lib\site-packages\README.txt" />

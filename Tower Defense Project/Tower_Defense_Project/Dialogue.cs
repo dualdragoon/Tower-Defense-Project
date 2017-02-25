@@ -55,17 +55,18 @@ namespace Tower_Defense_Project
         private Color TextColor = new Color(208, 112, 41);
         public List<DialogueChoice> Choices;
         public List<RectangleF> Rectangles = new List<RectangleF>();
+		public RectangleF Side;
         public Texture2D Portrait, Background, Backdrop;
 
-        public DialogueNode(string line, Texture2D portrait, Texture2D backdrop, Texture2D background, string node)
+        public DialogueNode(string line, string name, string side, Texture2D portrait, Texture2D backdrop, Texture2D background, string node)
         {
-            Init(line, portrait, backdrop, background, node);
+            Init(line, name, side, portrait, backdrop, background, node);
         }
 
-        public DialogueNode(string line, Texture2D portrait, Texture2D backdrop, Texture2D background, string node, params DialogueChoice[] choices)
+        public DialogueNode(string line, string name, string side, Texture2D portrait, Texture2D backdrop, Texture2D background, string node, params DialogueChoice[] choices)
         {
             SpriteFont tempFont = Main.GameContent.Load<SpriteFont>("Fonts/Font");
-            Init(line, portrait, backdrop, background, node);
+            Init(line, name, side, portrait, backdrop, background, node);
             Choices = choices.ToList();
 
             if (choices[0].ChoiceType != "Node")
@@ -77,21 +78,24 @@ namespace Tower_Defense_Project
 
             for (int i = 0; i < Choices.Count; i++)
             {
-                Rectangles.Add(new RectangleF(Rectangles.Last().X + Rectangles.Last().Width + 10, 480, tempFont.MeasureString(Choices[i].Name).X + 20, 60));
+                Rectangles.Add(new RectangleF(Rectangles.Last().X + Rectangles.Last().Width + (10f / 1366f) * Main.Scale.X, .625f * Main.Scale.Y, ((tempFont.MeasureString(Choices[i].Name).X + 20) / 1366f) * Main.Scale.X, .078125f * Main.Scale.Y));
             }
 
             Rectangles.RemoveAt(0);
         }
 
-        private void Init(string line, Texture2D portrait, Texture2D backdrop, Texture2D background, string node)
+        private void Init(string line, string name, string side, Texture2D portrait, Texture2D backdrop, Texture2D background, string node)
         {
             Line = line;
             Portrait = portrait;
             Backdrop = backdrop;
             Background = background;
             DestinationNode = node;
-            Name = "???";
-        }
+            Name = name;
+
+			float x = (side == "Right") ? (1066f / 1363f) * Main.Scale.X : 0;
+			Side = new RectangleF(x, (185f / 768f) * Main.Scale.Y, (300f / 1366f) * Main.Scale.X, (300f / 768f) * Main.Scale.Y);
+		}
 
         public void Update()
         {
@@ -114,11 +118,16 @@ namespace Tower_Defense_Project
             spriteBatch.Draw(Background, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
             spriteBatch.Draw(Backdrop, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
 
-            spriteBatch.DrawString(font, Line, new Vector2(10, 530), TextColor);
+            spriteBatch.DrawString(font, Line, new Vector2((10f / 1366f) * Main.Scale.X, (530f / 768f) * Main.Scale.Y), TextColor);
+
+			spriteBatch.Draw(Portrait, Side, Color.White);
+
+			Vector2 nameSize = font.MeasureString(Name);
+			spriteBatch.DrawString(font, Name, new Vector2(((683f - nameSize.X / 2) / 1366f) * Main.Scale.X, (450f / 768f) * Main.Scale.Y), Color.Black);
 
             for (int i = 0; i < Rectangles.Count; i++)
             {
-                spriteBatch.DrawString(font, Choices[i].Name, new Vector2(Rectangles[i].X + 10, Rectangles[i].Y + 10), TextColor);
+                spriteBatch.DrawString(font, Choices[i].Name, new Vector2(Rectangles[i].X + (10f / 1366f) * Main.Scale.X, Rectangles[i].Y + (10f / 768f) * Main.Scale.Y), TextColor);
             }
         }
     }
@@ -165,12 +174,12 @@ namespace Tower_Defense_Project
             LoadNode("Start");
         }
 
-        public void LoadNode(string idNum)
-        {
-            XmlNode root = Nodes[idNum];
-            List<DialogueChoice> dialogueChoices = new List<DialogueChoice>();
-            List<XmlNode> choices = new List<XmlNode>();
-            string line = "";
+		public void LoadNode(string idNum)
+		{
+			XmlNode root = Nodes[idNum];
+			List<DialogueChoice> dialogueChoices = new List<DialogueChoice>();
+			List<XmlNode> choices = new List<XmlNode>();
+			string line = "", charName = root.Attributes["name"].InnerText, side = root.Attributes["side"].InnerText;
 
             foreach (XmlNode i in root)
             {
@@ -210,15 +219,15 @@ namespace Tower_Defense_Project
 
             if (dialogueChoices.Count == 0)
             {
-                Node = new DialogueNode(line, portrait, backDrop, background, root.Attributes["destination"].InnerText);
+                Node = new DialogueNode(line, charName, side, portrait, backDrop, background, root.Attributes["destination"].InnerText);
             }
             else if (dialogueChoices[0].ChoiceType == "Node")
             {
-                Node = new DialogueNode(line, portrait, backDrop, background, "", dialogueChoices.ToArray());
+                Node = new DialogueNode(line, charName, side, portrait, backDrop, background, "", dialogueChoices.ToArray());
             }
             else
             {
-                Node = new DialogueNode(line, portrait, backDrop, background, "", dialogueChoices.ToArray());
+                Node = new DialogueNode(line, charName, side, portrait, backDrop, background, "", dialogueChoices.ToArray());
             }
         }
 
