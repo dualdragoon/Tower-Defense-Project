@@ -13,6 +13,8 @@ from SharpDX.Toolkit import GameTime
 from SharpDX.Toolkit.Graphics import Texture2D, SpriteBatch
 from Tower_Defense_Project import Tower, Enemy, Level, Main
 
+idNum = -1
+
 class ProjectileBase(object):
 	speed = .1
 	seconds = 10.0
