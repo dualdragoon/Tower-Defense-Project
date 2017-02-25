@@ -189,27 +189,4 @@ namespace Tower_Defense_Project
             }
         }
     }
-
-    class PathException : Exception
-    {
-        public PathException()
-            : base()
-        { }
-
-        public PathException(string message)
-            : base(message)
-        { }
-
-        public PathException(string format, params object[] args)
-            : base(string.Format(format, args))
-        { }
-
-        public PathException(string message, Exception innerException)
-            : base(message, innerException)
-        { }
-
-        public PathException(string format, Exception innerException, params object[] args)
-            : base(string.Format(format, args), innerException)
-        { }
-    }
 }

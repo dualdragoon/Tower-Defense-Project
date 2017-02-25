@@ -11,36 +11,36 @@ using SharpDX.Toolkit.Graphics;
 
 namespace Tower_Defense_Project
 {
-    sealed class MultiValue<T1, T2> : IEquatable<MultiValue<T1, T2>>
+    sealed class MultiValue<V1, V2> : IEquatable<MultiValue<V1, V2>>
     {
-        public T1 Value1 { get; private set; }
-        public T2 Value2 { get; private set; }
+        public V1 Value1 { get; private set; }
+        public V2 Value2 { get; private set; }
 
-        public MultiValue(T1 v1, T2 v2)
+        public MultiValue(V1 v1, V2 v2)
         {
             Value1 = v1;
             Value2 = v2;
         }
 
-        public bool Equals(MultiValue<T1, T2> other)
+        public bool Equals(MultiValue<V1, V2> other)
         {
             if (other == null)
             {
                 return false;
             }
-            return EqualityComparer<T1>.Default.Equals(this.Value1, other.Value1) &&
-                   EqualityComparer<T2>.Default.Equals(this.Value2, other.Value2);
+            return EqualityComparer<V1>.Default.Equals(this.Value1, other.Value1) &&
+                   EqualityComparer<V2>.Default.Equals(this.Value2, other.Value2);
         }
 
         public override bool Equals(object o)
         {
-            return Equals(o as MultiValue<T1, T2>);
+            return Equals(o as MultiValue<V1, V2>);
         }
 
         public override int GetHashCode()
         {
-            return EqualityComparer<T1>.Default.GetHashCode(Value1) * 37 +
-                   EqualityComparer<T2>.Default.GetHashCode(Value2);
+            return EqualityComparer<V1>.Default.GetHashCode(Value1) * 37 +
+                   EqualityComparer<V2>.Default.GetHashCode(Value2);
         }
     }
     class Menu
