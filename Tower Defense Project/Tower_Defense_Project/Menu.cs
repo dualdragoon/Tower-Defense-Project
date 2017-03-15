@@ -22,15 +22,25 @@ namespace Tower_Defense_Project
             Value2 = v2;
         }
 
-        public bool Equals(MultiValue<V1, V2> other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-            return EqualityComparer<V1>.Default.Equals(this.Value1, other.Value1) &&
-                   EqualityComparer<V2>.Default.Equals(this.Value2, other.Value2);
-        }
+		public bool Equals(MultiValue<V1, V2> other)
+		{
+			if (other == null)
+			{
+				return false;
+			}
+			return EqualityComparer<V1>.Default.Equals(this.Value1, other.Value1) &&
+				   EqualityComparer<V2>.Default.Equals(this.Value2, other.Value2);
+		}
+
+		public static bool operator ==(MultiValue<V1, V2> m1, MultiValue<V1, V2> m2)
+		{
+			return (m1.Equals(m2));
+		}
+
+		public static bool operator !=(MultiValue<V1, V2> m1, MultiValue<V1, V2> m2)
+		{
+			return (!m1.Equals(m2));
+		}
 
         public override bool Equals(object o)
         {
