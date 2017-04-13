@@ -14,338 +14,329 @@ using IronPython.Hosting;
 
 namespace Tower_Defense_Project
 {
-    public class Level
-    {
-        public Button temp1, start;
-        private bool pause = false, waveRunning = false;
-        private float escapeTimer = 0, minEscapeTimer = .05f;
-        private int pointsNum, waveNum;
-        private Path path;
-        public RectangleF storeSection;
-        private SpriteFont font;
-        private StreamWriter sw;
-        private StreamReader tempFile, read;
-        private Texture2D tex, /*background,*/ tempButton1, tempButton2, startWave, startWavePressed;
-        private uint currency;
-        private WaveManager waves;
-        XmlDocument doc;
-        XmlNode node;
+	public class Level
+	{
+		public Button start;
+		private bool pause = false, waveRunning = false;
+		private float escapeTimer = 0, minEscapeTimer = .05f;
+		private int pointsNum, waveNum;
+		private Path path;
+		public RectangleF storeSection;
+		private SpriteFont font;
+		private StreamWriter sw;
+		private StreamReader tempFile, read;
+		private Texture2D tex, /*background,*/ tempButton1, tempButton2, startWave, startWavePressed;
+		private uint currency;
+		private WaveManager waves;
+		XmlDocument doc;
+		XmlNode node;
 
-        internal List<Enemy> enemies = new List<Enemy>();
-        internal List<Tower> towers = new List<Tower>();
-        public List<dynamic> projectiles = new List<dynamic>();
-        internal Dictionary<int, dynamic> projectileTypes = new Dictionary<int, dynamic>();
+		private List<Button> buttons = new List<Button>();
+		internal List<Enemy> enemies = new List<Enemy>();
+		internal List<Tower> towers = new List<Tower>();
+		public List<dynamic> projectiles = new List<dynamic>();
+		internal Dictionary<int, dynamic> projectileTypes = new Dictionary<int, dynamic>();
 
-        private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
-        private static Dictionary<int, string[]> enemyStats = new Dictionary<int, string[]>();
+		private static Dictionary<int, string[]> towerStats = new Dictionary<int, string[]>();
+		private static Dictionary<int, string[]> enemyStats = new Dictionary<int, string[]>();
 
-        public static Dictionary<int, string[]> TowerStats
-        {
-            get { return towerStats; }
-            set { towerStats = value; }
-        }
+		public static Dictionary<int, string[]> TowerStats
+		{
+			get { return towerStats; }
+			set { towerStats = value; }
+		}
 
-        public static Dictionary<int, string[]> EnemyStats
-        {
-            get { return enemyStats; }
-            set { enemyStats = value; }
-        }
+		public static Dictionary<int, string[]> EnemyStats
+		{
+			get { return enemyStats; }
+			set { enemyStats = value; }
+		}
 
-        public uint Currency
-        {
-            get { return currency; }
-            set { currency = value; }
-        }
+		public uint Currency
+		{
+			get { return currency; }
+			set { currency = value; }
+		}
 
-        internal Path Path
-        {
-            get { return path; }
-        }
+		internal Path Path
+		{
+			get { return path; }
+		}
 
-        public SpriteFont Font
-        {
-            get { return font; }
-        }
+		public SpriteFont Font
+		{
+			get { return font; }
+		}
 
-        public Level()
-        {
-            ScriptEngine engine = Python.CreateEngine();
-            ScriptSource source = engine.CreateScriptSourceFromFile("Content/Projectiles/small.py");
-            ScriptScope scope = engine.CreateScope();
-            scope.Engine.Runtime.LoadAssembly(typeof(Program).Assembly);
-            try
-            {
-                source.Execute(scope);
-            }
-            catch (Exception e)
-            {
-                ErrorHandler.RecordError(2, 102, "Shrug", e.Message);
-            }
+		public Level()
+		{
+			ScriptEngine engine = Python.CreateEngine();
+			ScriptSource source = engine.CreateScriptSourceFromFile("Content/Projectiles/small.py");
+			ScriptScope scope = engine.CreateScope();
+			scope.Engine.Runtime.LoadAssembly(typeof(Program).Assembly);
+			try
+			{
+				source.Execute(scope);
+			}
+			catch (Exception e)
+			{
+				ErrorHandler.RecordError(2, 102, "Shrug", e.Message);
+			}
 
-            projectileTypes.Add(scope.GetVariable("idNum"), scope.GetVariable("Projectile"));
+			projectileTypes.Add(scope.GetVariable("idNum"), scope.GetVariable("Projectile"));
 
-            source = engine.CreateScriptSourceFromFile("Content/Projectiles/medium.py");
-            scope = engine.CreateScope();
-            scope.Engine.Runtime.LoadAssembly(typeof(Program).Assembly);
+			source = engine.CreateScriptSourceFromFile("Content/Projectiles/medium.py");
+			scope = engine.CreateScope();
+			scope.Engine.Runtime.LoadAssembly(typeof(Program).Assembly);
 
-            try
-            {
-                source.Execute(scope);
-            }
-            catch (Exception e)
-            {
-                ErrorHandler.RecordError(2, 102, "Shrug", e.Message);
-            }
+			try
+			{
+				source.Execute(scope);
+			}
+			catch (Exception e)
+			{
+				ErrorHandler.RecordError(2, 102, "Shrug", e.Message);
+			}
 
-            projectileTypes.Add(scope.GetVariable("idNum"), scope.GetVariable("Projectile"));
-            //dynamic test = Test2(new Tower(this, TowerType.GL, Main.CurrentMouse), Vector2.Zero, new Enemy(this, EnemyType.Peon), ProjectileType.Small, this);
-        }
+			projectileTypes.Add(scope.GetVariable("idNum"), scope.GetVariable("Projectile"));
+		}
 
-        private void LoadContent(string levelName)
-        {
-            doc = new XmlDocument();
-            doc.Load(@"Content/Towers/Stats/Tower Data.twd");
-            node = doc.SelectSingleNode("/Towers");
+		private void LoadContent(string levelName)
+		{
+			doc = new XmlDocument();
+			doc.Load(@"Content/Towers/Stats/Tower Data.twd");
+			node = doc.SelectSingleNode("/Towers");
 
-            for (int i = 0; i < node.ChildNodes.Count; i++)
-            {
-                string[] stats = new string[6];
-                for (int t = 0; t < node.ChildNodes[i].ChildNodes.Count; t++)
-                {
-                    stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;
-                }
-                towerStats.Add(101 + i, stats);
-            }
+			for (int i = 0; i < node.ChildNodes.Count; i++)
+			{
+				if (node.ChildNodes[i].Name == "#comment") continue;
+				string[] stats = new string[6];
+				for (int t = 0; t < node.ChildNodes[i].ChildNodes.Count; t++)
+				{
+					stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;
+				}
+				towerStats.Add(101 + towerStats.Count, stats);
+			}
 
-            doc.Load(@"Content/Enemies/Stats/Enemy Data.emd");
-            node = doc.SelectSingleNode("/Enemies");
+			doc.Load(@"Content/Enemies/Stats/Enemy Data.emd");
+			node = doc.SelectSingleNode("/Enemies");
 
-            for (int i = 0; i < node.ChildNodes.Count; i++)
-            {
-                string[] stats = new string[6];
-                for (int t = 0; t < node.ChildNodes[i].ChildNodes.Count; t++)
-                {
-                    stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;
-                }
-                enemyStats.Add(101 + i, stats);
-            }
+			for (int i = 0; i < node.ChildNodes.Count; i++)
+			{
+				string[] stats = new string[6];
+				for (int t = 0; t < node.ChildNodes[i].ChildNodes.Count; t++)
+				{
+					stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;
+				}
+				enemyStats.Add(101 + i, stats);
+			}
 
-            //background = Main.GameContent.Load<Texture2D>(@"Levels/" + levelName);
-            tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");
-            tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");
-            startWave = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave");
-            startWavePressed = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave Pressed");
-            tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
-            font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
+			//background = Main.GameContent.Load<Texture2D>(@"Levels/" + levelName);
+			tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");
+			tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");
+			startWave = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave");
+			startWavePressed = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave Pressed");
+			tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
+			font = Main.GameContent.Load<SpriteFont>(@"Fonts/Font");
 
-            storeSection = new RectangleF(.75f * Main.Scale.X, 0f * Main.Scale.Y, (.25f * Main.Scale.X) + 1, (Main.Scale.Y) + 1);
-            waves = new WaveManager(this);
-        }
+			storeSection = new RectangleF(.85f * Main.Scale.X, 0f * Main.Scale.Y, (.15f * Main.Scale.X) + 1, (Main.Scale.Y) + 1);
+			waves = new WaveManager(this);
+		}
 
-        public void LoadLevel(string levelName)
-        {
-            LoadContent(levelName);
+		public void LoadLevel(string levelName)
+		{
+			LoadContent(levelName);
 
-            waves.LoadEnemies(levelName);
-            waves.WaveFinished += WaveEnd;
+			waves.LoadEnemies(levelName);
+			waves.WaveFinished += WaveEnd;
 
-            tempFile = new StreamReader(@"Content/Levels/" + levelName + ".path");
-            sw = new StreamWriter("temp2.temp");
-            sw.Write(StringCipher.Decrypt(tempFile.ReadLine(), "temp2"));
-            sw.Close();
-            read = new StreamReader("temp2.temp");
-            pointsNum = int.Parse(read.ReadLine());
-            path = new Path();
-            for (int i = 0; i < pointsNum; i++)
-            {
-                path.AddCurve((new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
-                    (new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
-                    (new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
-                    (new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)));
-            }
-            read.Close();
-            File.Delete("temp2.temp");
-            path.Build();
-            currency = 1000;
+			tempFile = new StreamReader(@"Content/Levels/" + levelName + ".path");
+			sw = new StreamWriter("temp2.temp");
+			sw.Write(StringCipher.Decrypt(tempFile.ReadLine(), "temp2"));
+			sw.Close();
+			read = new StreamReader("temp2.temp");
+			pointsNum = int.Parse(read.ReadLine());
+			path = new Path();
+			for (int i = 0; i < pointsNum; i++)
+			{
+				path.AddCurve((new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
+					(new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
+					(new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)),
+					(new Vector2(float.Parse(read.ReadLine()) * Main.Scale.X, float.Parse(read.ReadLine()) * Main.Scale.Y)));
+			}
+			read.Close();
+			File.Delete("temp2.temp");
+			path.Build();
+			currency = 1000;
 
-            temp1 = new Button(new Vector2(.7625f * Main.Scale.X, (10f / 480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1875f * Main.Scale.Y), 1, Main.CurrentMouse, tempButton1, tempButton2, true, Main.Scale.X, Main.Scale.Y);
-            temp1.LeftClicked += ButtonHandling;
+			try
+			{
+				for (int i = 0; i < TowerStats.Keys.Count; i++)
+				{
+					int[] keys = new int[TowerStats.Keys.Count];
+					TowerStats.Keys.CopyTo(keys, 0);
+					float x = (i - 1 % 2 == 0) ? 1264 : 1174,
+						y = (buttons.Count <= 1) ? 12 : buttons[buttons.Count - 2].Collision.Bottom + 12;
+					buttons.Add(new Button(new Vector2(x, y), (40f / 683f) * Main.Scale.X, (5f / 48f) * Main.Scale.Y, buttons.Count, Main.CurrentMouse, tempButton1, tempButton2, true, Main.Scale.X, Main.Scale.Y));
+					int l = i;
+					buttons[buttons.Count - 1].LeftClicked += (object sender, EventArgs e) =>
+					{
+						bool previousPlaced = (towers.Count > 0) ? towers[towers.Count - 1].isPlaced : true;
+						if (Currency >= uint.Parse(TowerStats[keys[l]][5]) && previousPlaced)
+						{
+							towers.Add(new Tower(this, (TowerType)keys[l], Main.CurrentMouse));
+							currency -= towers[towers.Count - 1].Cost;
+						}
+					};
+				}
+			}
+			catch (Exception e)
+			{
+				ErrorHandler.RecordError(3, 104, e.Message, e.StackTrace);
+			}
 
-            start = new Button(new Vector2(.7625f * Main.Scale.X, (380f / 480f) * Main.Scale.Y), (int)(.225f * Main.Scale.X), (int)(.1875f * Main.Scale.Y), 2, Main.CurrentMouse, startWave, startWavePressed, true, Main.Scale.X, Main.Scale.Y);
-            start.LeftClicked += ButtonHandling;
+			start = new Button(new Vector2(.866f * Main.Scale.X, (650f / 768f) * Main.Scale.Y), (160f / 1366f) * Main.Scale.X, (90f / 768f) * Main.Scale.Y, 2, Main.CurrentMouse, startWave, startWavePressed, true, Main.Scale.X, Main.Scale.Y);
+			start.LeftClicked += ButtonHandling;
+		}
 
-            //test2.go();
-        }
+		public void Clear()
+		{
+			enemies.Clear();
+			towers.Clear();
+			projectiles.Clear();
+		}
 
-        public void Clear()
-        {
-            enemies.Clear();
-            towers.Clear();
-            projectiles.Clear();
-        }
+		public void Update(GameTime gameTime)
+		{
+			Main.CurrentMouse = Main.Mouse.GetState();
 
-        public void Update(GameTime gameTime)
-        {
-            Main.CurrentMouse = Main.Mouse.GetState();
+			escapeTimer = Main.CurrentKeyboard.IsKeyPressed(Keys.Escape) ? escapeTimer + (float)gameTime.ElapsedGameTime.TotalSeconds : escapeTimer;
 
-            escapeTimer = Main.CurrentKeyboard.IsKeyPressed(Keys.Escape) ? escapeTimer + (float)gameTime.ElapsedGameTime.TotalSeconds : escapeTimer;
+			if (Main.CurrentKeyboard.IsKeyReleased(Keys.Escape) && escapeTimer > minEscapeTimer)
+			{
+				escapeTimer = 0;
+				pause = !pause;
+			}
 
-            if (Main.CurrentKeyboard.IsKeyReleased(Keys.Escape) && escapeTimer > minEscapeTimer)
-            {
-                escapeTimer = 0;
-                pause = !pause;
-            }
+			if (!pause)
+			{
+				foreach (Button button in buttons)
+				{
+					button.Update(Main.CurrentMouse);
+				}
 
-            if (!pause)
-            {
-                temp1.Update(Main.CurrentMouse);
+				if (waveRunning)
+				{
+					waves.UpdateWave(gameTime);
+				}
+				else
+				{
+					start.Update(Main.CurrentMouse);
+				}
 
-                if (waveRunning)
-                {
-                    waves.UpdateWave(gameTime);
-                }
-                else
-                {
-                    start.Update(Main.CurrentMouse);
-                }
+				try
+				{
+					foreach (Enemy enemy in enemies)
+					{
+						enemy.Update(gameTime);
 
-                try
-                {
-                    foreach (Enemy enemy in enemies)
-                    {
-                        enemy.Update(gameTime);
+						if (enemy.position == path.Points[path.Points.Count - 1])
+						{
+							enemies.Remove(enemy);
+						}
+					}
 
-                        if (enemy.position == path.Points[path.Points.Count - 1])
-                        {
-                            enemies.Remove(enemy);
-                        }
-                    }
+					foreach (Tower tower in towers)
+					{
+						tower.Update(gameTime, Main.CurrentMouse);
+					}
 
-                    foreach (Tower tower in towers)
-                    {
-                        tower.Update(gameTime, Main.CurrentMouse);
-                    }
+					for (int i = 0; i < projectiles.Count; i++)
+					{
+						projectiles[i].Update(gameTime);
+					}
+				}
+				catch
+				{
+					//ErrorHandler.RecordError(3, 100, "*shrugs*", ex.Message);
+				}
 
-                    for (int i = 0; i < projectiles.Count; i++)
-                    {
-                        projectiles[i].Update(gameTime);
-                    }
-                }
-                catch
-                {
-                    //ErrorHandler.RecordError(3, 100, "*shrugs*", ex.Message);
-                }
+				Input();
+			}
+		}
 
-                Input();
+		private void ButtonHandling(object sender, EventArgs e)
+		{
+			waves.WaveFinished += WaveEnd;
+			start.LeftClicked -= ButtonHandling;
+			waveRunning = true;
+		}
 
-                /*try
-                {
-                    Console.WriteLine(enemies[0].stagePos);
-                }
-                catch
-                { }*/
-            }
-        }
+		private void WaveEnd(object sender, EventArgs e)
+		{
+			waves.WaveFinished -= WaveEnd;
+			start.LeftClicked += ButtonHandling;
+			waveRunning = false;
+		}
 
-        private void ButtonHandling(object sender, EventArgs e)
-        {
-            switch (((Button)sender).ButtonNum)
-            {
-                case 1:
-                    if (Currency >= 500)
-                    {
-                        towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
-                        currency -= towers[towers.Count - 1].Cost;
-                    }
-                    break;
+		private void Input()
+		{
+			bool previousPlaced = (towers.Count > 0) ? towers[towers.Count - 1].isPlaced : true;
 
-                case 2:
-                    waves.WaveFinished += WaveEnd;
-                    start.LeftClicked -= ButtonHandling;
-                    waveRunning = true;
-                    break;
+			if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500 && previousPlaced)
+			{
+				towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
+				currency -= towers[towers.Count - 1].Cost;
+			}
+			else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && Currency >= 1000 && previousPlaced)
+			{
+				towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
+				currency -= towers[towers.Count - 1].Cost;
+			}
+		}
 
-                default:
-                    break;
-            }
-        }
+		public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+		{
+			//spriteBatch.Draw(background, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
 
-        private void WaveEnd(object sender, EventArgs e)
-        {
-            waves.WaveFinished -= WaveEnd;
-            start.LeftClicked += ButtonHandling;
-            waveRunning = false;
-        }
+			spriteBatch.Draw(tex, storeSection, Color.Black);
 
-        private void Input()
-        {
-            bool temp = (towers.Count > 0);
+			#region ButtonDrawing
+			try
+			{
+				foreach (Button button in buttons)
+				{
+					spriteBatch.Draw(button.Texture, button.Collision, Color.White);
+				}
+				if (!waveRunning) spriteBatch.Draw(start.Texture, start.Collision, Color.White);
+			}
+			catch
+			{ }
+			#endregion
 
-            if (!temp)
-            {
-                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500)
-                {
-                    towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
-                    currency -= towers[towers.Count - 1].Cost;
-                }
-                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2))
-                {
-                    towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
-                }
-            }
-            else
-            {
-                if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500 && towers[towers.Count - 1].isPlaced)
-                {
-                    towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
-                    currency -= towers[towers.Count - 1].Cost;
-                }
-                else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && towers[towers.Count - 1].isPlaced)
-                {
-                    towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
-                }
-            }
-        }
+			path.Draw(spriteBatch);
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            //spriteBatch.Draw(background, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
+			foreach (Enemy enemy in enemies)
+			{
+				enemy.Draw(gameTime, spriteBatch);
+			}
 
-            spriteBatch.Draw(tex, storeSection, Color.Black);
+			foreach (Tower tower in towers)
+			{
+				tower.Draw(spriteBatch);
+			}
 
-            #region ButtonDrawing
-            try
-            {
-                spriteBatch.Draw(temp1.Texture, temp1.Collision, Color.White);
-                if (!waveRunning) spriteBatch.Draw(start.Texture, start.Collision, Color.White);
-            }
-            catch
-            { }
-            #endregion
+			foreach (dynamic projectile in projectiles)
+			{
+				projectile.Draw(spriteBatch);
+			}
 
-            path.Draw(spriteBatch);
+			spriteBatch.DrawString(Font, Currency.ToString(), Vector2.Zero, Color.Black);
+		}
 
-            foreach (Enemy enemy in enemies)
-            {
-                enemy.Draw(gameTime, spriteBatch);
-            }
-
-            foreach (Tower tower in towers)
-            {
-                tower.Draw(spriteBatch);
-            }
-
-            foreach (dynamic projectile in projectiles)
-            {
-                projectile.Draw(spriteBatch);
-            }
-
-            spriteBatch.DrawString(Font, Currency.ToString(), Vector2.Zero, Color.Black);
-        }
-
-        public void DrawProjectile(SpriteBatch spriteBatch, Texture2D texture, Vector2 pos, Color color)
-        {
-            spriteBatch.Draw(texture, pos, color);
-        }
-    }
+		public void DrawProjectile(SpriteBatch spriteBatch, Texture2D texture, Vector2 pos, Color color)
+		{
+			spriteBatch.Draw(texture, pos, color);
+		}
+	}
 }

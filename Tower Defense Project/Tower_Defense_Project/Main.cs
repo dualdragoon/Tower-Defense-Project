@@ -124,8 +124,8 @@ namespace Tower_Defense_Project
             mouseManager = new MouseManager(this);
             keyboardManager = new KeyboardManager(this);
             content = Content;
-            graphics.PreferredBackBufferHeight = 768;
-            graphics.PreferredBackBufferWidth = 1366;
+            graphics.PreferredBackBufferHeight = 765;
+            graphics.PreferredBackBufferWidth = 1360;
             //graphics.PreferredBackBufferHeight = 900;
             //graphics.PreferredBackBufferWidth = 1440;
             /*graphics.IsFullScreen = true;
@@ -169,7 +169,7 @@ namespace Tower_Defense_Project
 
             bluePulse.Add(Content.Load<Texture2D>("Textures/Cursors/Particles/Pulse"));
 
-			CurrentState = GameState.Dialogue;
+			CurrentState = GameState.Menu;
         }
 
         /// <summary>

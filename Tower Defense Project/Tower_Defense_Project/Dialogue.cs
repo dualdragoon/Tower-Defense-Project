@@ -49,7 +49,8 @@ namespace Tower_Defense_Project
     class DialogueNode
     {
         public string Name;
-        public string Line;
+        public string[] Line;
+		private int LineNumber = 0;
 
         public string DestinationNode;
         private Color TextColor = new Color(208, 112, 41);
@@ -86,7 +87,8 @@ namespace Tower_Defense_Project
 
         private void Init(string line, string name, string side, Texture2D portrait, Texture2D backdrop, Texture2D background, string node)
         {
-            Line = line;
+            Line = line.Split('\t');
+			LineNumber = Line.Length - 1;
             Portrait = portrait;
             Backdrop = backdrop;
             Background = background;
@@ -99,13 +101,20 @@ namespace Tower_Defense_Project
 
         public void Update()
         {
-            for (int i = 0; i < Choices.Count; i++)
-            {
-                if (Rectangles[i].Contains(Main.CurrentMouse.X * Main.Scale.X, Main.CurrentMouse.Y * Main.Scale.Y) && Main.CurrentMouse.LeftButton.Pressed)
-                {
-                    Choices[i].Invoke();
-                }
-            }
+			if (LineNumber == 0)
+			{
+				for (int i = 0; i < Choices.Count; i++)
+				{
+					if (Rectangles[i].Contains(Main.CurrentMouse.X * Main.Scale.X, Main.CurrentMouse.Y * Main.Scale.Y) && Main.CurrentMouse.LeftButton.Pressed)
+					{
+						Choices[i].Invoke();
+					}
+				} 
+			}
+			else if (Main.CurrentMouse.LeftButton.Pressed)
+			{
+				LineNumber--;
+			}
         }
 
         public void Clear()
@@ -118,17 +127,20 @@ namespace Tower_Defense_Project
             spriteBatch.Draw(Background, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
             spriteBatch.Draw(Backdrop, new RectangleF(0, 0, Main.Scale.X, Main.Scale.Y), Color.White);
 
-            spriteBatch.DrawString(font, Line, new Vector2((10f / 1366f) * Main.Scale.X, (530f / 768f) * Main.Scale.Y), TextColor);
+            spriteBatch.DrawString(font, Line[LineNumber], new Vector2((10f / 1366f) * Main.Scale.X, (530f / 768f) * Main.Scale.Y), TextColor);
 
 			spriteBatch.Draw(Portrait, Side, Color.White);
 
 			Vector2 nameSize = font.MeasureString(Name);
 			spriteBatch.DrawString(font, Name, new Vector2(((683f - nameSize.X / 2) / 1366f) * Main.Scale.X, (450f / 768f) * Main.Scale.Y), Color.Black);
 
-            for (int i = 0; i < Rectangles.Count; i++)
-            {
-                spriteBatch.DrawString(font, Choices[i].Name, new Vector2(Rectangles[i].X + (10f / 1366f) * Main.Scale.X, Rectangles[i].Y + (10f / 768f) * Main.Scale.Y), TextColor);
-            }
+			if (LineNumber == 0)
+			{
+				for (int i = 0; i < Rectangles.Count; i++)
+				{
+					spriteBatch.DrawString(font, Choices[i].Name, new Vector2(Rectangles[i].X + (10f / 1366f) * Main.Scale.X, Rectangles[i].Y + (10f / 768f) * Main.Scale.Y), TextColor);
+				} 
+			}
         }
     }
 
@@ -238,7 +250,7 @@ namespace Tower_Defense_Project
 
         public string WrapText(string text, float maxLineWidth, float maxLineHeight)
         {
-            text.Replace("\n", " ");
+            text.Replace('\n', ' ');
             text.Replace("\r", "");
             string[] words = text.Split(' ');
             string newText = "";

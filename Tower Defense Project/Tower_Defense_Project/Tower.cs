@@ -11,7 +11,6 @@ namespace Tower_Defense_Project
     {
         GL = 101,
         RL = 102,
-        BLL = 103,
     }
 
     public class Tower
@@ -75,9 +74,9 @@ namespace Tower_Defense_Project
             projectileType = int.Parse(Level.TowerStats[(int)type][4]);
             cost = uint.Parse(Level.TowerStats[(int)type][5]);
 
-            collision = new RectangleF((mouse.X * Main.Scale.X) - ((size / 800f) * Main.Scale.X), (mouse.Y * Main.Scale.Y) - ((size / 480f) * Main.Scale.Y), (size / 800f) * Main.Scale.X, (size / 480f) * Main.Scale.Y);
-            range = new Ellipse((diameter / 800f) * Main.Scale.X, (diameter / 480f) * Main.Scale.Y, new Vector2(mouse.X * Main.Scale.X, mouse.Y * Main.Scale.Y));
-            tower = new Ellipse((size / 800f) * Main.Scale.X, (size / 480f) * Main.Scale.Y, new Vector2(mouse.X * Main.Scale.X, mouse.Y * Main.Scale.Y));
+            collision = new RectangleF((mouse.X * Main.Scale.X) - ((size / 1360f) * Main.Scale.X), (mouse.Y * Main.Scale.Y) - ((size / 765f) * Main.Scale.Y), (size / 1360f) * Main.Scale.X, (size / 765f) * Main.Scale.Y);
+            range = new Ellipse((diameter / 1360f) * Main.Scale.X, (diameter / 765f) * Main.Scale.Y, new Vector2(mouse.X * Main.Scale.X, mouse.Y * Main.Scale.Y));
+            tower = new Ellipse((size / 1360f) * Main.Scale.X, (size / 765f) * Main.Scale.Y, new Vector2(mouse.X * Main.Scale.X, mouse.Y * Main.Scale.Y));
 
             LoadContent();
             Fired += OnFire;
@@ -159,7 +158,6 @@ namespace Tower_Defense_Project
                     rangeColor = Color.Red;
                     placed = false;
                 }
-                return placed;
             }
             #region Mouse Off-Screen Handling
             else if (mouse.X * Main.Scale.X <= 0 && mouse.Y * Main.Scale.Y >= 0 && mouse.Y * Main.Scale.Y <= Main.Scale.Y)
@@ -168,7 +166,6 @@ namespace Tower_Defense_Project
                 collision.Y = mouse.Y * Main.Scale.Y;
                 range.Center = new Vector2(0 + (collision.Width / 2), mouse.Y * Main.Scale.Y + (collision.Height / 2));
                 tower.Center = new Vector2(0 + (collision.Width / 2), mouse.Y * Main.Scale.Y + (collision.Height / 2));
-                return placed;
             }
             else if (mouse.X * Main.Scale.X >= Main.Scale.X && mouse.Y * Main.Scale.Y >= 0 && mouse.Y * Main.Scale.Y <= Main.Scale.Y)
             {
@@ -176,7 +173,6 @@ namespace Tower_Defense_Project
                 collision.Y = mouse.Y * Main.Scale.Y;
                 range.Center = new Vector2(Main.Scale.X + (collision.Width / 2), mouse.Y * Main.Scale.Y + (collision.Height / 2));
                 tower.Center = new Vector2(Main.Scale.X + (collision.Width / 2), mouse.Y * Main.Scale.Y + (collision.Height / 2));
-                return placed;
             }
             else if (mouse.Y * Main.Scale.Y <= 0 && mouse.X * Main.Scale.X >= 0 && mouse.X * Main.Scale.X <= Main.Scale.X)
             {
@@ -184,7 +180,6 @@ namespace Tower_Defense_Project
                 collision.Y = 0;
                 range.Center = new Vector2(mouse.X * Main.Scale.X + (collision.Width / 2), 0 + (collision.Height / 2));
                 tower.Center = new Vector2(mouse.X * Main.Scale.X + (collision.Width / 2), 0 + (collision.Height / 2));
-                return placed;
             }
             else if (mouse.Y * Main.Scale.Y >= Main.Scale.Y && mouse.X * Main.Scale.X >= 0 && mouse.X * Main.Scale.X <= Main.Scale.X)
             {
@@ -192,7 +187,6 @@ namespace Tower_Defense_Project
                 collision.Y = Main.Scale.Y;
                 range.Center = new Vector2(mouse.X * Main.Scale.X + (collision.Width / 2), Main.Scale.Y + (collision.Height / 2));
                 tower.Center = new Vector2(mouse.X * Main.Scale.X + (collision.Width / 2), Main.Scale.Y + (collision.Height / 2));
-                return placed;
             }
             else if (mouse.X * Main.Scale.X <= 0 && mouse.Y * Main.Scale.Y <= 0)
             {
@@ -200,7 +194,6 @@ namespace Tower_Defense_Project
                 collision.Y = 0;
                 range.Center = new Vector2(0 + (collision.Width / 2), 0 + (collision.Height / 2));
                 tower.Center = new Vector2(0 + (collision.Width / 2), 0 + (collision.Height / 2));
-                return placed;
             }
             else if (mouse.X * Main.Scale.X <= 0 && mouse.Y * Main.Scale.Y >= Main.Scale.Y)
             {
@@ -208,7 +201,6 @@ namespace Tower_Defense_Project
                 collision.Y = Main.Scale.Y;
                 range.Center = new Vector2(0 + (collision.Width / 2), Main.Scale.Y + (collision.Height / 2));
                 tower.Center = new Vector2(0 + (collision.Width / 2), Main.Scale.Y + (collision.Height / 2));
-                return placed;
             }
             else if (mouse.X * Main.Scale.X >= Main.Scale.X && mouse.Y * Main.Scale.Y <= 0)
             {
@@ -216,7 +208,6 @@ namespace Tower_Defense_Project
                 collision.Y = 0;
                 range.Center = new Vector2(Main.Scale.X + (collision.Width / 2), 0 + (collision.Height / 2));
                 tower.Center = new Vector2(Main.Scale.X + (collision.Width / 2), 0 + (collision.Height / 2));
-                return placed;
             }
             else if (mouse.X * Main.Scale.X >= Main.Scale.X && mouse.Y * Main.Scale.Y >= Main.Scale.Y)
             {
@@ -224,13 +215,9 @@ namespace Tower_Defense_Project
                 collision.Y = Main.Scale.Y;
                 range.Center = new Vector2(Main.Scale.X + (collision.Width / 2), Main.Scale.Y + (collision.Height / 2));
                 tower.Center = new Vector2(Main.Scale.X + (collision.Width / 2), Main.Scale.Y + (collision.Height / 2));
-                return placed;
             }
-            #endregion
-            else
-            {
-                return placed;
-            }
+			#endregion
+			return placed;
         }
 
         private bool CanPlace()

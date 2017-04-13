@@ -110,6 +110,7 @@ namespace Tower_Defense_Project
         public void LoadContent()
         {
             moveAnimation = new Animation(Main.GameContent.Load<Texture2D>(string.Format("Enemies/{0}", spriteSet)), 0.1f, true, frameWidth);
+			moveAnimation.FrameHeight = frameWidth;
 
             sprite.PlayAnimation(moveAnimation);
         }
@@ -138,8 +139,8 @@ namespace Tower_Defense_Project
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             sprite.PlayAnimation(moveAnimation);
-
-            sprite.Draw(gameTime, spriteBatch, new RectangleF(position.X, position.Y + 5, (int)((frameWidth / 800f) * Main.Scale.X), (int)((moveAnimation.Texture.Height / 480f) * Main.Scale.Y)), SpriteEffects.None);
+			
+            sprite.Draw(gameTime, spriteBatch, new RectangleF(position.X, position.Y + 5, (frameWidth / 1360f) * Main.Scale.X, (moveAnimation.FrameHeight / 765f) * Main.Scale.Y), SpriteEffects.None);
         }
     }
 }

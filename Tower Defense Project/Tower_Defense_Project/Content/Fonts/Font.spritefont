@@ -53,5 +53,9 @@ with.
       <Start>32</Start>
       <End>127</End>
     </CharacterRegion>
+    <CharacterRegion>
+      <Start>10</Start>
+      <End>10</End>
+    </CharacterRegion>
   </CharacterRegions>
 </TkFont>

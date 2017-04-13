@@ -1,26 +1,20 @@
 ﻿<Towers>
+  <!--All pixel related values are determined at a resolution 1360x765
+  aka a perfect 16:9 ratio and testing should be done at said resolution.-->
 	<T101>
 		<Name>GL</Name>
-		<Size>32</Size>
-		<Range>100</Range>
+		<Size>50</Size>
+		<Range>170</Range>
 		<AttackSpeed>1</AttackSpeed>
 		<FiredProjectile>0</FiredProjectile>
 		<Cost>500</Cost>
 	</T101>
 	<T102>
 		<Name>RL</Name>
-		<Size>32</Size>
-		<Range>120</Range>
+		<Size>50</Size>
+		<Range>200</Range>
 		<AttackSpeed>.3</AttackSpeed>
 		<FiredProjectile>1</FiredProjectile>
-		<Cost>0</Cost>
+		<Cost>1000</Cost>
 	</T102>
-	<T103>
-		<Name>BLL</Name>
-		<Size>32</Size>
-		<Range>140</Range>
-		<AttackSpeed>.1</AttackSpeed>
-		<FiredProjectile>2</FiredProjectile>
-		<Cost>0</Cost>
-	</T103>
 </Towers>

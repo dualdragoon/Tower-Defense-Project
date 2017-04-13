@@ -79,7 +79,7 @@ class ProjectileBase(object):
 		if (self.stageIndex == 1):
 			self.OnHit()
 		if (not self.origin.range.Contains(self.position)):
-			self.level.testProjectiles.Remove(self)
+			self.level.projectiles.Remove(self)
 		
 	
 	def Draw(self, spriteBatch):

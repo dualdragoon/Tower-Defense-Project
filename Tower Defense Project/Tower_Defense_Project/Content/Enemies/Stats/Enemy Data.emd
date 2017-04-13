@@ -1,7 +1,7 @@
 ﻿<Enemies>
   <E101>
     <Name>Peon</Name>
-    <FrameWidth>10</FrameWidth>
+    <FrameWidth>17</FrameWidth>
     <Speed>.5</Speed>
     <Seconds>1</Seconds>
     <Health>1</Health>
@@ -9,7 +9,7 @@
   </E101>
   <E102>
     <Name>Scout</Name>
-    <FrameWidth>20</FrameWidth>
+    <FrameWidth>34</FrameWidth>
     <Speed>.5</Speed>
     <Seconds>2</Seconds>
     <Health>6</Health>
