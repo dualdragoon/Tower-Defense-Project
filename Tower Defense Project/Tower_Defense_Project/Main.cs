@@ -23,12 +23,12 @@ namespace Tower_Defense_Project
         Designer designer;
         Dialogue dialogue;
         GameState currentState;
-        int offset;
+        int mouseOffset;
         Level level;
         List<Texture2D> bloodDrops = new List<Texture2D>();
         List<Texture2D> bluePulse = new List<Texture2D>();
         Menu menu;
-        ParticleEngine generator = new ParticleEngine();
+        ParticleEngine mouseEngine = new ParticleEngine();
         SpriteBatch spriteBatch;
         string levelName = "Level1";
         Texture2D[] cursors = new Texture2D[8];
@@ -195,20 +195,20 @@ namespace Tower_Defense_Project
                 currentCursor = cursors[(int)CursorType];
                 if (currentCursor == cursors[1])
                 {
-                    generator.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
-                    generator.Update();
-                    offset = 2;
+                    mouseEngine.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
+                    mouseEngine.Update();
+                    mouseOffset = 2;
                 }
                 else if (currentCursor == cursors[5])
                 {
-                    generator.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
-                    generator.Update();
-                    offset = 1;
+                    mouseEngine.EmitterLocation = new Vector2(CurrentMouse.X, CurrentMouse.Y);
+                    mouseEngine.Update();
+                    mouseOffset = 1;
                 }
                 else
                 {
-                    generator.ClearParticles();
-                    offset = 1;
+                    mouseEngine.ClearParticles();
+                    mouseOffset = 1;
                 }
             }
             else
@@ -258,8 +258,8 @@ namespace Tower_Defense_Project
 
             if (keyboard.IsKeyPressed(Keys.E) || keyboard.IsKeyPressed(Keys.Q))
             {
-                if (CursorType == (CustomCursor)5) generator = new ParticleEngine(bloodDrops, new Vector2(-10, -10), EngineType.Dripping);
-                else if (CursorType == (CustomCursor)1) generator = new ParticleEngine(bluePulse, new Vector2(-10, -10), EngineType.Pulsing); 
+                if (CursorType == (CustomCursor)5) mouseEngine = new ParticleEngine(bloodDrops, new Vector2(-10, -10), EngineType.Dripping);
+                else if (CursorType == (CustomCursor)1) mouseEngine = new ParticleEngine(bluePulse, new Vector2(-10, -10), EngineType.Pulsing); 
             }
         }
 
@@ -268,7 +268,7 @@ namespace Tower_Defense_Project
             switch(currentState)
             {
                 case GameState.Play:
-					if (level == null) level = new Level();
+					if (level == null) level = new Level(this);
 					else level.Clear();
                     level.LoadLevel(LevelName);
                     break;
@@ -327,8 +327,8 @@ namespace Tower_Defense_Project
                     break;
             }
 
-            generator.Draw(spriteBatch);
-            spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * Scale.X) - offset, (CurrentMouse.Y * Scale.Y) - offset), Color.White);
+            mouseEngine.Draw(spriteBatch);
+            spriteBatch.Draw(currentCursor, new Vector2((CurrentMouse.X * Scale.X) - mouseOffset, (CurrentMouse.Y * Scale.Y) - mouseOffset), Color.White);
 
             spriteBatch.End();
 

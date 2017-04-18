@@ -20,6 +20,7 @@ namespace Tower_Defense_Project
 		private bool pause = false, waveRunning = false;
 		private float escapeTimer = 0, minEscapeTimer = .05f;
 		private int pointsNum, waveNum;
+		private Main baseMain;
 		private Path path;
 		public RectangleF storeSection;
 		private SpriteFont font;
@@ -68,8 +69,10 @@ namespace Tower_Defense_Project
 			get { return font; }
 		}
 
-		public Level()
+		public Level(Main main)
 		{
+			baseMain = main;
+
 			ScriptEngine engine = Python.CreateEngine();
 			ScriptSource source = engine.CreateScriptSourceFromFile("Content/Projectiles/small.py");
 			ScriptScope scope = engine.CreateScope();
@@ -149,6 +152,7 @@ namespace Tower_Defense_Project
 
 			waves.LoadEnemies(levelName);
 			waves.WaveFinished += WaveEnd;
+			waves.LevelComplete += LevelEnd;
 
 			tempFile = new StreamReader(@"Content/Levels/" + levelName + ".path");
 			sw = new StreamWriter("temp2.temp");
@@ -277,6 +281,12 @@ namespace Tower_Defense_Project
 			waves.WaveFinished -= WaveEnd;
 			start.LeftClicked += ButtonHandling;
 			waveRunning = false;
+		}
+
+		private void LevelEnd(object sender, EventArgs e)
+		{
+			waves.LevelComplete -= LevelEnd;
+			baseMain.CurrentState = GameState.Menu;
 		}
 
 		private void Input()

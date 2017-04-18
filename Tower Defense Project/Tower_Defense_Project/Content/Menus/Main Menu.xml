@@ -6,11 +6,28 @@
 	<BackgroundTexture>Background</BackgroundTexture>
 	<Button>
 		<ButtonType>0</ButtonType>
-		<NormalTexture>Test Button Normal</NormalTexture>
-		<HoveredTexture>Test Button Hovered</HoveredTexture>
+		<NormalTexture>Play Button Normal</NormalTexture>
+		<HoveredTexture>Play Button Hovered</HoveredTexture>
 		<Position>
-			<X>200</X>
-			<Y>200</Y>
+			<X>400</X>
+			<Y>450</Y>
+		</Position>
+		<Size>
+			<Width>150</Width>
+			<Height>90</Height>
+		</Size>
+		<LeftClickResult>
+      <ResultType>1</ResultType>
+      <ResultName>Level1</ResultName>
+		</LeftClickResult>
+	</Button>
+	<Button>
+		<ButtonType>0</ButtonType>
+		<NormalTexture>Designer Button Normal</NormalTexture>
+		<HoveredTexture>Designer Button Hovered</HoveredTexture>
+		<Position>
+			<X>810</X>
+			<Y>450</Y>
 		</Position>
 		<Size>
 			<Width>150</Width>
@@ -18,11 +35,7 @@
 		</Size>
 		<LeftClickResult>
 			<ResultType>2</ResultType>
-			<ResultName>Level1</ResultName>
+			<ResultName>NaN</ResultName>
 		</LeftClickResult>
-		<RightClickResult>
-			<ResultType>1</ResultType>
-			<ResultName>Level1</ResultName>
-		</RightClickResult>
 	</Button>
 </Menu>

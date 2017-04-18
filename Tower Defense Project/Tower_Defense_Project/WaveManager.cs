@@ -54,20 +54,23 @@ namespace Tower_Defense_Project
 
             if (timer > minTimer)
             {
-                if (waves.Peek().Count > 0)
-                {
-                    level.enemies.Add(new Enemy(level, waves.Peek().Dequeue()));
-                }
-                else if (waveFinished != null && level.enemies.Count == 0 && waves.Count > 1)
-                {
-                    waves.Dequeue();
-                    waveFinished(this, EventArgs.Empty);
-                }
-                else if (levelComplete != null && level.enemies.Count == 0 && waves.Count == 1)
-                {
-                    waves.Dequeue();
-                    levelComplete(this, EventArgs.Empty);
-                }
+				if (waves.Count > 0)
+				{
+					if (waves.Peek().Count > 0)
+					{
+						level.enemies.Add(new Enemy(level, waves.Peek().Dequeue()));
+					}
+					else if (waveFinished != null && level.enemies.Count == 0 && waves.Count > 1)
+					{
+						waves.Dequeue();
+						waveFinished(this, EventArgs.Empty);
+					}
+					else if (levelComplete != null && level.enemies.Count == 0 && waves.Count == 1)
+					{
+						waves.Dequeue();
+						levelComplete(this, EventArgs.Empty);
+					} 
+				}
                 timer = 0;
             }
         }
