@@ -1,20 +1,20 @@
 ﻿<Towers>
-  <!--All pixel related values are determined at a resolution 1360x765
+  <!--All pixel related values are determined at a resolution of 1360x765
   aka a perfect 16:9 ratio and testing should be done at said resolution.-->
-	<T101>
+	<T>
 		<Name>GL</Name>
 		<Size>50</Size>
 		<Range>170</Range>
 		<AttackSpeed>1</AttackSpeed>
 		<FiredProjectile>0</FiredProjectile>
 		<Cost>500</Cost>
-	</T101>
-	<T102>
+	</T>
+	<T>
 		<Name>RL</Name>
 		<Size>50</Size>
 		<Range>200</Range>
 		<AttackSpeed>.3</AttackSpeed>
 		<FiredProjectile>1</FiredProjectile>
 		<Cost>1000</Cost>
-	</T102>
+	</T>
 </Towers>

@@ -242,6 +242,8 @@
     <None Include="Content\Menus\Main Menu\Designer Button Normal.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <ToolkitTexture Include="Content\Buttons\Button Background.png" />
+    <ToolkitTexture Include="Content\Buttons\Hovered Background.png" />
     <Content Include="Content\Textures\Trach Can work in progress.png" />
     <ToolkitTexture Include="Content\Textures\Wave Designer Background.png" />
     <Content Include="Lib\site-packages\README.txt" />

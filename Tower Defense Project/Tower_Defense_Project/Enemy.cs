@@ -20,7 +20,7 @@ namespace Tower_Defense_Project
         private Designer designer;
         public float stagePos;
         private float speed = 0, seconds = 0;
-        private int stageIndex, frameWidth, health;
+        private int stageIndex, frameWidth, health, damage;
         private Level level;
         private Path path;
         private string spriteSet;
@@ -50,6 +50,12 @@ namespace Tower_Defense_Project
             get { return health; }
             set { health = value; }
         }
+
+		public int Damage
+		{
+			get { return damage; }
+			set { damage = value; }
+		}
 
         public Path Path
         {
@@ -87,6 +93,7 @@ namespace Tower_Defense_Project
             seconds = float.Parse(Level.EnemyStats[(int)type][3]);
             health = int.Parse(Level.EnemyStats[(int)type][4]);
             worth = uint.Parse(Level.EnemyStats[(int)type][5]);
+			damage = int.Parse(Level.EnemyStats[(int)type][6]);
 
             LoadContent();
         }

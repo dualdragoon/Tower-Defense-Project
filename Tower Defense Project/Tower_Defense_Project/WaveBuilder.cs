@@ -32,6 +32,11 @@ namespace Tower_Defense_Project
             get { return waves; }
         }
 
+		public int TotalEnemies
+		{
+			get { return totalEnemies; }
+		}
+
         public WaveBuilder(Designer designer)
         {
             this.designer = designer;

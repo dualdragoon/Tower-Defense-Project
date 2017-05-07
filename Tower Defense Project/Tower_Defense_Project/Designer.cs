@@ -16,13 +16,13 @@ namespace Tower_Defense_Project
     public class Designer
     {
         public RectangleF storeSection;
-        bool fin, x1Selected, y1Selected, x2Selected, y2Selected, x3Selected, y3Selected, x4Selected, y4Selected, nameSelected, anythingSelected;
-        string location1X, location1Y, location2X, location2Y, location3X, location3Y, location4X, location4Y, name;
+        bool pathExists, enemiesExist, healthSelected, nameSelected, anythingSelected;
+        string health, name;
         Button build, previous, next;
-        Color color1X, color1Y, color2X, color2Y, color3X, color3Y, color4X, color4Y, colorName;
+        Color colorHealth, colorName;
         DesignerForm form = DesignerForm.Path;
         DesignPath path = new DesignPath();
-        RectangleF x1, y1, x2, y2, x3, y3, x4, y4, nameRect;
+        RectangleF healthRect, nameRect;
         SpriteFont font;
         Texture2D tex, buildUnpressed, buildPressed, previousNormal, previousHovered, nextNormal, nextHovered;
         Vector2 mousePos, textLocation = new Vector2(.88f * Main.Scale.X, (14f / 480f) * Main.Scale.Y);
@@ -39,7 +39,7 @@ namespace Tower_Defense_Project
                 {
                     waveBuilder = new WaveBuilder(this);
                 }
-                else if (value == DesignerForm.Path) fin = true;
+                else if (value == DesignerForm.Path) pathExists = true;
                 form = value;
             }
         }
@@ -57,14 +57,7 @@ namespace Tower_Defense_Project
 
         public void LoadContent()
         {
-            color1X = Color.LightGray;
-            color1Y = Color.LightGray;
-            color2X = Color.LightGray;
-            color2Y = Color.LightGray;
-            color3X = Color.LightGray;
-            color3Y = Color.LightGray;
-            color4X = Color.LightGray;
-            color4Y = Color.LightGray;
+            colorHealth = Color.LightGray;
             tex = Main.GameContent.Load<Texture2D>("Textures/SQUARE");
             font = Main.GameContent.Load<SpriteFont>("Fonts/Font");
 
@@ -84,24 +77,10 @@ namespace Tower_Defense_Project
             next.LeftClicked += NextCurve;
 
             storeSection = new RectangleF(.75f * Main.Scale.X, 0f, (.25f * Main.Scale.X) + 1, (Main.Scale.Y) + 1);
-            x1 = new RectangleF(.7625f * Main.Scale.X, .625f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
-            y1 = new RectangleF(.89375f * Main.Scale.X, .625f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
-            x2 = new RectangleF(.7625f * Main.Scale.X, (260f / 480f) * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
-            y2 = new RectangleF(.89375f * Main.Scale.X, (260f / 480f) * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
-            x3 = new RectangleF(.7625f * Main.Scale.X, (220f / 480f) * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
-            y3 = new RectangleF(.89375f * Main.Scale.X, (220f / 480f) * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
-            x4 = new RectangleF(.7625f * Main.Scale.X, .375f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
-            y4 = new RectangleF(.89375f * Main.Scale.X, .375f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
+            healthRect = new RectangleF(.7625f * Main.Scale.X, .625f * Main.Scale.Y, .09375f * Main.Scale.X, .0625f * Main.Scale.Y);
             nameRect = new RectangleF(.7625f * Main.Scale.X, (10f / 480f) * Main.Scale.Y, .225f * Main.Scale.X, .0625f * Main.Scale.Y);
 
-            location1X = "0";
-            location1Y = "0";
-            location2X = "0";
-            location2Y = "0";
-            location3X = "0";
-            location3Y = "0";
-            location4X = "0";
-            location4Y = "0";
+            health = "0";
             name = "";
         }
 
@@ -110,17 +89,15 @@ namespace Tower_Defense_Project
             Main.CurrentMouse = Main.Mouse.GetState();
             mousePos = new Vector2(Main.CurrentMouse.X * Main.Scale.X, Main.CurrentMouse.Y * Main.Scale.Y);
 
+			if (waveBuilder != null)
+			{
+				enemiesExist = waveBuilder.TotalEnemies > 0;
+			}
+
             switch (form)
             {
                 case DesignerForm.Path:
-                    color1X = (x1Selected) ? Color.Aqua : Color.LightGray;
-                    color1Y = (y1Selected) ? Color.Aqua : Color.LightGray;
-                    color2X = (x2Selected) ? Color.Aqua : Color.LightGray;
-                    color2Y = (y2Selected) ? Color.Aqua : Color.LightGray;
-                    color3X = (x3Selected) ? Color.Aqua : Color.LightGray;
-                    color3Y = (y3Selected) ? Color.Aqua : Color.LightGray;
-                    color4X = (x4Selected) ? Color.Aqua : Color.LightGray;
-                    color4Y = (y4Selected) ? Color.Aqua : Color.LightGray;
+                    colorHealth = (healthSelected) ? Color.Aqua : Color.LightGray;
 
                     colorName = (nameSelected) ? Color.Aqua : Color.LightGray;
 
@@ -136,9 +113,9 @@ namespace Tower_Defense_Project
 
                     path.Update();
 
-                    if (fin)
+                    if (pathExists)
                     {
-                        build.Update(Main.CurrentMouse);
+                        if (enemiesExist) build.Update(Main.CurrentMouse);
                         previous.Update(Main.CurrentMouse);
                         next.Update(Main.CurrentMouse);
                     }
@@ -167,7 +144,8 @@ namespace Tower_Defense_Project
 
         private void Build(object sender, EventArgs e)
         {
-            StreamWriter temp = new StreamWriter("temp1.temp");
+			MemoryStream stream = new MemoryStream();
+			StreamWriter temp = new StreamWriter(stream);
             StreamWriter write = new StreamWriter(string.Format("{0}.path", name));
 
             temp.WriteLine(path.Curves.Count);
@@ -180,15 +158,15 @@ namespace Tower_Defense_Project
                     temp.WriteLine(path.Curves[i].Points[l].Y / Main.Scale.Y);
                 }
             }
-
-            temp.Close();
-
-            StreamReader read = new StreamReader("temp1.temp");
+			
+			temp.Flush();
+			stream.Position = 0;
+			
+			StreamReader read = new StreamReader(stream);
 
             write.Write(StringCipher.Encrypt(read.ReadToEnd(), "temp2"));
             write.Close();
             read.Close();
-            File.Delete("temp1.temp");
 
             path.Clear();
 
@@ -212,7 +190,7 @@ namespace Tower_Defense_Project
 
             waveBuilder.Clear();
 
-            fin = false;
+            pathExists = false;
         }
 
         private void Input()
@@ -221,7 +199,7 @@ namespace Tower_Defense_Project
             {
                 path.AddCurve();
                 path.Selected = path.Curves.Count - 1;
-                fin = true;
+                pathExists = true;
             }
 
             if (Main.CurrentKeyboard.IsKeyPressed(Keys.Left)) PreviousCurve(this, EventArgs.Empty);
@@ -237,23 +215,11 @@ namespace Tower_Defense_Project
 
             try
             {
-                if ((x1Selected || y1Selected || x2Selected || y2Selected || x3Selected || y3Selected || x4Selected || y4Selected))
+                if (healthSelected)
                 {
                     char? c;
                     InputParser.TryConvertNumberInput(Main.CurrentKeyboard, out c);
-                    if (x1Selected) StringInput(ref location1X, c);
-                    else if (y1Selected) StringInput(ref location1Y, c);
-                    else if (x2Selected) StringInput(ref location2X, c);
-                    else if (y2Selected) StringInput(ref location2Y, c);
-                    else if (x3Selected) StringInput(ref location3X, c);
-                    else if (y3Selected) StringInput(ref location3Y, c);
-                    else if (x4Selected) StringInput(ref location4X, c);
-                    else if (y4Selected) StringInput(ref location4Y, c);
-
-                    if (Main.CurrentKeyboard.IsKeyPressed(Keys.Enter))
-                    {
-
-                    }
+                    StringInput(ref health, c);
                 }
                 else if (nameSelected)
                 {
@@ -267,17 +233,10 @@ namespace Tower_Defense_Project
 
             if (Main.CurrentMouse.LeftButton.Pressed)
             {
-                x1Selected = x1.Contains(mousePos);
-                y1Selected = y1.Contains(mousePos);
-                x2Selected = x2.Contains(mousePos);
-                y2Selected = y2.Contains(mousePos);
-                x3Selected = x3.Contains(mousePos);
-                y3Selected = y3.Contains(mousePos);
-                x4Selected = x4.Contains(mousePos);
-                y4Selected = y4.Contains(mousePos);
+                healthSelected = healthRect.Contains(mousePos);
                 nameSelected = nameRect.Contains(mousePos);
             }
-            anythingSelected = x1Selected || y1Selected || x2Selected || y2Selected || x3Selected || y3Selected || x4Selected || y4Selected || nameSelected;
+            anythingSelected = healthSelected || nameSelected;
         }
 
         private void StringInput(ref string source, char? c)
@@ -292,30 +251,16 @@ namespace Tower_Defense_Project
             {
                 case DesignerForm.Path:
                     spriteBatch.Draw(tex, storeSection, Color.Black);
-                    spriteBatch.Draw(tex, x1, color1X);
-                    spriteBatch.Draw(tex, y1, color1Y);
-                    spriteBatch.Draw(tex, x2, color2X);
-                    spriteBatch.Draw(tex, y2, color2Y);
-                    spriteBatch.Draw(tex, x3, color3X);
-                    spriteBatch.Draw(tex, y3, color3Y);
-                    spriteBatch.Draw(tex, x4, color4X);
-                    spriteBatch.Draw(tex, y4, color4Y);
+                    spriteBatch.Draw(tex, healthRect, colorHealth);
                     spriteBatch.Draw(tex, nameRect, colorName);
-                    spriteBatch.DrawString(font, location1X, new Vector2(.76875f * Main.Scale.X, (298f / 480f) * Main.Scale.Y), Color.Black);
-                    spriteBatch.DrawString(font, location1Y, new Vector2(.9f * Main.Scale.X, (298f / 480f) * Main.Scale.Y), Color.Black);
-                    spriteBatch.DrawString(font, location2X, new Vector2(.76875f * Main.Scale.X, .5375f * Main.Scale.Y), Color.Black);
-                    spriteBatch.DrawString(font, location2Y, new Vector2(.9f * Main.Scale.X, .5375f * Main.Scale.Y), Color.Black);
-                    spriteBatch.DrawString(font, location3X, new Vector2(.76875f * Main.Scale.X, (218f / 480f) * Main.Scale.Y), Color.Black);
-                    spriteBatch.DrawString(font, location3Y, new Vector2(.9f * Main.Scale.X, (218f / 480f) * Main.Scale.Y), Color.Black);
-                    spriteBatch.DrawString(font, location4X, new Vector2(.76875f * Main.Scale.X, (178f / 480f) * Main.Scale.Y), Color.Black);
-                    spriteBatch.DrawString(font, location4Y, new Vector2(.9f * Main.Scale.X, (178f / 480f) * Main.Scale.Y), Color.Black);
+                    spriteBatch.DrawString(font, health, new Vector2(.76875f * Main.Scale.X, (298f / 480f) * Main.Scale.Y), Color.Black);
                     spriteBatch.DrawString(font, name, new Vector2(textLocation.X - (font.MeasureString(name).X / 2), textLocation.Y), Color.Black);
 
                     try
                     {
-                        if (fin)
+                        if (pathExists)
                         {
-                            spriteBatch.Draw(build.Texture, build.Collision, Color.White);
+                            if (enemiesExist) spriteBatch.Draw(build.Texture, build.Collision, Color.White);
                             spriteBatch.Draw(previous.Texture, previous.Collision, Color.White);
                             spriteBatch.Draw(next.Texture, next.Collision, Color.White);
                         }

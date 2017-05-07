@@ -19,19 +19,20 @@ namespace Tower_Defense_Project
 		public Button start;
 		private bool pause = false, waveRunning = false;
 		private float escapeTimer = 0, minEscapeTimer = .05f;
-		private int pointsNum, waveNum;
+		private int pointsNum, waveNum, health;
 		private Main baseMain;
 		private Path path;
 		public RectangleF storeSection;
 		private SpriteFont font;
 		private StreamWriter sw;
 		private StreamReader tempFile, read;
-		private Texture2D tex, /*background,*/ tempButton1, tempButton2, startWave, startWavePressed;
+		private Texture2D tex, /*background,*/ towerBackground, hoveredBackground, startWave, startWavePressed;
 		private uint currency;
 		private WaveManager waves;
 		XmlDocument doc;
 		XmlNode node;
 
+		private List<Texture2D> sprites = new List<Texture2D>();
 		private List<Button> buttons = new List<Button>();
 		internal List<Enemy> enemies = new List<Enemy>();
 		internal List<Tower> towers = new List<Tower>();
@@ -57,6 +58,12 @@ namespace Tower_Defense_Project
 		{
 			get { return currency; }
 			set { currency = value; }
+		}
+
+		public int Health
+		{
+			get { return health; }
+			set { health = value; }
 		}
 
 		internal Path Path
@@ -126,17 +133,18 @@ namespace Tower_Defense_Project
 
 			for (int i = 0; i < node.ChildNodes.Count; i++)
 			{
-				string[] stats = new string[6];
+				if (node.ChildNodes[i].Name == "#comment") continue;
+				string[] stats = new string[7];
 				for (int t = 0; t < node.ChildNodes[i].ChildNodes.Count; t++)
 				{
 					stats[t] = node.ChildNodes[i].ChildNodes[t].InnerText;
 				}
-				enemyStats.Add(101 + i, stats);
+				enemyStats.Add(101 + enemyStats.Count, stats);
 			}
 
 			//background = Main.GameContent.Load<Texture2D>(@"Levels/" + levelName);
-			tempButton1 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 1");
-			tempButton2 = Main.GameContent.Load<Texture2D>(@"Buttons/Temp Button 2");
+			towerBackground = Main.GameContent.Load<Texture2D>("Buttons/Button Background");
+			hoveredBackground = Main.GameContent.Load<Texture2D>("Buttons/Hovered Background");
 			startWave = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave");
 			startWavePressed = Main.GameContent.Load<Texture2D>(@"Buttons/Start Wave Pressed");
 			tex = Main.GameContent.Load<Texture2D>(@"Textures/SQUARE");
@@ -171,7 +179,7 @@ namespace Tower_Defense_Project
 			read.Close();
 			File.Delete("temp2.temp");
 			path.Build();
-			currency = 1000;
+			Currency = 1000;
 
 			try
 			{
@@ -180,8 +188,11 @@ namespace Tower_Defense_Project
 					int[] keys = new int[TowerStats.Keys.Count];
 					TowerStats.Keys.CopyTo(keys, 0);
 					float x = (i - 1 % 2 == 0) ? 1264 : 1174,
-						y = (buttons.Count <= 1) ? 12 : buttons[buttons.Count - 2].Collision.Bottom + 12;
-					buttons.Add(new Button(new Vector2(x, y), (40f / 683f) * Main.Scale.X, (5f / 48f) * Main.Scale.Y, buttons.Count, Main.CurrentMouse, tempButton1, tempButton2, true, Main.Scale.X, Main.Scale.Y));
+						y = (buttons.Count <= 1) ? 112 : buttons[buttons.Count - 2].Collision.Bottom + 12;
+
+					sprites.Add(Main.GameContent.Load<Texture2D>("Towers/" + TowerStats[keys[i]][0]));
+
+					buttons.Add(new Button(new Vector2(x, y), (40f / 683f) * Main.Scale.X, (5f / 48f) * Main.Scale.Y, buttons.Count, Main.CurrentMouse, towerBackground, hoveredBackground, true, Main.Scale.X, Main.Scale.Y));
 					int l = i;
 					buttons[buttons.Count - 1].LeftClicked += (object sender, EventArgs e) =>
 					{
@@ -189,7 +200,7 @@ namespace Tower_Defense_Project
 						if (Currency >= uint.Parse(TowerStats[keys[l]][5]) && previousPlaced)
 						{
 							towers.Add(new Tower(this, (TowerType)keys[l], Main.CurrentMouse));
-							currency -= towers[towers.Count - 1].Cost;
+							Currency -= towers[towers.Count - 1].Cost;
 						}
 					};
 				}
@@ -246,6 +257,7 @@ namespace Tower_Defense_Project
 
 						if (enemy.position == path.Points[path.Points.Count - 1])
 						{
+							Health -= enemy.Damage;
 							enemies.Remove(enemy);
 						}
 					}
@@ -296,12 +308,12 @@ namespace Tower_Defense_Project
 			if (Main.CurrentKeyboard.IsKeyPressed(Keys.D1) && Currency >= 500 && previousPlaced)
 			{
 				towers.Add(new Tower(this, TowerType.GL, Main.CurrentMouse));
-				currency -= towers[towers.Count - 1].Cost;
+				Currency -= towers[towers.Count - 1].Cost;
 			}
 			else if (Main.CurrentKeyboard.IsKeyPressed(Keys.D2) && Currency >= 1000 && previousPlaced)
 			{
 				towers.Add(new Tower(this, TowerType.RL, Main.CurrentMouse));
-				currency -= towers[towers.Count - 1].Cost;
+				Currency -= towers[towers.Count - 1].Cost;
 			}
 		}
 
@@ -314,9 +326,10 @@ namespace Tower_Defense_Project
 			#region ButtonDrawing
 			try
 			{
-				foreach (Button button in buttons)
+				for (int i = 0; i < buttons.Count; i++)
 				{
-					spriteBatch.Draw(button.Texture, button.Collision, Color.White);
+					spriteBatch.Draw(buttons[i].Texture, buttons[i].Collision, Color.White);
+					spriteBatch.Draw(sprites[i], buttons[i].Collision, Color.White);
 				}
 				if (!waveRunning) spriteBatch.Draw(start.Texture, start.Collision, Color.White);
 			}

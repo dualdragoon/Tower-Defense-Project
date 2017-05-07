@@ -1,26 +1,29 @@
 ﻿<Enemies>
-  <E101>
+  <E>
     <Name>Peon</Name>
     <FrameWidth>17</FrameWidth>
     <Speed>.5</Speed>
     <Seconds>1</Seconds>
     <Health>1</Health>
     <Worth>1</Worth>
-  </E101>
-  <E102>
+		<Damage>1</Damage>
+  </E>
+  <E>
     <Name>Scout</Name>
     <FrameWidth>34</FrameWidth>
     <Speed>.5</Speed>
     <Seconds>2</Seconds>
     <Health>6</Health>
     <Worth>5</Worth>
-  </E102>
-  <E103>
+		<Damage>5</Damage>
+  </E>
+  <E>
     <Name>Brute</Name>
     <FrameWidth>30</FrameWidth>
     <Speed>.2</Speed>
     <Seconds>1</Seconds>
     <Health>10</Health>
     <Worth>10</Worth>
-  </E103>
+		<Damage>10</Damage>
+  </E>
 </Enemies>
